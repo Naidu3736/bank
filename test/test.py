@@ -43,6 +43,7 @@ class TestCard(unittest.TestCase):
         """Verifica que el número de tarjeta generado tenga 16 dígitos."""
         for card_type in CardType:
             card_number = generate_card_number(card_type)
+            print(f"\n{card_number}")
             self.assertEqual(len(card_number), 16)
             self.assertTrue(card_number.startswith(card_type.value))
 
