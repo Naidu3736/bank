@@ -1,0 +1,3 @@
+Acá habrán cosas como la logicas, clases neceesarias para el funcionamiento, y no sé, hay que separar
+hay que separar todo en muchos archivos, para que no se junte todo, también si quieres decir algo mejor ponlo acá
+jejeje
