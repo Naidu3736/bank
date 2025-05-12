@@ -1,34 +1,55 @@
 from datetime import datetime
+from core.card import CardCategory, CardType  # Asegúrate de importar bien esto
 
 class Turn:
     _prefix_counters = {
-        "C": 1,    # Clientes sin tarjeta o baja prioridad
-        "AZ": 1,   # Clientes con tarjeta GOLD, prioridad media
-        "VIP": 1   # Clientes PLATINUM o alta prioridad
+        "C": 1,    # No cliente o sin tarjeta
+        "AZ": 1,   # Débito básica
+        "VIP": 1   # Crédito premium
     }
 
-    PRIORITY_PREFIX = {
-        3: "C",     # Baja prioridad
-        2: "AZ",    # Media prioridad
-        1: "VIP"    # Alta prioridad
-    }
-
-    def __init__(self, customer_id: str, priority: int, created_at=None):
-        if priority not in Turn.PRIORITY_PREFIX:
-            raise ValueError("Prioridad no válida")
-
-        self.prefix = Turn.PRIORITY_PREFIX[priority]
+    def __init__(self, customer=None, card=None, created_at=None):
+        self.customer_id = customer.customer_id if customer else "INVITADO"
+        self.priority = self._determine_priority(card)
+        self.prefix = self._priority_to_prefix(self.priority)
         self.turn_id = f"{self.prefix}{Turn._prefix_counters[self.prefix]:03}"
         Turn._prefix_counters[self.prefix] += 1
 
-        self.customer_id = customer_id
-        self.priority = priority  # Menor valor = mayor prioridad
         self.created_at = created_at or datetime.now()
         self.attended = False
 
+
+    def _determine_priority(self, card):
+        if not card:
+            return 3  # No tarjeta, prioridad baja
+    	
+        # Si la tarjeta es de credito
+        if card.category == CardCategory.CREDIT:
+            # Alta prioridad para platinum y gold
+            if card.card_type in (CardType.PLATINUM, CardType.GOLD):
+                return 1
+            # Prioridad media para tarjetas de crédito normales
+            return 2
+        # Si la tarjeta es de débito, prioridad media
+        elif card.category == CardCategory.DEBIT:
+            return 2
+
+        # En dado caso de no ser cliente del banco
+        return 3
+
+
+    def _priority_to_prefix(self, priority):
+        return {
+            3: "C",
+            2: "AZ",
+            1: "VIP"
+        }[priority]
+
+    # Marca que el turno como atendido
     def mark_as_attended(self):
         self.attended = True
 
+    # Métodos necesarios para la cola de prioridad, y tal vez la cosola de eventos
     def __lt__(self, other):
         if self.priority == other.priority:
             return self.created_at < other.created_at
