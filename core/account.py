@@ -1,21 +1,29 @@
 from hashlib import sha256
-from core.credit_card import DebitCard, CardType  # Ahora usamos DebitCard directamente
+import random
+from core.debit_card import DebitCard, CardType
 
 class Account:
-    def __init__(self, account_number, customer_id, initial_balance=0, nip=None):
-        self.account_number = account_number
+    def __init__(self, customer_id, initial_balance=0, nip=None):
+        self.account_number = self._generate_account_number()  # Genera un número de cuenta automáticamente
         self.customer_id = customer_id
         self.balance = initial_balance
-        self.nip_hash = self._hash_nip(nip) if nip else None
+        self.nip_hash = self._hash_nip(nip) if nip else None  # El NIP se pasa directamente al crear la cuenta
         self.debit_cards = []
         self.nip_attempts = 0
         self.is_locked = False
         self.transaction_history = []
 
+    def _generate_account_number(self):
+        """Genera un número de cuenta aleatorio de 10 dígitos"""
+        return str(random.randint(1000000000, 9999999999))
+
     def _hash_nip(self, nip):
         """Hashea el NIP para almacenamiento seguro"""
-        return sha256(nip.encode()).hexdigest()
-
+        if nip and len(nip) == 4 and nip.isdigit():
+            return sha256(nip.encode()).hexdigest()
+        else:
+            raise ValueError("El NIP debe ser de 4 dígitos numéricos.")
+    
     def add_debit_card(self, card_type: CardType):
         """Añade una tarjeta de débito a la cuenta"""
         card = DebitCard(card_type, self.account_number)

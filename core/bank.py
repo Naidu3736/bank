@@ -8,20 +8,20 @@ from core.credit_card import CreditCard
 
 class Bank:
     def __init__(self):
-        self.accounts: Dict[str, Account] = {}
-        self.customers: Dict[str, Customer] = {}
-        self.card_registry: Dict[str, DebitCard | CreditCard] = {}
+        self.accounts: Dict[str, Account] = {}  # Cuentas registradas en el banco
+        self.customers: Dict[str, Customer] = {}    # Cliente registrados en el banco
+        self.card_registry: Dict[str, DebitCard | CreditCard] = {}  # Tarjetas registradas en el sistema
 
     def add_customer(self, name, email):
         customer = Customer(name, email)
         self.customers[customer.customer_id] = customer
         return customer
 
-    def add_account(self, customer_id, account_number, initial_balance=0, nip=None):
+    def add_account(self, customer_id, initial_balance=0, nip=None):
         if customer_id not in self.customers:
             raise ValueError("Cliente no encontrado")
 
-        account = Account(account_number, customer_id, initial_balance, nip)
+        account = Account(customer_id, initial_balance, nip)
         self.accounts[account.account_number] = account
         self.customers[customer_id].link_account(account)
         return account
