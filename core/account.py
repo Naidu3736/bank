@@ -34,6 +34,19 @@ class Account:
     def add_transaction(self, transaction):
         self.transaction_history.append(transaction)
 
+    def unlock_account(self):
+        self.is_locked = False
+        self.nip_attempts = 0
+
+    def get_balance(self):
+        return self.balance
+    
+    def get_transaction_history(self) -> list:
+        return [f"{t.timestamp}: {t.type} - ${t.amount}" for t in self.transaction_history]
+    
+    def get_cards_summary(self) -> list:
+        return [str(card) for card in self.debit_cards]
+
     def validate_nip(self, nip):
         """Valida el NIP proporcionado"""
         if self.is_locked:

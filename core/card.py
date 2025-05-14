@@ -22,6 +22,9 @@ class Card(ABC):
     def generate_card_number(card_type):
         prefix = card_type.value
         return prefix + ''.join([str(random.randint(0, 9)) for _ in range(16 - len(prefix))])
+    
+    def is_expired(self) -> bool:
+        return datetime.now() > self.expiration_date
 
     def activate_card(self):
         self.active = True

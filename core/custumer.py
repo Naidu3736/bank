@@ -20,6 +20,9 @@ class Customer:
         self.credit_cards.append(card)
         return card
 
+    def get_cards_summary(self) -> list:
+        return [str(card) for card in self.credit_cards]
+
     def link_account(self, account):
         """Vincula una cuenta existente al cliente"""
         if account.customer_id != self.customer_id:

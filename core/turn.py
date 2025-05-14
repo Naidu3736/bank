@@ -1,5 +1,7 @@
 from datetime import datetime
-from core.card import CardCategory, CardType  # Asegúrate de importar bien esto
+from core.card import CardType  # Asegúrate de importar bien esto
+from core.credit_card import CreditCard
+from core.debit_card import DebitCard
 
 class Turn:
     _prefix_counters = {
@@ -24,14 +26,14 @@ class Turn:
             return 3  # No tarjeta, prioridad baja
     	
         # Si la tarjeta es de credito
-        if card.category == CardCategory.CREDIT:
+        if isinstance(card, CreditCard):
             # Alta prioridad para platinum y gold
             if card.card_type in (CardType.PLATINUM, CardType.GOLD):
                 return 1
             # Prioridad media para tarjetas de crédito normales
             return 2
         # Si la tarjeta es de débito, prioridad media
-        elif card.category == CardCategory.DEBIT:
+        elif isinstance(card, DebitCard):
             return 2
 
         # En dado caso de no ser cliente del banco
