@@ -1,1 +1,0 @@
-Aqui habrán cosas relacionadas con el servidor, sockets, y esas madres, no sé

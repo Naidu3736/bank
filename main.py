@@ -1,6 +1,7 @@
 import time
 import json
 from server.bank_server import BankSystem
+from core.debit_card import DebitCard, CardType
 
 if __name__ == "__main__":
     bank_system = BankSystem()
@@ -17,8 +18,9 @@ if __name__ == "__main__":
     
     # Solicitar turno (como cliente con tarjeta)
     turn_id = bank_system.request_turn(
+        "treller",
         customer_id=customer['customer_id'],
-        card_number="1234567890123456"  # Suponiendo que tiene una tarjeta
+        card_number="1234567890123456"
     )
     
     # Procesar transacciones concurrentemente

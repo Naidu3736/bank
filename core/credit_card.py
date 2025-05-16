@@ -33,6 +33,28 @@ class CreditCard(Card):
 
     def calculate_interest(self):
         return self.outstanding_balance * self.benefits["interest_rate"]
+    
+    def apply_interest(self):
+        """Aplica el interés acumulado al saldo pendiente."""
+        interest = self.calculate_interest()
+        self.outstanding_balance += interest
+        self.available_credit -= interest
+
+    def get_statement(self) -> str:
+        return (
+            f"Tarjeta {self.type.name}\n"
+            f"Crédito disponible: ${self.available_credit:.2f}\n"
+            f"Saldo pendiente: ${self.outstanding_balance:.2f}\n"
+            f"Interés mensual: {self.benefits['interest_rate'] * 100:.1f}%\n"
+        )
+    
+    def reset_credit_limit(self):
+        """Resetea el crédito disponible si el saldo pendiente es 0."""
+        if self.outstanding_balance == 0:
+            self.available_credit = self.credit_limit
+
+    def is_overdue(self, days_late: int) -> bool:
+        return self.outstanding_balance > 0 and days_late > 30  # Ajustable
 
     def __str__(self):
         return f"[CRÉDITO] {self.type.name} {self.card_number[:4]}****{self.card_number[-4:]}, Límite: ${self.credit_limit}, Saldo: ${self.outstanding_balance}"

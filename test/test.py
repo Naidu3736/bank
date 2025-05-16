@@ -3,7 +3,7 @@ from hashlib import sha256
 from core.account import Account
 from core.card import CardType, generate_card_number
 import uuid
-from core.custumer import Custumer
+from core.customer import Custumer
 
 class TestAccount(unittest.TestCase):
     def setUp(self):
