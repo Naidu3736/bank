@@ -46,6 +46,11 @@ class Account:
     
     def get_cards_summary(self) -> list:
         return [str(card) for card in self.debit_cards]
+    
+    def remove_debit_card(self, card_number: str) -> bool:
+        self.debit_cards = [dc for dc in self.debit_cards 
+                        if dc.card_number != card_number]
+        return True
 
     def validate_nip(self, nip):
         """Valida el NIP proporcionado"""

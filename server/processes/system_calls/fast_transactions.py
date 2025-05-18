@@ -1,20 +1,21 @@
-def deposit(bank, account_number: str, amount: float) -> bool:
-    """Depósito directo sin validaciones adicionales"""
-    with bank._accounts_lock:
-        account = bank.accounts.get(account_number)
-        if account:
-            account.balance += amount
-            return True
-        return False
+def create_account(bank, customer_id: str, initial_balance: float, nip: str) -> str:
+    """Wrapper para bank.add_account()"""
+    account = bank.add_account(customer_id, initial_balance, nip)
+    return account.account_number
 
-def simple_transfer(bank, source_id: str, target_id: str, amount: float) -> bool:
-    """Transferencia básica entre cuentas"""
-    with bank._accounts_lock:
-        if source_id not in bank.accounts or target_id not in bank.accounts:
+def link_account_to_customer(bank, account_number: str, customer_id: str) -> bool:
+    """Wrapper para bank.link_account_to_customer()"""
+    return bank.link_account_to_customer(account_number, customer_id)
+
+def close_account(bank, account_number: str) -> bool:
+    """Wrapper para bank.close_account()"""
+    return bank.close_account(account_number)
+
+def fast_deposit(bank, account_number: str, amount: float) -> bool:
+    """Versión simplificada para depósitos directos (efectivo)"""
+    with bank.locks.accounts_lock:
+        account = bank.accounts.get(account_number)
+        if not account:
             return False
-        if bank.accounts[source_id].balance < amount:
-            return False
-        
-        bank.accounts[source_id].balance -= amount
-        bank.accounts[target_id].balance += amount
+        account.balance += amount
         return True

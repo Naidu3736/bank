@@ -1,42 +1,175 @@
+from core.bank import Bank
+from core.transaction import Transaction, TransactionType
+from core.account import Account
+from core.customer import Customer
+from core.card import CardType
+from server.locks import BankLocks
+from event_logger import EventConsole, ProcessTracker
 import time
-import json
-from server.bank_server import BankSystem
-from core.debit_card import DebitCard, CardType
+import random
+import os
+from typing import List
+from rich.console import Console
+
+def customer_operations(bank: Bank, customer_id: str, account_numbers: List[str]):
+    """Simula operaciones de un cliente"""
+    pid = os.getpid()
+    
+    for i in range(5):
+        time.sleep(random.uniform(0.1, 0.5))
+        operation = random.choice([
+            lambda: bank.deposit(account_numbers[0], random.uniform(10, 100)),
+            lambda: bank.withdraw(account_numbers[0], random.uniform(10, 50), "1234"),
+            lambda: bank.transfer(account_numbers[0], account_numbers[1], random.uniform(5, 30)),
+            lambda: bank.get_account_balance(account_numbers[0]),
+            lambda: bank.get_account_transactions(account_numbers[0])
+        ])
+        
+        try:
+            operation()
+        except Exception as e:
+            bank.event_console.add_event(
+                pid,
+                "CUSTOMER_OPERATION_ERROR",
+                f"Error en operación: {str(e)}",
+                "error"
+            )
+
+def credit_card_operations(bank: Bank, card_number: str, account_number: str):
+    """Simula operaciones con tarjeta de crédito"""
+    pid = os.getpid()
+    
+    for i in range(3):
+        time.sleep(random.uniform(0.3, 1.0))
+        try:
+            if random.random() > 0.3:
+                bank.pay_credit_card(
+                    card_number, 
+                    random.uniform(20, 100), 
+                    account_number
+                )
+            else:
+                bank.pay_credit_card(
+                    card_number, 
+                    random.uniform(10, 50), 
+                    is_cash=True
+                )
+        except Exception as e:
+            bank.event_console.add_event(
+                pid,
+                "CREDIT_CARD_OPERATION_ERROR",
+                f"Error en pago: {str(e)}",
+                "error"
+            )
+
+def run_monitor(event_console: EventConsole, process_tracker: ProcessTracker):
+    """Función para ejecutar el monitor en el mismo proceso"""
+    from event_logger import BankMonitor  # Importación local para evitar problemas de pickling
+    monitor = BankMonitor(event_console, process_tracker)
+    monitor.run()
+
+def main():
+    console = Console()
+    
+    # Inicializar componentes
+    locks = BankLocks()
+    event_console = EventConsole()
+    process_tracker = ProcessTracker()
+    
+    # Crear banco
+    bank = Bank(locks, event_console, process_tracker)
+    
+    try:
+        console.print("\n--- Creando clientes ---", style="bold blue")
+        customer1 = bank.add_customer("Juan Pérez", "juan@example.com")
+        customer2 = bank.add_customer("María García", "maria@example.com")
+        
+        console.print("\n--- Creando cuentas ---", style="bold blue")
+        account1 = bank.add_account(customer1.customer_id, 1000.0, "1234")
+        account2 = bank.add_account(customer1.customer_id, 500.0, "5678")
+        account3 = bank.add_account(customer2.customer_id, 2000.0, "4321")
+        
+        console.print("\n--- Emitiendo tarjetas ---", style="bold blue")
+        debit_card1 = bank.issue_debit_card(account1.account_number, CardType.CLASSIC)
+        debit_card2 = bank.issue_debit_card(account2.account_number, CardType.GOLD)
+        credit_card1 = bank.issue_credit_card(customer1.customer_id, CardType.PLATINUM)
+        
+        console.print("\n--- Iniciando operaciones ---", style="bold blue")
+        
+        # Ejecutar el monitor en el hilo principal
+        import threading
+        monitor_thread = threading.Thread(
+            target=run_monitor,
+            args=(event_console, process_tracker),
+            daemon=True
+        )
+        monitor_thread.start()
+        
+        # Dar tiempo al monitor para iniciar
+        time.sleep(1)
+        
+        # Ejecutar operaciones en procesos separados
+        import multiprocessing
+        processes = []
+        
+        # Operaciones del cliente 1
+        for _ in range(2):
+            p = multiprocessing.Process(
+                target=customer_operations,
+                args=(bank, customer1.customer_id, [account1.account_number, account2.account_number])
+            )
+            processes.append(p)
+            p.start()
+        
+        # Operaciones con tarjeta de crédito
+        p = multiprocessing.Process(
+            target=credit_card_operations,
+            args=(bank, credit_card1.card_number, account1.account_number)
+        )
+        processes.append(p)
+        p.start()
+        
+        # Operaciones del cliente 2
+        p = multiprocessing.Process(
+            target=customer_operations,
+            args=(bank, customer2.customer_id, [account3.account_number])
+        )
+        processes.append(p)
+        p.start()
+        
+        # Esperar a que terminen las operaciones concurrentes
+        time.sleep(5)
+        
+        console.print("\n--- Operaciones administrativas ---", style="bold blue")
+        bank.block_card(debit_card1.card_number)
+        bank.generate_account_statement(account1.account_number)
+        bank.apply_monthly_interest()
+        
+        # Esperar a que terminen los procesos
+        for p in processes:
+            p.join(timeout=1)
+            if p.is_alive():
+                p.terminate()
+        
+        console.print("\n--- Resumen final ---", style="bold green")
+        console.print(f"Clientes creados: {len(bank.customers)}")
+        console.print(f"Cuentas creadas: {len(bank.accounts)}")
+        console.print(f"Tarjetas emitidas: {len(bank.card_registry)}")
+        console.print(f"Transacciones realizadas: {len(bank.transaction_history)}")
+        
+    except Exception as e:
+        console.print(f"\nError en main: {str(e)}", style="bold red")
+    finally:
+        # Detener el monitor
+        event_console.add_event(os.getpid(), "SYSTEM", "Cerrando aplicación", "warning")
+        time.sleep(1)  # Dar tiempo para mostrar el último mensaje
 
 if __name__ == "__main__":
-    bank_system = BankSystem()
+    # Configuración especial para Windows
+    import multiprocessing
+    multiprocessing.freeze_support()
     
-    # Añadir cajeros
-    bank_system.add_teller("VENTANILLA-1")
-    bank_system.add_teller("VENTANILLA-2")
+    # Cambiar el método de inicio para evitar problemas con RLock
+    multiprocessing.set_start_method('spawn')
     
-    # Crear cliente
-    customer = bank_system.create_customer("María García", "maria@example.com")
-    
-    # Crear cuenta
-    account = bank_system.create_account(customer['customer_id'], initial_balance=1000, nip="1234")
-    
-    # Solicitar turno (como cliente con tarjeta)
-    turn_id = bank_system.request_turn(
-        "treller",
-        customer_id=customer['customer_id'],
-        card_number="1234567890123456"
-    )
-    
-    # Procesar transacciones concurrentemente
-    deposit_pid = bank_system.process_transaction(
-        "deposit",
-        account_number=account['account_number'],
-        amount=500
-    )
-    
-    withdrawal_pid = bank_system.process_transaction(
-        "withdrawal",
-        account_number=account['account_number'],
-        amount=200
-    )
-    
-    # Monitorear estado
-    time.sleep(1)
-    print("Estado del sistema:")
-    print(json.dumps(bank_system.get_system_status(), indent=2))
+    main()

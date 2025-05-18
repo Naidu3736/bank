@@ -6,12 +6,11 @@ class TransactionType(Enum):
     DEPOSIT = "deposit"
     WITHDRAWAL = "withdrawal"
     TRANSFER = "transfer"
-    PURCHASE = "purchase"
     PAYMENT = "payment"
 
 class Transaction:
     def __init__(self, account_id, amount, transaction_type, 
-                 target_account_id=None, merchant=None, card_number=None):
+                 target_account_id=None, card_number=None, is_cash=False):
         self.transaction_id = self._generator_transaction_id()    # Identificador de la transacción
         self.account_id = account_id    # Identificador de la cuenta de origen de la transacción
         self.amount = amount    # Cantidad a operar del saldo
@@ -21,8 +20,9 @@ class Transaction:
         # Se asigna el id del receptor si y solo si es una transferencia
         self.target_account_id = target_account_id  if transaction_type == TransactionType.TRANSFER else None
 
-        self.merchant = merchant
         self.card_number = card_number
+
+        self.is_cash = is_cash
 
     def _generator_transaction_id(self):
         return str(uuid.uuid4)

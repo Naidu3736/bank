@@ -1,38 +1,81 @@
-from multiprocessing import Process
+from multiprocessing import Pool
 from core.turn import Turn
+from event_logger import EventConsole, ProcessTracker
+import os
 import time
 
-def run_process(turn: Turn, operations, time_slice=0.1):
-    """Ejecuta procesos con algoritmo round-robin"""
-    active_processes = []
+def run_process(turn: Turn, operations):
+    """Ejecuta operaciones en paralelo con multiprocessing."""
+    pid = os.getpid()
+    ProcessTracker.update_process(
+        pid,
+        state="running",
+        current_operation=f"Processing turn {turn.turn_id}"
+    )
+    
+    start_time = time.time()
+    results = []
     
     try:
-        # Iniciar todos los procesos primero
-        for op in operations:
-            p = Process(target=op)
-            p.start()
-            active_processes.append(p)
+        with Pool(processes=min(len(operations), 3)) as pool:
+            for i, op in enumerate(operations):
+                ProcessTracker.update_process(
+                    pid,
+                    state="running",
+                    current_operation=f"Executing op {i+1}/{len(operations)}"
+                )
+                results.append(pool.apply_async(_execute_operation, (op,)))
+            
+            results = [r.get() for r in results]
+            
+        if all(results):
+            turn.mark_as_attended()
+            EventConsole.add_event(
+                pid,
+                "PROCESS_COMPLETE",
+                f"Turn {turn.turn_id} completed successfully",
+                "success"
+            )
+        else:
+            turn.mark_as_failed()
+            EventConsole.add_event(
+                pid,
+                "PROCESS_FAILED",
+                f"Turn {turn.turn_id} failed",
+                "error"
+            )
+            
+    except Exception as e:
+        EventConsole.add_event(
+            pid,
+            "PROCESS_ERROR",
+            f"Error in turn {turn.turn_id}: {str(e)}",
+            "error"
+        )
+        turn.mark_as_failed()
         
-        # Implementación round-robin
-        while active_processes:
-            for p in list(active_processes):  # Copia para iteración segura
-                if not p.is_alive():
-                    active_processes.remove(p)
-                    continue
-                
-                # Pequeña pausa para simular time slice
-                time.sleep(time_slice)
-                
-                # En multiprocessing no podemos preemptar realmente,
-                # esto es más un enfoque cooperativo
-                
-    except KeyboardInterrupt:
-        for p in active_processes:
-            p.terminate()
-    
-    # Limpieza final
-    for p in active_processes:
-        p.join()
-        
-    # Marcar turno como atendido
-    turn.mark_as_attended()
+    finally:
+        ProcessTracker.update_process(
+            pid,
+            state="completed",
+            current_operation=f"Turn {turn.turn_id} processed in {time.time()-start_time:.2f}s"
+        )
+
+def _execute_operation(op):
+    """Función auxiliar para ejecutar una operación."""
+    pid = os.getpid()
+    try:
+        ProcessTracker.update_process(
+            pid,
+            state="running",
+            current_operation="Executing bank operation"
+        )
+        return op()
+    except Exception as e:
+        EventConsole.add_event(
+            pid,
+            "OPERATION_ERROR",
+            f"Operation failed: {str(e)}",
+            "error"
+        )
+        return False

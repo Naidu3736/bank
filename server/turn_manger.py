@@ -26,3 +26,7 @@ class TurnManager:
         """Elimina un turno de los activos"""
         if turn_id in self.active_turns:
             self.active_turns.remove(turn_id)
+
+    @property
+    def has_pending_turns(self) -> bool:
+        return len(self.priority_queue) > 0

@@ -1,0 +1,4 @@
+{"timestamp": "19:40:24,240", "pid": 2592, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Mar\u00eda Garc\u00eda (maria.garcia@example.com)", "status": "info"}
+{"timestamp": "19:40:24,291", "pid": 2592, "operation": "ADD_CUSTOMER_ERROR", "details": "Error al crear cliente: ProcessTracker.update_process() got an unexpected keyword argument 'lock_acquired'", "status": "error"}
+{"timestamp": "19:40:24,537", "pid": 21760, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Mar\u00eda Garc\u00eda (maria.garcia@example.com)", "status": "info"}
+{"timestamp": "19:40:24,569", "pid": 21760, "operation": "ADD_CUSTOMER_ERROR", "details": "Error al crear cliente: ProcessTracker.update_process() got an unexpected keyword argument 'lock_acquired'", "status": "error"}

@@ -1,0 +1,11 @@
+{"timestamp": "20:03:43,122", "pid": 24824, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Juan P\u00e9rez (juan@example.com)", "status": "info"}
+{"timestamp": "20:03:43,146", "pid": 24824, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Juan P\u00e9rez (ID: 64b1834b-ee6c-4131-afae-3e5077c4dd16)", "status": "success"}
+{"timestamp": "20:03:43,161", "pid": 24824, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Mar\u00eda Garc\u00eda (maria@example.com)", "status": "info"}
+{"timestamp": "20:03:43,173", "pid": 24824, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Mar\u00eda Garc\u00eda (ID: f2cc0c0b-6bdc-4db7-ba5e-d1aff686e469)", "status": "success"}
+{"timestamp": "20:03:43,190", "pid": 24824, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 64b1834b-ee6c-4131-afae-3e5077c4dd16", "status": "info"}
+{"timestamp": "20:03:43,214", "pid": 24824, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 7017960379 con saldo inicial $1000.00", "status": "success"}
+{"timestamp": "20:03:43,222", "pid": 24824, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 64b1834b-ee6c-4131-afae-3e5077c4dd16", "status": "info"}
+{"timestamp": "20:03:43,243", "pid": 24824, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 9320399688 con saldo inicial $500.00", "status": "success"}
+{"timestamp": "20:03:43,249", "pid": 24824, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente f2cc0c0b-6bdc-4db7-ba5e-d1aff686e469", "status": "info"}
+{"timestamp": "20:03:43,271", "pid": 24824, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 4521231606 con saldo inicial $2000.00", "status": "success"}
+{"timestamp": "20:03:43,279", "pid": 24824, "operation": "SYSTEM", "details": "Cerrando aplicaci\u00f3n", "status": "warning"}
