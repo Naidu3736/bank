@@ -1,44 +1,32 @@
-Folder PATH listing
-Volume serial number is 4EC3-768D
 C:.
-|   estructura.txt
-|   event_logger.py
-|   main.py
-|   README.md
-|   view_logs.py
+|   estructura.txt          # Documentación de la estructura del proyecto
+|   event_logger.py         # Sistema de registro de eventos y monitorización (EventConsole, ProcessTracker, BankMonitor)
+|   main.py                 # Punto de entrada principal de la aplicación
+|   README.md               # Documentación general del proyecto
+|   view_logs.py            # Herramienta para visualizar los logs generados
 |   
 +---client
-|       descripci�n.txt
+|       descripción.txt     # Documentación sobre el módulo cliente
 |       
-+---core
-|   |   account.py
-|   |   bank.py
-|   |   card.py
-|   |   credit_card.py
-|   |   customer.py
-|   |   debit_card.py
-|   |   transaction.py
-|   |   turn.py
++---core                   # Módulo principal con las clases básicas del sistema bancario
+|   |   account.py          # Clase Account (cuentas bancarias)
+|   |   bank.py             # Clase Bank (lógica principal del banco)
+|   |   card.py             # Clase base Card y CardType (enum)
+|   |   credit_card.py      # Clase CreditCard (implementa tarjetas de crédito)
+|   |   customer.py         # Clase Customer (clientes del banco)
+|   |   debit_card.py       # Clase DebitCard (implementa tarjetas de débito)
+|   |   transaction.py      # Clase Transaction y TransactionType (enum)
+|   |   turn.py             # Gestión de turnos (si aplica)
 |   |   
-|   \---__pycache__
-|           account.cpython-313.pyc
-|           bank.cpython-313.pyc
-|           card.cpython-313.pyc
-|           credit_card.cpython-313.pyc
-|           customer.cpython-313.pyc
-|           custumer.cpython-313.pyc
-|           debit_card.cpython-313.pyc
-|           teller.cpython-313.pyc
-|           transaction.cpython-313.pyc
-|           turn.cpython-313.pyc
+|   \---__pycache__        # Archivos compilados de Python (generados automáticamente)
 |           
-+---logs
-|       bank_20250517_201009.log
++---logs                   # Directorio de logs generados por la aplicación
+|       bank_20250517_201009.log  # Ejemplo de archivo de log
 |       
-+---server
-|   |   advisor.py
-|   |   locks.py
-|   |   process_dispatcher.py
-|   |   run_process.py
-|   |   teller.py
-|   |   turn_manger.py       
++---server                 # Módulo del servidor y componentes de atención
+|   |   advisor.py         # Lógica para asesores bancarios
+|   |   locks.py           # Implementación de locks para concurrencia (BankLocks)
+|   |   process_dispatcher.py  # Gestión de procesos del servidor
+|   |   run_process.py     # Script para ejecutar procesos
+|   |   teller.py          # Lógica para cajeros bancarios
+|   |   turn_manager.py    # Gestor de turnos (alternativa a turn.py)
