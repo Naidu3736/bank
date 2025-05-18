@@ -1,0 +1,47 @@
+{"timestamp": "20:16:56,271", "pid": 23880, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Juan P\u00e9rez (juan@example.com)", "status": "info"}
+{"timestamp": "20:16:56,152", "pid": 23880, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Juan P\u00e9rez (ID: 5ee3aaa0-a22d-4d20-979b-973ebfce45c3)", "status": "success"}
+{"timestamp": "20:16:56,164", "pid": 23880, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Mar\u00eda Garc\u00eda (maria@example.com)", "status": "info"}
+{"timestamp": "20:16:56,178", "pid": 23880, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Mar\u00eda Garc\u00eda (ID: d9ef00e9-ab68-46cb-b7f7-2401a8bd0185)", "status": "success"}
+{"timestamp": "20:16:56,206", "pid": 23880, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 5ee3aaa0-a22d-4d20-979b-973ebfce45c3", "status": "info"}
+{"timestamp": "20:16:56,232", "pid": 23880, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 2762489845 con saldo inicial $1000.00", "status": "success"}
+{"timestamp": "20:16:56,239", "pid": 23880, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 5ee3aaa0-a22d-4d20-979b-973ebfce45c3", "status": "info"}
+{"timestamp": "20:16:56,257", "pid": 23880, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 8851976932 con saldo inicial $500.00", "status": "success"}
+{"timestamp": "20:16:56,263", "pid": 23880, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente d9ef00e9-ab68-46cb-b7f7-2401a8bd0185", "status": "info"}
+{"timestamp": "20:16:56,281", "pid": 23880, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 1640514342 con saldo inicial $2000.00", "status": "success"}
+{"timestamp": "20:16:56,287", "pid": 23880, "operation": "ISSUE_DEBIT_CARD_START", "details": "Emisi\u00f3n de tarjeta d\u00e9bito para cuenta 2762489845", "status": "info"}
+{"timestamp": "20:16:56,307", "pid": 23880, "operation": "ISSUE_DEBIT_CARD_SUCCESS", "details": "Tarjeta d\u00e9bito emitida: 4468916678884315 (Tipo: NORMAL)", "status": "success"}
+{"timestamp": "20:16:56,313", "pid": 23880, "operation": "ISSUE_DEBIT_CARD_START", "details": "Emisi\u00f3n de tarjeta d\u00e9bito para cuenta 8851976932", "status": "info"}
+{"timestamp": "20:16:56,331", "pid": 23880, "operation": "ISSUE_DEBIT_CARD_SUCCESS", "details": "Tarjeta d\u00e9bito emitida: 5156847004630161 (Tipo: GOLD)", "status": "success"}
+{"timestamp": "20:16:56,338", "pid": 23880, "operation": "ISSUE_CREDIT_CARD_START", "details": "Emisi\u00f3n de tarjeta cr\u00e9dito para cliente 5ee3aaa0-a22d-4d20-979b-973ebfce45c3", "status": "info"}
+{"timestamp": "20:16:56,355", "pid": 23880, "operation": "ISSUE_CREDIT_CARD_SUCCESS", "details": "Tarjeta cr\u00e9dito emitida: 5250942946760376 (L\u00edmite: $50000.00)", "status": "success"}
+{"timestamp": "20:16:56,688", "pid": 23880, "operation": "CREDIT_PAYMENT_START", "details": "Procesando pago de $78.44 a tarjeta 5250942946760376", "status": "info"}
+{"timestamp": "20:16:56,708", "pid": 23880, "operation": "CREDIT_PAYMENT_SUCCESS", "details": "Pago aplicado a tarjeta 5250942946760376. Nuevo saldo: $0.00", "status": "success"}
+{"timestamp": "20:16:56,745", "pid": 23880, "operation": "DEPOSIT_INITIATED", "details": "Intentando depositar $21.97 en 2762489845", "status": "info"}
+{"timestamp": "20:16:56,758", "pid": 23880, "operation": "DEPOSIT_ERROR", "details": "Error inesperado en dep\u00f3sito: Transaction.__init__() got an unexpected keyword argument 'source_reference'", "status": "error"}
+{"timestamp": "20:16:56,771", "pid": 23880, "operation": "TRANSACTION_HISTORY_REQUEST", "details": "Solicitando historial de 1640514342 (\u00faltimas 10 transacciones)", "status": "info"}
+{"timestamp": "20:16:56,788", "pid": 23880, "operation": "CUSTOMER_OPERATION_ERROR", "details": "Error en operaci\u00f3n: 'Account' object has no attribute 'get_transactions'", "status": "error"}
+{"timestamp": "20:16:56,949", "pid": 23880, "operation": "TRANSACTION_HISTORY_REQUEST", "details": "Solicitando historial de 2762489845 (\u00faltimas 10 transacciones)", "status": "info"}
+{"timestamp": "20:16:56,964", "pid": 23880, "operation": "CUSTOMER_OPERATION_ERROR", "details": "Error en operaci\u00f3n: 'Account' object has no attribute 'get_transactions'", "status": "error"}
+{"timestamp": "20:16:57,243", "pid": 23880, "operation": "WITHDRAWAL_INITIATED", "details": "Intentando retirar $23.57 de 1640514342", "status": "info"}
+{"timestamp": "20:16:57,253", "pid": 23880, "operation": "WITHDRAWAL_FAILED", "details": "Cuenta no encontrada o NIP incorrecto", "status": "error"}
+{"timestamp": "20:16:57,328", "pid": 23880, "operation": "BALANCE_REQUEST", "details": "Solicitando saldo de 2762489845", "status": "info"}
+{"timestamp": "20:16:57,338", "pid": 23880, "operation": "BALANCE_RETURNED", "details": "Saldo obtenido: $943.54", "status": "success"}
+{"timestamp": "20:16:57,383", "pid": 23880, "operation": "WITHDRAWAL_INITIATED", "details": "Intentando retirar $22.33 de 1640514342", "status": "info"}
+{"timestamp": "20:16:57,394", "pid": 23880, "operation": "WITHDRAWAL_FAILED", "details": "Cuenta no encontrada o NIP incorrecto", "status": "error"}
+{"timestamp": "20:16:57,558", "pid": 23880, "operation": "CREDIT_PAYMENT_START", "details": "Procesando pago de $26.09 a tarjeta 5250942946760376", "status": "info"}
+{"timestamp": "20:16:57,569", "pid": 23880, "operation": "CREDIT_CASH_PAYMENT", "details": "Pago en efectivo registrado: $26.09", "status": "info"}
+{"timestamp": "20:16:57,571", "pid": 23880, "operation": "CREDIT_PAYMENT_SUCCESS", "details": "Pago aplicado a tarjeta 5250942946760376. Nuevo saldo: $0.00", "status": "success"}
+{"timestamp": "20:16:57,721", "pid": 23880, "operation": "DEPOSIT_INITIATED", "details": "Intentando depositar $18.82 en 1640514342", "status": "info"}
+{"timestamp": "20:16:57,737", "pid": 23880, "operation": "DEPOSIT_ERROR", "details": "Error inesperado en dep\u00f3sito: Transaction.__init__() got an unexpected keyword argument 'source_reference'", "status": "error"}
+{"timestamp": "20:16:57,809", "pid": 23880, "operation": "TRANSACTION_HISTORY_REQUEST", "details": "Solicitando historial de 2762489845 (\u00faltimas 10 transacciones)", "status": "info"}
+{"timestamp": "20:16:57,823", "pid": 23880, "operation": "CUSTOMER_OPERATION_ERROR", "details": "Error en operaci\u00f3n: 'Account' object has no attribute 'get_transactions'", "status": "error"}
+{"timestamp": "20:16:57,879", "pid": 23880, "operation": "TRANSACTION_HISTORY_REQUEST", "details": "Solicitando historial de 1640514342 (\u00faltimas 10 transacciones)", "status": "info"}
+{"timestamp": "20:16:57,906", "pid": 23880, "operation": "CUSTOMER_OPERATION_ERROR", "details": "Error en operaci\u00f3n: 'Account' object has no attribute 'get_transactions'", "status": "error"}
+{"timestamp": "20:16:57,923", "pid": 23880, "operation": "CREDIT_PAYMENT_START", "details": "Procesando pago de $40.48 a tarjeta 5250942946760376", "status": "info"}
+{"timestamp": "20:16:57,947", "pid": 23880, "operation": "CREDIT_PAYMENT_SUCCESS", "details": "Pago aplicado a tarjeta 5250942946760376. Nuevo saldo: $0.00", "status": "success"}
+{"timestamp": "20:16:58,252", "pid": 23880, "operation": "TRANSACTION_HISTORY_REQUEST", "details": "Solicitando historial de 2762489845 (\u00faltimas 10 transacciones)", "status": "info"}
+{"timestamp": "20:16:58,272", "pid": 23880, "operation": "CUSTOMER_OPERATION_ERROR", "details": "Error en operaci\u00f3n: 'Account' object has no attribute 'get_transactions'", "status": "error"}
+{"timestamp": "20:16:58,275", "pid": 23880, "operation": "BLOCK_CARD_START", "details": "Intentando bloquear tarjeta 4468916678884315", "status": "warning"}
+{"timestamp": "20:16:58,288", "pid": 23880, "operation": "BLOCK_CARD_SUCCESS", "details": "Tarjeta 4468916678884315 bloqueada exitosamente", "status": "warning"}
+{"timestamp": "20:16:58,297", "pid": 23880, "operation": "ACCOUNT_STATEMENT_REQUEST", "details": "Generando estado de cuenta para 2762489845 (\u00faltimos 30 d\u00edas)", "status": "info"}
+{"timestamp": "20:16:58,311", "pid": 23880, "operation": "TRANSACTION_HISTORY_REQUEST", "details": "Solicitando historial de 2762489845 (\u00faltimas 100 transacciones)", "status": "info"}

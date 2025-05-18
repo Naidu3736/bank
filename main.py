@@ -1,13 +1,11 @@
 from core.bank import Bank
-from core.transaction import Transaction, TransactionType
-from core.account import Account
-from core.customer import Customer
 from core.card import CardType
 from server.locks import BankLocks
-from event_logger import EventConsole, ProcessTracker
+from event_logger import EventConsole, ProcessTracker, BankMonitor
 import time
 import random
 import os
+import threading
 from typing import List
 from rich.console import Console
 
@@ -62,12 +60,6 @@ def credit_card_operations(bank: Bank, card_number: str, account_number: str):
                 "error"
             )
 
-def run_monitor(event_console: EventConsole, process_tracker: ProcessTracker):
-    """Función para ejecutar el monitor en el mismo proceso"""
-    from event_logger import BankMonitor  # Importación local para evitar problemas de pickling
-    monitor = BankMonitor(event_console, process_tracker)
-    monitor.run()
-
 def main():
     console = Console()
     
@@ -78,6 +70,11 @@ def main():
     
     # Crear banco
     bank = Bank(locks, event_console, process_tracker)
+    
+    # Iniciar el monitor en un hilo separado
+    monitor = BankMonitor(event_console, process_tracker)
+    monitor_thread = threading.Thread(target=monitor.run, daemon=True)
+    monitor_thread.start()
     
     try:
         console.print("\n--- Creando clientes ---", style="bold blue")
@@ -90,86 +87,70 @@ def main():
         account3 = bank.add_account(customer2.customer_id, 2000.0, "4321")
         
         console.print("\n--- Emitiendo tarjetas ---", style="bold blue")
-        debit_card1 = bank.issue_debit_card(account1.account_number, CardType.CLASSIC)
+        debit_card1 = bank.issue_debit_card(account1.account_number, CardType.NORMAL)
         debit_card2 = bank.issue_debit_card(account2.account_number, CardType.GOLD)
         credit_card1 = bank.issue_credit_card(customer1.customer_id, CardType.PLATINUM)
         
-        console.print("\n--- Iniciando operaciones ---", style="bold blue")
-        
-        # Ejecutar el monitor en el hilo principal
-        import threading
-        monitor_thread = threading.Thread(
-            target=run_monitor,
-            args=(event_console, process_tracker),
-            daemon=True
-        )
-        monitor_thread.start()
-        
-        # Dar tiempo al monitor para iniciar
-        time.sleep(1)
-        
-        # Ejecutar operaciones en procesos separados
-        import multiprocessing
-        processes = []
+        # Iniciar operaciones concurrentes
+        console.print("\n--- Iniciando operaciones concurrentes ---", style="bold blue")
+        threads = []
         
         # Operaciones del cliente 1
-        for _ in range(2):
-            p = multiprocessing.Process(
-                target=customer_operations,
-                args=(bank, customer1.customer_id, [account1.account_number, account2.account_number])
-            )
-            processes.append(p)
-            p.start()
-        
-        # Operaciones con tarjeta de crédito
-        p = multiprocessing.Process(
-            target=credit_card_operations,
-            args=(bank, credit_card1.card_number, account1.account_number)
+        t = threading.Thread(
+            target=customer_operations,
+            args=(bank, customer1.customer_id, [account1.account_number, account2.account_number])
         )
-        processes.append(p)
-        p.start()
+        threads.append(t)
+        t.start()
         
         # Operaciones del cliente 2
-        p = multiprocessing.Process(
+        t = threading.Thread(
             target=customer_operations,
             args=(bank, customer2.customer_id, [account3.account_number])
         )
-        processes.append(p)
-        p.start()
+        threads.append(t)
+        t.start()
         
-        # Esperar a que terminen las operaciones concurrentes
-        time.sleep(5)
+        # Operaciones con tarjeta de crédito
+        t = threading.Thread(
+            target=credit_card_operations,
+            args=(bank, credit_card1.card_number, account1.account_number)
+        )
+        threads.append(t)
+        t.start()
         
-        console.print("\n--- Operaciones administrativas ---", style="bold blue")
+        # Esperar a que terminen las operaciones
+        for t in threads:
+            t.join(timeout=10)
+        
+        # Operaciones administrativas finales
+        console.print("\n--- Realizando operaciones administrativas ---", style="bold blue")
         bank.block_card(debit_card1.card_number)
         bank.generate_account_statement(account1.account_number)
         bank.apply_monthly_interest()
         
-        # Esperar a que terminen los procesos
-        for p in processes:
-            p.join(timeout=1)
-            if p.is_alive():
-                p.terminate()
+        console.print("\n--- Todas las operaciones completadas ---", style="bold green")
+        console.print("El monitor seguirá activo durante 10 segundos más...")
         
-        console.print("\n--- Resumen final ---", style="bold green")
-        console.print(f"Clientes creados: {len(bank.customers)}")
-        console.print(f"Cuentas creadas: {len(bank.accounts)}")
-        console.print(f"Tarjetas emitidas: {len(bank.card_registry)}")
-        console.print(f"Transacciones realizadas: {len(bank.transaction_history)}")
+        time.sleep(10)  # Tiempo para ver el monitor
         
     except Exception as e:
         console.print(f"\nError en main: {str(e)}", style="bold red")
     finally:
         # Detener el monitor
-        event_console.add_event(os.getpid(), "SYSTEM", "Cerrando aplicación", "warning")
-        time.sleep(1)  # Dar tiempo para mostrar el último mensaje
+        monitor.running = False
+        monitor_thread.join(timeout=1)
+        
+        # Resumen final
+        console.print("\n--- Resumen final ---", style="bold green")
+        console.print(f"Clientes creados: {len(bank.customers)}")
+        console.print(f"Cuentas creadas: {len(bank.accounts)}")
+        console.print(f"Tarjetas emitidas: {len(bank.card_registry)}")
+        console.print(f"Transacciones realizadas: {len(bank.transaction_history)}")
 
 if __name__ == "__main__":
-    # Configuración especial para Windows
+    # Configuración para Windows
     import multiprocessing
     multiprocessing.freeze_support()
-    
-    # Cambiar el método de inicio para evitar problemas con RLock
-    multiprocessing.set_start_method('spawn')
     
     main()
