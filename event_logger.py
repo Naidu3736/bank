@@ -216,7 +216,7 @@ class BankMonitor:
         layout = Layout()
         layout.split(
             Layout(name="processes", size=10),
-            Layout(name="locks", size=6),
+            Layout(name="locks", size=10),
             Layout(name="events", size=14)
         )
         

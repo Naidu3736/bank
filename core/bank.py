@@ -9,17 +9,61 @@ from server.locks import BankLocks
 from event_logger import EventConsole, ProcessTracker
 import os
 import time
+import multiprocessing
 from contextlib import contextmanager
 
 class Bank:
-    def __init__(self, locks: BankLocks, event_console, process_tracker):
-        self.accounts: Dict[str, Account] = {}
-        self.customers: Dict[str, Customer] = {}
-        self.card_registry: Dict[str, DebitCard | CreditCard] = {}
+    def __init__(self, locks: BankLocks, event_console: EventConsole, process_tracker: ProcessTracker, shared_data=None):
+        """
+        Inicializa el banco con sistemas de concurrencia y datos compartidos.
+        
+        Args:
+            locks (BankLocks): Sistema de bloqueos para concurrencia
+            event_console (EventConsole): Sistema de registro de eventos
+            process_tracker (ProcessTracker): Rastreador de procesos
+            shared_data (dict, optional): Datos compartidos entre procesos. Defaults to None.
+        """
+        # Sistemas esenciales
         self.locks = locks
-        self.transaction_history: List[Transaction] = []
         self.event_console = event_console
         self.process_tracker = process_tracker
+        
+        # Inicialización de estructuras de datos
+        self._initialize_data_structures(shared_data)
+        
+        # Contadores para IDs
+        self._account_counter = multiprocessing.Value('i', 1000)
+        self._customer_counter = multiprocessing.Value('i', 100)
+        self._transaction_counter = multiprocessing.Value('i', 1)
+
+    def _initialize_data_structures(self, shared_data):
+        """Inicializa las estructuras de datos, con o sin memoria compartida"""
+        if shared_data:
+            # Modo multiproceso con datos compartidos
+            self.accounts = shared_data.get('accounts', self._create_shared_dict())
+            self.customers = shared_data.get('customers', self._create_shared_dict())
+            self.card_registry = shared_data.get('cards', self._create_shared_dict())
+            self.transaction_history = shared_data.get('transactions', self._create_shared_list())
+        else:
+            # Modo single-process
+            self.accounts = {}
+            self.customers = {}
+            self.card_registry = {}
+            self.transaction_history = []
+            
+        # Bloqueo para contadores
+        self._counter_lock = multiprocessing.Lock()
+
+    def _create_shared_dict(self):
+        """Crea un diccionario compartido seguro para multiprocesos"""
+        manager = multiprocessing.Manager()
+        return manager.dict()
+
+    def _create_shared_list(self):
+        """Crea una lista compartida segura para multiprocesos"""
+        manager = multiprocessing.Manager()
+        return manager.list()
+
         
     @contextmanager
     def _track_operation(self, operation_name: str, lock_name: str = None):
@@ -87,18 +131,22 @@ class Bank:
                 "info"
             )
             
+            # 1. Esperando accounts_lock
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Verificando cuenta",
+                state="waiting",
+                current_operation="Esperando accounts_lock para verificar cuenta",
                 lock_waiting="accounts_lock"
             )
+            self.process_tracker.update_lock("accounts_lock", state="waiting", owner_pid=pid)
             
             with self.locks.accounts_lock:
+                # 2. Adquirido accounts_lock
+                self.process_tracker.update_lock("accounts_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Verificando cuenta (lock adquirido)",
+                    current_operation="Verificando cuenta (accounts_lock adquirido)",
                     lock_acquired="accounts_lock"
                 )
                 
@@ -112,18 +160,22 @@ class Bank:
                     )
                     return False
 
+            # 3. Esperando customers_lock
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Verificando cliente",
+                state="waiting",
+                current_operation="Esperando customers_lock para verificar cliente",
                 lock_waiting="customers_lock"
             )
+            self.process_tracker.update_lock("customers_lock", state="waiting", owner_pid=pid)
             
             with self.locks.customers_lock:
+                # 4. Adquirido customers_lock
+                self.process_tracker.update_lock("customers_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Verificando cliente (lock adquirido)",
+                    current_operation="Verificando cliente (customers_lock adquirido)",
                     lock_acquired="customers_lock"
                 )
                 
@@ -156,6 +208,9 @@ class Bank:
                     return False
                     
         finally:
+            # Liberar todos los locks y actualizar estado
+            self.process_tracker.update_lock("accounts_lock", state="free", owner_pid=-1)
+            self.process_tracker.update_lock("customers_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
@@ -176,13 +231,13 @@ class Bank:
                 "info"
             )
             
+            # Verificación de propiedad sin lock (solo lectura)
             self.process_tracker.update_process(
                 pid,
                 state="working",
                 current_operation="Verificando propiedad de cuentas"
             )
             
-            # Verificación de propiedad
             owned_accounts = {acc.account_number for acc in self.get_customer_accounts(customer_id)}
             if source_acc not in owned_accounts or target_acc not in owned_accounts:
                 self.event_console.add_event(
@@ -193,14 +248,16 @@ class Bank:
                 )
                 return False
 
-            # Registrar transferencia
-            self.event_console.add_event(
+            # 1. Esperando accounts_lock para transferencia
+            self.process_tracker.update_process(
                 pid,
-                "INTERNAL_TRANSFER_ATTEMPT",
-                f"Transferencia interna: ${amount:.2f} de {source_acc} a {target_acc}",
-                "info"
+                state="waiting",
+                current_operation="Esperando accounts_lock para transferencia",
+                lock_waiting="accounts_lock"
             )
+            self.process_tracker.update_lock("accounts_lock", state="waiting", owner_pid=pid)
             
+            # Realizar transferencia (este método ya maneja sus propios locks)
             result = self.transfer(source_acc, target_acc, amount)
             
             if result:
@@ -221,6 +278,8 @@ class Bank:
             return result
             
         finally:
+            # Asegurarse de liberar locks (aunque transfer ya lo hace)
+            self.process_tracker.update_lock("accounts_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
@@ -241,18 +300,22 @@ class Bank:
                 "info"
             )
             
+            # 1. Estado de espera para customers_lock
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Validando email único",
+                state="waiting",
+                current_operation="Esperando customers_lock para validar email",
                 lock_waiting="customers_lock"
             )
+            self.process_tracker.update_lock("customers_lock", state="waiting", owner_pid=pid)
             
             with self.locks.customers_lock:
+                # 2. Lock adquirido
+                self.process_tracker.update_lock("customers_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Verificando email (lock adquirido)",
+                    current_operation="Validando email único (customers_lock adquirido)",
                     lock_acquired="customers_lock"
                 )
                 
@@ -277,13 +340,6 @@ class Bank:
                     "success"
                 )
                 
-                self.process_tracker.update_process(
-                    pid,
-                    state="working",
-                    current_operation="Cliente registrado exitosamente",
-                    lock_acquired="customers_lock"
-                )
-                
                 return customer
                 
         except Exception as e:
@@ -296,6 +352,8 @@ class Bank:
             raise
             
         finally:
+            # Liberar lock y actualizar estado
+            self.process_tracker.update_lock("customers_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
@@ -314,18 +372,22 @@ class Bank:
                 "info"
             )
             
+            # 1. Estado de espera para customers_lock
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Preparando eliminación",
+                state="waiting",
+                current_operation="Esperando customers_lock para eliminar cliente",
                 lock_waiting="customers_lock"
             )
+            self.process_tracker.update_lock("customers_lock", state="waiting", owner_pid=pid)
             
             with self.locks.customers_lock:
+                # 2. Lock adquirido
+                self.process_tracker.update_lock("customers_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Eliminando cliente (lock adquirido)",
+                    current_operation="Eliminando cliente (customers_lock adquirido)",
                     lock_acquired="customers_lock"
                 )
                 
@@ -351,6 +413,8 @@ class Bank:
                 return False
                 
         finally:
+            # Liberar lock y actualizar estado
+            self.process_tracker.update_lock("customers_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
@@ -371,19 +435,22 @@ class Bank:
                 "info"
             )
             
+            # 1. Esperando customers_lock para verificar cliente
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Verificando cliente",
+                state="waiting",
+                current_operation="Esperando customers_lock para verificar cliente",
                 lock_waiting="customers_lock"
             )
+            self.process_tracker.update_lock("customers_lock", state="waiting", owner_pid=pid)
             
-            # Verificar que el cliente existe
             with self.locks.customers_lock:
+                # 2. customers_lock adquirido
+                self.process_tracker.update_lock("customers_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Verificando cliente (lock adquirido)",
+                    current_operation="Verificando cliente (customers_lock adquirido)",
                     lock_acquired="customers_lock"
                 )
                 
@@ -396,35 +463,58 @@ class Bank:
                     )
                     raise ValueError("Cliente no encontrado")
 
+            # 3. Esperando accounts_lock para crear cuenta
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Creando cuenta",
+                state="waiting",
+                current_operation="Esperando accounts_lock para crear cuenta",
                 lock_waiting="accounts_lock"
             )
+            self.process_tracker.update_lock("accounts_lock", state="waiting", owner_pid=pid)
             
-            # Crear la nueva cuenta
             with self.locks.accounts_lock:
+                # 4. accounts_lock adquirido
+                self.process_tracker.update_lock("accounts_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Registrando cuenta (lock adquirido)",
+                    current_operation="Registrando cuenta (accounts_lock adquirido)",
                     lock_acquired="accounts_lock"
                 )
                 
                 account = Account(customer_id, initial_balance, nip)
                 self.accounts[account.account_number] = account
-                self.customers[customer_id].link_account(account)
                 
-                self.event_console.add_event(
+                # 5. Necesitamos customers_lock nuevamente para link_account
+                self.process_tracker.update_process(
                     pid,
-                    "ADD_ACCOUNT_SUCCESS",
-                    f"Nueva cuenta creada: {account.account_number} con saldo inicial ${initial_balance:.2f}",
-                    "success"
+                    state="waiting",
+                    current_operation="Esperando customers_lock para vincular cuenta",
+                    lock_waiting="customers_lock"
                 )
+                self.process_tracker.update_lock("customers_lock", state="waiting", owner_pid=pid)
                 
-                return account
-                
+                with self.locks.customers_lock:
+                    # 6. customers_lock adquirido nuevamente
+                    self.process_tracker.update_lock("customers_lock", state="acquired", owner_pid=pid)
+                    self.process_tracker.update_process(
+                        pid,
+                        state="working",
+                        current_operation="Vinculando cuenta a cliente (customers_lock adquirido)",
+                        lock_acquired="customers_lock"
+                    )
+                    
+                    self.customers[customer_id].link_account(account)
+                    
+                    self.event_console.add_event(
+                        pid,
+                        "ADD_ACCOUNT_SUCCESS",
+                        f"Nueva cuenta creada: {account.account_number} con saldo inicial ${initial_balance:.2f}",
+                        "success"
+                    )
+                    
+                    return account
+                    
         except Exception as e:
             self.event_console.add_event(
                 pid,
@@ -435,6 +525,9 @@ class Bank:
             raise
             
         finally:
+            # Liberar todos los locks y actualizar estado
+            self.process_tracker.update_lock("customers_lock", state="free", owner_pid=-1)
+            self.process_tracker.update_lock("accounts_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
@@ -453,18 +546,22 @@ class Bank:
                 "warning"  # Warning porque es operación sensible
             )
             
+            # 1. Esperando accounts_lock
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Preparando cierre de cuenta",
+                state="waiting",
+                current_operation="Esperando accounts_lock para cerrar cuenta",
                 lock_waiting="accounts_lock"
             )
+            self.process_tracker.update_lock("accounts_lock", state="waiting", owner_pid=pid)
             
             with self.locks.accounts_lock:
+                # 2. accounts_lock adquirido
+                self.process_tracker.update_lock("accounts_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Cerrando cuenta (lock adquirido)",
+                    current_operation="Cerrando cuenta (accounts_lock adquirido)",
                     lock_acquired="accounts_lock"
                 )
                 
@@ -492,6 +589,8 @@ class Bank:
                 return False
                 
         finally:
+            # Liberar lock y actualizar estado
+            self.process_tracker.update_lock("accounts_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
@@ -504,6 +603,7 @@ class Bank:
     def issue_debit_card(self, account_number: str, card_type: CardType) -> DebitCard:
         pid = os.getpid()
         try:
+            # Registrar inicio de operación
             self.event_console.add_event(
                 pid,
                 "ISSUE_DEBIT_CARD_START",
@@ -511,18 +611,22 @@ class Bank:
                 "info"
             )
             
+            # 1. Esperando accounts_lock para verificar cuenta
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Verificando cuenta",
+                state="waiting",
+                current_operation="Esperando accounts_lock para verificar cuenta",
                 lock_waiting="accounts_lock"
             )
+            self.process_tracker.update_lock("accounts_lock", state="waiting", owner_pid=pid)
             
             with self.locks.accounts_lock:
+                # 2. accounts_lock adquirido
+                self.process_tracker.update_lock("accounts_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Verificando cuenta (lock adquirido)",
+                    current_operation="Verificando cuenta (accounts_lock adquirido)",
                     lock_acquired="accounts_lock"
                 )
                 
@@ -536,18 +640,22 @@ class Bank:
                     )
                     raise ValueError("Cuenta no existe")
 
+            # 3. Esperando cards_lock para emitir tarjeta
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Emitiendo tarjeta",
+                state="waiting",
+                current_operation="Esperando cards_lock para emitir tarjeta",
                 lock_waiting="cards_lock"
             )
+            self.process_tracker.update_lock("cards_lock", state="waiting", owner_pid=pid)
             
             with self.locks.cards_lock:
+                # 4. cards_lock adquirido
+                self.process_tracker.update_lock("cards_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Registrando tarjeta (lock adquirido)",
+                    current_operation="Registrando tarjeta (cards_lock adquirido)",
                     lock_acquired="cards_lock"
                 )
                 
@@ -573,6 +681,9 @@ class Bank:
             raise
             
         finally:
+            # Liberar todos los locks
+            self.process_tracker.update_lock("accounts_lock", state="free", owner_pid=-1)
+            self.process_tracker.update_lock("cards_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
@@ -591,18 +702,22 @@ class Bank:
                 "warning"
             )
             
+            # 1. Esperando cards_lock
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Buscando tarjeta",
+                state="waiting",
+                current_operation="Esperando cards_lock para bloquear tarjeta",
                 lock_waiting="cards_lock"
             )
+            self.process_tracker.update_lock("cards_lock", state="waiting", owner_pid=pid)
             
             with self.locks.cards_lock:
+                # 2. cards_lock adquirido
+                self.process_tracker.update_lock("cards_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Procesando bloqueo (lock adquirido)",
+                    current_operation="Procesando bloqueo (cards_lock adquirido)",
                     lock_acquired="cards_lock"
                 )
                 
@@ -627,6 +742,8 @@ class Bank:
             return False
             
         finally:
+            # Liberar lock
+            self.process_tracker.update_lock("cards_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
@@ -645,18 +762,22 @@ class Bank:
                 "info"
             )
             
+            # 1. Esperando customers_lock
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Verificando cliente",
+                state="waiting",
+                current_operation="Esperando customers_lock para verificar cliente",
                 lock_waiting="customers_lock"
             )
+            self.process_tracker.update_lock("customers_lock", state="waiting", owner_pid=pid)
             
             with self.locks.customers_lock:
+                # 2. customers_lock adquirido
+                self.process_tracker.update_lock("customers_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Verificando cliente (lock adquirido)",
+                    current_operation="Verificando cliente (customers_lock adquirido)",
                     lock_acquired="customers_lock"
                 )
                 
@@ -670,18 +791,22 @@ class Bank:
                     raise ValueError("Cliente no existe")
                 customer = self.customers[customer_id]
 
+            # 3. Esperando cards_lock
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Emitiendo tarjeta",
+                state="waiting",
+                current_operation="Esperando cards_lock para emitir tarjeta",
                 lock_waiting="cards_lock"
             )
+            self.process_tracker.update_lock("cards_lock", state="waiting", owner_pid=pid)
             
             with self.locks.cards_lock:
+                # 4. cards_lock adquirido
+                self.process_tracker.update_lock("cards_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Registrando tarjeta (lock adquirido)",
+                    current_operation="Registrando tarjeta (cards_lock adquirido)",
                     lock_acquired="cards_lock"
                 )
                 
@@ -707,6 +832,9 @@ class Bank:
             raise
             
         finally:
+            # Liberar todos los locks
+            self.process_tracker.update_lock("customers_lock", state="free", owner_pid=-1)
+            self.process_tracker.update_lock("cards_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
@@ -727,19 +855,22 @@ class Bank:
                 "info"
             )
             
+            # 1. Esperando cards_lock para verificar tarjeta
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Verificando tarjeta",
+                state="waiting",
+                current_operation="Esperando cards_lock para verificar tarjeta",
                 lock_waiting="cards_lock"
             )
+            self.process_tracker.update_lock("cards_lock", state="waiting", owner_pid=pid)
             
-            # Verificar tarjeta
             with self.locks.cards_lock:
+                # 2. cards_lock adquirido
+                self.process_tracker.update_lock("cards_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Validando tarjeta (lock adquirido)",
+                    current_operation="Validando tarjeta (cards_lock adquirido)",
                     lock_acquired="cards_lock"
                 )
                 
@@ -754,19 +885,22 @@ class Bank:
                     return False
 
             if not is_cash:
+                # 3. Esperando accounts_lock para pago desde cuenta
                 self.process_tracker.update_process(
                     pid,
-                    state="working",
-                    current_operation="Procesando pago desde cuenta",
+                    state="waiting",
+                    current_operation="Esperando accounts_lock para debitar cuenta",
                     lock_waiting="accounts_lock"
                 )
+                self.process_tracker.update_lock("accounts_lock", state="waiting", owner_pid=pid)
                 
-                # Pago desde cuenta bancaria
                 with self.locks.accounts_lock:
+                    # 4. accounts_lock adquirido
+                    self.process_tracker.update_lock("accounts_lock", state="acquired", owner_pid=pid)
                     self.process_tracker.update_process(
                         pid,
                         state="working",
-                        current_operation="Debitando cuenta (lock adquirido)",
+                        current_operation="Procesando pago (accounts_lock adquirido)",
                         lock_acquired="accounts_lock"
                     )
                     
@@ -805,38 +939,59 @@ class Bank:
                     "info"
                 )
 
-            try:
-                # Aplicar pago a la tarjeta
-                card.make_payment(amount)
-                
-                payment_transaction = Transaction(
-                    account_id=card.customer_id if is_cash else payment_source,
-                    amount=amount,
-                    transaction_type=TransactionType.PAYMENT,
-                    card_number=card_number,
-                    is_cash=is_cash
-                )
-                self.transaction_history.append(payment_transaction)
-                
-                self.event_console.add_event(
+            # 5. Necesitamos cards_lock nuevamente para aplicar pago
+            self.process_tracker.update_process(
+                pid,
+                state="waiting",
+                current_operation="Esperando cards_lock para aplicar pago",
+                lock_waiting="cards_lock"
+            )
+            self.process_tracker.update_lock("cards_lock", state="waiting", owner_pid=pid)
+            
+            with self.locks.cards_lock:
+                # 6. cards_lock adquirido nuevamente
+                self.process_tracker.update_lock("cards_lock", state="acquired", owner_pid=pid)
+                self.process_tracker.update_process(
                     pid,
-                    "CREDIT_PAYMENT_SUCCESS",
-                    f"Pago aplicado a tarjeta {card_number}. Nuevo saldo: ${card.outstanding_balance:.2f}",
-                    "success"
+                    state="working",
+                    current_operation="Aplicando pago (cards_lock adquirido)",
+                    lock_acquired="cards_lock"
                 )
                 
-                return True
-                
-            except ValueError as e:
-                self.event_console.add_event(
-                    pid,
-                    "CREDIT_PAYMENT_ERROR",
-                    f"Error al aplicar pago: {str(e)}",
-                    "error"
-                )
-                return False
-                
+                try:
+                    card.make_payment(amount)
+                    
+                    payment_transaction = Transaction(
+                        account_id=card.customer_id if is_cash else payment_source,
+                        amount=amount,
+                        transaction_type=TransactionType.PAYMENT,
+                        card_number=card_number,
+                        is_cash=is_cash
+                    )
+                    self.transaction_history.append(payment_transaction)
+                    
+                    self.event_console.add_event(
+                        pid,
+                        "CREDIT_PAYMENT_SUCCESS",
+                        f"Pago aplicado a tarjeta {card_number}. Nuevo saldo: ${card.outstanding_balance:.2f}",
+                        "success"
+                    )
+                    
+                    return True
+                    
+                except ValueError as e:
+                    self.event_console.add_event(
+                        pid,
+                        "CREDIT_PAYMENT_ERROR",
+                        f"Error al aplicar pago: {str(e)}",
+                        "error"
+                    )
+                    return False
+                    
         finally:
+            # Liberar todos los locks
+            self.process_tracker.update_lock("cards_lock", state="free", owner_pid=-1)
+            self.process_tracker.update_lock("accounts_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
@@ -855,18 +1010,22 @@ class Bank:
                 "info"
             )
             
+            # 1. Esperando cards_lock
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Consultando tarjeta",
+                state="waiting",
+                current_operation="Esperando cards_lock para consultar tarjeta",
                 lock_waiting="cards_lock"
             )
+            self.process_tracker.update_lock("cards_lock", state="waiting", owner_pid=pid)
             
             with self.locks.cards_lock:
+                # 2. cards_lock adquirido
+                self.process_tracker.update_lock("cards_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Obteniendo datos (lock adquirido)",
+                    current_operation="Consultando tarjeta (cards_lock adquirido)",
                     lock_acquired="cards_lock"
                 )
                 
@@ -897,6 +1056,8 @@ class Bank:
                 }
                 
         finally:
+            # Liberar lock
+            self.process_tracker.update_lock("cards_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
@@ -915,18 +1076,22 @@ class Bank:
                 "info"
             )
             
+            # 1. Esperando cards_lock
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Procesando intereses",
+                state="waiting",
+                current_operation="Esperando cards_lock para aplicar intereses",
                 lock_waiting="cards_lock"
             )
+            self.process_tracker.update_lock("cards_lock", state="waiting", owner_pid=pid)
             
             with self.locks.cards_lock:
+                # 2. cards_lock adquirido
+                self.process_tracker.update_lock("cards_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Calculando intereses (lock adquirido)",
+                    current_operation="Calculando intereses (cards_lock adquirido)",
                     lock_acquired="cards_lock"
                 )
                 
@@ -965,6 +1130,8 @@ class Bank:
             raise
             
         finally:
+            # Liberar lock
+            self.process_tracker.update_lock("cards_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
@@ -983,18 +1150,22 @@ class Bank:
                 "warning"
             )
             
+            # 1. Esperando cards_lock para verificar tarjeta
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Validando tarjeta",
+                state="waiting",
+                current_operation="Esperando cards_lock para desactivar tarjeta",
                 lock_waiting="cards_lock"
             )
+            self.process_tracker.update_lock("cards_lock", state="waiting", owner_pid=pid)
             
             with self.locks.cards_lock:
+                # 2. cards_lock adquirido
+                self.process_tracker.update_lock("cards_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Procesando desactivación (lock adquirido)",
+                    current_operation="Validando tarjeta (cards_lock adquirido)",
                     lock_acquired="cards_lock"
                 )
                 
@@ -1024,14 +1195,52 @@ class Bank:
                 
                 del self.card_registry[card_number]
                 
-                # Actualizar referencias
-                lock_type = self.locks.customers_lock if isinstance(card, CreditCard) else self.locks.accounts_lock
-                with lock_type:
-                    owner = self.customers.get(card.customer_id) if isinstance(card, CreditCard) else self.accounts.get(card.account_id)
-                    if owner:
-                        if isinstance(card, CreditCard):
+                # Determinar qué lock necesitamos para actualizar referencias
+                if isinstance(card, CreditCard):
+                    # 3. Esperando customers_lock para tarjetas de crédito
+                    self.process_tracker.update_process(
+                        pid,
+                        state="waiting",
+                        current_operation="Esperando customers_lock para actualizar referencias",
+                        lock_waiting="customers_lock"
+                    )
+                    self.process_tracker.update_lock("customers_lock", state="waiting", owner_pid=pid)
+                    
+                    with self.locks.customers_lock:
+                        # 4. customers_lock adquirido
+                        self.process_tracker.update_lock("customers_lock", state="acquired", owner_pid=pid)
+                        self.process_tracker.update_process(
+                            pid,
+                            state="working",
+                            current_operation="Actualizando cliente (customers_lock adquirido)",
+                            lock_acquired="customers_lock"
+                        )
+                        
+                        owner = self.customers.get(card.customer_id)
+                        if owner:
                             owner.credit_cards = [c for c in owner.credit_cards if c.card_number != card_number]
-                        else:
+                else:
+                    # 3. Esperando accounts_lock para tarjetas de débito
+                    self.process_tracker.update_process(
+                        pid,
+                        state="waiting",
+                        current_operation="Esperando accounts_lock para actualizar referencias",
+                        lock_waiting="accounts_lock"
+                    )
+                    self.process_tracker.update_lock("accounts_lock", state="waiting", owner_pid=pid)
+                    
+                    with self.locks.accounts_lock:
+                        # 4. accounts_lock adquirido
+                        self.process_tracker.update_lock("accounts_lock", state="acquired", owner_pid=pid)
+                        self.process_tracker.update_process(
+                            pid,
+                            state="working",
+                            current_operation="Actualizando cuenta (accounts_lock adquirido)",
+                            lock_acquired="accounts_lock"
+                        )
+                        
+                        owner = self.accounts.get(card.account_id)
+                        if owner:
                             owner.debit_cards = [dc for dc in owner.debit_cards if dc.card_number != card_number]
 
                 self.event_console.add_event(
@@ -1052,6 +1261,10 @@ class Bank:
             raise
             
         finally:
+            # Liberar todos los locks posibles
+            self.process_tracker.update_lock("cards_lock", state="free", owner_pid=-1)
+            self.process_tracker.update_lock("customers_lock", state="free", owner_pid=-1)
+            self.process_tracker.update_lock("accounts_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
@@ -1070,18 +1283,22 @@ class Bank:
                 "info"
             )
             
+            # 1. Esperando accounts_lock
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Buscando cuenta",
+                state="waiting",
+                current_operation="Esperando accounts_lock para consultar tarjetas",
                 lock_waiting="accounts_lock"
             )
+            self.process_tracker.update_lock("accounts_lock", state="waiting", owner_pid=pid)
             
             with self.locks.accounts_lock:
+                # 2. accounts_lock adquirido
+                self.process_tracker.update_lock("accounts_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Obteniendo tarjetas (lock adquirido)",
+                    current_operation="Obteniendo tarjetas (accounts_lock adquirido)",
                     lock_acquired="accounts_lock"
                 )
                 
@@ -1105,6 +1322,8 @@ class Bank:
                 return cards
                 
         finally:
+            # Liberar lock
+            self.process_tracker.update_lock("accounts_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
@@ -1123,18 +1342,22 @@ class Bank:
                 "info"
             )
             
+            # 1. Esperando customers_lock
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Buscando cliente",
+                state="waiting",
+                current_operation="Esperando customers_lock para consultar tarjetas",
                 lock_waiting="customers_lock"
             )
+            self.process_tracker.update_lock("customers_lock", state="waiting", owner_pid=pid)
             
             with self.locks.customers_lock:
+                # 2. customers_lock adquirido
+                self.process_tracker.update_lock("customers_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Obteniendo tarjetas (lock adquirido)",
+                    current_operation="Obteniendo tarjetas (customers_lock adquirido)",
                     lock_acquired="customers_lock"
                 )
                 
@@ -1158,6 +1381,8 @@ class Bank:
                 return cards
                 
         finally:
+            # Liberar lock
+            self.process_tracker.update_lock("customers_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
@@ -1166,41 +1391,56 @@ class Bank:
                 lock_waiting=None
             )
 
-    # ---- Operaciones Bancarias ----
+    # ---- Banking Operations ----
     def transfer(self, source_id: str, target_id: str, amount: float, nip: Optional[str] = None) -> bool:
         pid = os.getpid()
         try:
+            # Register operation start
             self.event_console.add_event(
                 pid,
                 "TRANSFER_INITIATED",
-                f"Iniciando transferencia de ${amount:.2f} de {source_id} a {target_id}",
+                f"Transfer initiated: ${amount:.2f} from {source_id[:4]}... to {target_id[:4]}...",
                 "info"
             )
             
+            # 1. Waiting for accounts_lock
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Validando transferencia",
+                state="waiting",
+                current_operation="Waiting for accounts_lock to validate transfer",
                 lock_waiting="accounts_lock"
             )
+            self.process_tracker.update_lock("accounts_lock", state="waiting", owner_pid=pid)
             
             with self.locks.accounts_lock:
+                # 2. accounts_lock acquired
+                self.process_tracker.update_lock("accounts_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Procesando transferencia (lock adquirido)",
+                    current_operation="Processing transfer (accounts_lock acquired)",
                     lock_acquired="accounts_lock"
                 )
                 
+                # Basic validation
+                if source_id == target_id:
+                    self.event_console.add_event(
+                        pid,
+                        "TRANSFER_FAILED",
+                        "Cannot transfer to same account",
+                        "error"
+                    )
+                    return False
+                    
                 source = self.accounts.get(source_id)
                 target = self.accounts.get(target_id)
                 
-                # Validaciones
+                # Validations
                 if not source or not target:
                     self.event_console.add_event(
                         pid,
                         "TRANSFER_FAILED",
-                        "Cuenta(s) origen/destino no encontrada(s)",
+                        "Account(s) not found",
                         "error"
                     )
                     return False
@@ -1209,7 +1449,7 @@ class Bank:
                     self.event_console.add_event(
                         pid,
                         "TRANSFER_FAILED",
-                        "Validación de NIP fallida",
+                        "Incorrect PIN",
                         "error"
                     )
                     return False
@@ -1218,30 +1458,40 @@ class Bank:
                     self.event_console.add_event(
                         pid,
                         "TRANSFER_FAILED",
-                        f"Saldo insuficiente en cuenta {source_id} (Disponible: ${source.balance:.2f})",
+                        f"Insufficient funds (${source.balance:.2f} < ${amount:.2f})",
                         "error"
                     )
                     return False
 
-                # Ejecutar transferencia
+                # Execute transfer
                 source.balance -= amount
                 target.balance += amount
 
-                # Registrar transacciones
+                # Record transactions
                 source_transaction = Transaction(
-                    source_id, amount, TransactionType.TRANSFER, target_id
+                    account_id=source_id,
+                    amount=amount,
+                    transaction_type=TransactionType.TRANSFER,
+                    description=f"Transfer to {target_id[:4]}...",
+                    source_reference=target_id
                 )
+                
                 target_transaction = Transaction(
-                    target_id, amount, TransactionType.DEPOSIT, source_id
+                    account_id=target_id,
+                    amount=amount,
+                    transaction_type=TransactionType.DEPOSIT,
+                    description=f"Transfer from {source_id[:4]}...",
+                    source_reference=source_id
                 )
                 
                 source.add_transaction(source_transaction)
                 target.add_transaction(target_transaction)
+                self.transaction_history.extend([source_transaction, target_transaction])
                 
                 self.event_console.add_event(
                     pid,
                     "TRANSFER_COMPLETED",
-                    f"Transferencia exitosa. Nuevos saldos: {source_id}=${source.balance:.2f}, {target_id}=${target.balance:.2f}",
+                    f"Transfer successful. New balances: {source_id[:4]}...=${source.balance:.2f}, {target_id[:4]}...=${target.balance:.2f}",
                     "success"
                 )
                 
@@ -1251,16 +1501,18 @@ class Bank:
             self.event_console.add_event(
                 pid,
                 "TRANSFER_ERROR",
-                f"Error inesperado en transferencia: {str(e)}",
+                f"Transfer error: {str(e)}",
                 "error"
             )
             return False
             
         finally:
+            # Release lock and update status
+            self.process_tracker.update_lock("accounts_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
-                current_operation="Transferencia procesada",
+                current_operation="Waiting for operation",
                 lock_acquired=None,
                 lock_waiting=None
             )
@@ -1271,7 +1523,7 @@ class Bank:
             self.event_console.add_event(
                 pid,
                 "DEPOSIT_INITIATED",
-                f"Intentando depositar ${amount:.2f} en {account_number}",
+                f"Attempting to deposit ${amount:.2f} to {account_number}",
                 "info"
             )
             
@@ -1279,23 +1531,27 @@ class Bank:
                 self.event_console.add_event(
                     pid,
                     "DEPOSIT_FAILED",
-                    f"Monto inválido: ${amount:.2f}",
+                    f"Invalid amount: ${amount:.2f}",
                     "error"
                 )
                 return False
 
+            # 1. Waiting for accounts_lock
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Procesando depósito",
+                state="waiting",
+                current_operation="Waiting for accounts_lock to process deposit",
                 lock_waiting="accounts_lock"
             )
+            self.process_tracker.update_lock("accounts_lock", state="waiting", owner_pid=pid)
             
             with self.locks.accounts_lock:
+                # 2. accounts_lock acquired
+                self.process_tracker.update_lock("accounts_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Realizando depósito (lock adquirido)",
+                    current_operation="Processing deposit (accounts_lock acquired)",
                     lock_acquired="accounts_lock"
                 )
                 
@@ -1304,12 +1560,12 @@ class Bank:
                     self.event_console.add_event(
                         pid,
                         "DEPOSIT_FAILED",
-                        f"Cuenta {account_number} no encontrada",
+                        f"Account {account_number} not found",
                         "error"
                     )
                     return False
 
-                # Realizar depósito
+                # Make deposit
                 account.balance += amount
                 
                 transaction_type = (
@@ -1330,7 +1586,7 @@ class Bank:
                 self.event_console.add_event(
                     pid,
                     "DEPOSIT_COMPLETED",
-                    f"Depósito exitoso. Nuevo saldo: ${account.balance:.2f}",
+                    f"Deposit successful. New balance: ${account.balance:.2f}",
                     "success"
                 )
                 
@@ -1340,16 +1596,18 @@ class Bank:
             self.event_console.add_event(
                 pid,
                 "DEPOSIT_ERROR",
-                f"Error inesperado en depósito: {str(e)}",
+                f"Unexpected deposit error: {str(e)}",
                 "error"
             )
             return False
             
         finally:
+            # Release lock and update status
+            self.process_tracker.update_lock("accounts_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
-                current_operation="Depósito procesado",
+                current_operation="Deposit processed",
                 lock_acquired=None,
                 lock_waiting=None
             )
@@ -1360,41 +1618,67 @@ class Bank:
             self.event_console.add_event(
                 pid,
                 "WITHDRAWAL_INITIATED",
-                f"Intentando retirar ${amount:.2f} de {account_number}",
+                f"Attempting to withdraw ${amount:.2f} from {account_number}",
                 "info"
             )
             
+            # Basic amount validation
             if amount <= 0:
                 self.event_console.add_event(
                     pid,
                     "WITHDRAWAL_FAILED",
-                    f"Monto inválido: ${amount:.2f}",
+                    f"Invalid amount: ${amount:.2f}",
                     "error"
                 )
                 return False
 
+            # 1. Waiting for accounts_lock
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Validando retiro",
+                state="waiting",
+                current_operation="Waiting for accounts_lock to validate withdrawal",
                 lock_waiting="accounts_lock"
             )
+            self.process_tracker.update_lock("accounts_lock", state="waiting", owner_pid=pid)
             
             with self.locks.accounts_lock:
+                # 2. accounts_lock acquired
+                self.process_tracker.update_lock("accounts_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Procesando retiro (lock adquirido)",
+                    current_operation="Processing withdrawal (accounts_lock acquired)",
                     lock_acquired="accounts_lock"
                 )
                 
                 account = self.accounts.get(account_number)
-                if not account or not account.validate_nip(nip):
+                
+                # Account validations
+                if not account:
                     self.event_console.add_event(
                         pid,
                         "WITHDRAWAL_FAILED",
-                        "Cuenta no encontrada o NIP incorrecto",
+                        f"Account {account_number} not found",
                         "error"
+                    )
+                    return False
+                    
+                if account.is_locked:
+                    self.event_console.add_event(
+                        pid,
+                        "ACCOUNT_LOCKED",
+                        f"Account {account_number} temporarily locked",
+                        "error"
+                    )
+                    return False
+                    
+                if not account.validate_nip(nip):
+                    remaining_attempts = 3 - account.nip_attempts
+                    self.event_console.add_event(
+                        pid,
+                        "WITHDRAWAL_FAILED",
+                        f"Incorrect PIN. Remaining attempts: {remaining_attempts}",
+                        "warning"
                     )
                     return False
                     
@@ -1402,17 +1686,18 @@ class Bank:
                     self.event_console.add_event(
                         pid,
                         "WITHDRAWAL_FAILED",
-                        f"Saldo insuficiente (Disponible: ${account.balance:.2f})",
+                        f"Insufficient funds. Available: ${account.balance:.2f}",
                         "error"
                     )
                     return False
 
-                # Realizar retiro
+                # Process withdrawal
                 account.balance -= amount
                 transaction = Transaction(
-                    account_number,
-                    amount,
-                    TransactionType.WITHDRAWAL
+                    account_id=account_number,
+                    amount=amount,
+                    transaction_type=TransactionType.WITHDRAWAL,
+                    description="Cash withdrawal"
                 )
                 account.add_transaction(transaction)
                 self.transaction_history.append(transaction)
@@ -1420,7 +1705,7 @@ class Bank:
                 self.event_console.add_event(
                     pid,
                     "WITHDRAWAL_COMPLETED",
-                    f"Retiro exitoso. Nuevo saldo: ${account.balance:.2f}",
+                    f"Withdrawal successful. New balance: ${account.balance:.2f}",
                     "success"
                 )
                 
@@ -1430,16 +1715,18 @@ class Bank:
             self.event_console.add_event(
                 pid,
                 "WITHDRAWAL_ERROR",
-                f"Error inesperado en retiro: {str(e)}",
+                f"Unexpected withdrawal error: {str(e)}",
                 "error"
             )
             return False
             
         finally:
+            # Release lock and update status
+            self.process_tracker.update_lock("accounts_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
-                current_operation="Retiro procesado",
+                current_operation="Withdrawal processed",
                 lock_acquired=None,
                 lock_waiting=None
             )
@@ -1450,22 +1737,26 @@ class Bank:
             self.event_console.add_event(
                 pid,
                 "TRANSACTION_HISTORY_REQUEST",
-                f"Solicitando historial de {account_number} (últimas {limit} transacciones)",
+                f"Requesting transaction history for {account_number} (last {limit} transactions)",
                 "info"
             )
             
+            # 1. Waiting for accounts_lock
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Consultando historial",
+                state="waiting",
+                current_operation="Waiting for accounts_lock to get transactions",
                 lock_waiting="accounts_lock"
             )
+            self.process_tracker.update_lock("accounts_lock", state="waiting", owner_pid=pid)
             
             with self.locks.accounts_lock:
+                # 2. accounts_lock acquired
+                self.process_tracker.update_lock("accounts_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Obteniendo transacciones (lock adquirido)",
+                    current_operation="Getting transactions (accounts_lock acquired)",
                     lock_acquired="accounts_lock"
                 )
                 
@@ -1474,7 +1765,7 @@ class Bank:
                     self.event_console.add_event(
                         pid,
                         "ACCOUNT_NOT_FOUND",
-                        f"Cuenta {account_number} no existe",
+                        f"Account {account_number} does not exist",
                         "warning"
                     )
                     return []
@@ -1483,16 +1774,18 @@ class Bank:
                 self.event_console.add_event(
                     pid,
                     "TRANSACTION_HISTORY_RETURNED",
-                    f"Se encontraron {len(transactions)} transacciones",
+                    f"Found {len(transactions)} transactions",
                     "success"
                 )
                 return transactions
                 
         finally:
+            # Release lock and update status
+            self.process_tracker.update_lock("accounts_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
-                current_operation="Consulta completada",
+                current_operation="Transaction history retrieved",
                 lock_acquired=None,
                 lock_waiting=None
             )
@@ -1503,22 +1796,26 @@ class Bank:
             self.event_console.add_event(
                 pid,
                 "BALANCE_REQUEST",
-                f"Solicitando saldo de {account_number}",
+                f"Requesting balance for {account_number}",
                 "info"
             )
             
+            # 1. Waiting for accounts_lock
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Consultando saldo",
+                state="waiting",
+                current_operation="Waiting for accounts_lock to get balance",
                 lock_waiting="accounts_lock"
             )
+            self.process_tracker.update_lock("accounts_lock", state="waiting", owner_pid=pid)
             
             with self.locks.accounts_lock:
+                # 2. accounts_lock acquired
+                self.process_tracker.update_lock("accounts_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Obteniendo saldo (lock adquirido)",
+                    current_operation="Getting balance (accounts_lock acquired)",
                     lock_acquired="accounts_lock"
                 )
                 
@@ -1527,7 +1824,7 @@ class Bank:
                     self.event_console.add_event(
                         pid,
                         "BALANCE_RETURNED",
-                        f"Saldo obtenido: ${account.balance:.2f}",
+                        f"Balance retrieved: ${account.balance:.2f}",
                         "success"
                     )
                     return account.balance
@@ -1535,16 +1832,18 @@ class Bank:
                     self.event_console.add_event(
                         pid,
                         "ACCOUNT_NOT_FOUND",
-                        f"Cuenta {account_number} no existe",
+                        f"Account {account_number} does not exist",
                         "warning"
                     )
                     return None
                     
         finally:
+            # Release lock and update status
+            self.process_tracker.update_lock("accounts_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
-                current_operation="Consulta completada",
+                current_operation="Balance retrieved",
                 lock_acquired=None,
                 lock_waiting=None
             )
@@ -1555,22 +1854,26 @@ class Bank:
             self.event_console.add_event(
                 pid,
                 "CUSTOMER_SEARCH",
-                f"Buscando cliente por email: {email}",
+                f"Searching for customer by email: {email}",
                 "info"
             )
             
+            # 1. Waiting for customers_lock
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Buscando cliente",
+                state="waiting",
+                current_operation="Waiting for customers_lock to search customer",
                 lock_waiting="customers_lock"
             )
+            self.process_tracker.update_lock("customers_lock", state="waiting", owner_pid=pid)
             
             with self.locks.customers_lock:
+                # 2. customers_lock acquired
+                self.process_tracker.update_lock("customers_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
-                    current_operation="Buscando en registros (lock adquirido)",
+                    current_operation="Searching records (customers_lock acquired)",
                     lock_acquired="customers_lock"
                 )
                 
@@ -1579,7 +1882,7 @@ class Bank:
                         self.event_console.add_event(
                             pid,
                             "CUSTOMER_FOUND",
-                            f"Cliente encontrado: {customer.customer_id}",
+                            f"Customer found: {customer.customer_id}",
                             "success"
                         )
                         return customer
@@ -1587,16 +1890,18 @@ class Bank:
                 self.event_console.add_event(
                     pid,
                     "CUSTOMER_NOT_FOUND",
-                    f"No se encontró cliente con email: {email}",
+                    f"No customer found with email: {email}",
                     "warning"
                 )
                 return None
                 
         finally:
+            # Release lock and update status
+            self.process_tracker.update_lock("customers_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
-                current_operation="Búsqueda completada",
+                current_operation="Customer search completed",
                 lock_acquired=None,
                 lock_waiting=None
             )
@@ -1614,19 +1919,22 @@ class Bank:
             
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Buscando cliente",
+                state="waiting",
+                current_operation="Esperando customers_lock",
                 lock_waiting="customers_lock"
             )
-            
+            self.process_tracker.update_lock("customers_lock", state="waiting", owner_pid=pid)
+
             with self.locks.customers_lock:
+                self.process_tracker.update_lock("customers_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
                     current_operation="Obteniendo cuentas (lock adquirido)",
-                    lock_acquired="customers_lock"
+                    lock_acquired="customers_lock",
+                    lock_waiting=None
                 )
-                
+
                 customer = self.customers.get(customer_id)
                 if not customer:
                     self.event_console.add_event(
@@ -1636,7 +1944,7 @@ class Bank:
                         "warning"
                     )
                     return []
-                    
+
                 accounts = customer.accounts
                 self.event_console.add_event(
                     pid,
@@ -1645,8 +1953,9 @@ class Bank:
                     "success"
                 )
                 return accounts
-                
+
         finally:
+            self.process_tracker.update_lock("customers_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
@@ -1664,22 +1973,25 @@ class Bank:
                 f"Consultando saldo de tarjeta {card_number}",
                 "info"
             )
-            
+
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Buscando tarjeta",
+                state="waiting",
+                current_operation="Esperando cards_lock",
                 lock_waiting="cards_lock"
             )
-            
+            self.process_tracker.update_lock("cards_lock", state="waiting", owner_pid=pid)
+
             with self.locks.cards_lock:
+                self.process_tracker.update_lock("cards_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
                     current_operation="Obteniendo saldo (lock adquirido)",
-                    lock_acquired="cards_lock"
+                    lock_acquired="cards_lock",
+                    lock_waiting=None
                 )
-                
+
                 card = self.card_registry.get(card_number)
                 if not card:
                     self.event_console.add_event(
@@ -1689,7 +2001,7 @@ class Bank:
                         "warning"
                     )
                     return None
-                    
+
                 if isinstance(card, DebitCard):
                     account = self.accounts.get(card.account_id)
                     if not account:
@@ -1700,7 +2012,7 @@ class Bank:
                             "error"
                         )
                         return None
-                        
+
                     balance = account.balance
                     self.event_console.add_event(
                         pid,
@@ -1709,7 +2021,7 @@ class Bank:
                         "success"
                     )
                     return balance
-                    
+
                 elif isinstance(card, CreditCard):
                     available_credit = card.available_credit
                     self.event_console.add_event(
@@ -1719,10 +2031,11 @@ class Bank:
                         "success"
                     )
                     return available_credit
-                    
+
                 return None
-                
+
         finally:
+            self.process_tracker.update_lock("cards_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
@@ -1736,26 +2049,29 @@ class Bank:
         try:
             self.event_console.add_event(
                 pid,
-                "ACCOUNT_STATEMENT_REQUEST",
+                "ACCOUNT_STATEMENT_START",
                 f"Generando estado de cuenta para {account_number} (últimos {days} días)",
                 "info"
             )
-            
+
             self.process_tracker.update_process(
                 pid,
-                state="working",
-                current_operation="Preparando estado de cuenta",
+                state="waiting",
+                current_operation="Esperando accounts_lock",
                 lock_waiting="accounts_lock"
             )
-            
+            self.process_tracker.update_lock("accounts_lock", state="waiting", owner_pid=pid)
+
             with self.locks.accounts_lock:
+                self.process_tracker.update_lock("accounts_lock", state="acquired", owner_pid=pid)
                 self.process_tracker.update_process(
                     pid,
                     state="working",
                     current_operation="Generando reporte (lock adquirido)",
-                    lock_acquired="accounts_lock"
+                    lock_acquired="accounts_lock",
+                    lock_waiting=None
                 )
-                
+
                 account = self.accounts.get(account_number)
                 if not account:
                     self.event_console.add_event(
@@ -1765,14 +2081,14 @@ class Bank:
                         "error"
                     )
                     return {}
-                    
-                transactions = self.get_account_transactions(account_number, limit=100)
+
+                transactions = account.get_transactions(limit=100)
                 recent_transactions = [t for t in transactions if t.is_recent(days)]
-                
+
                 deposits = sum(t.amount for t in recent_transactions if t.type == TransactionType.DEPOSIT)
                 withdrawals = sum(t.amount for t in recent_transactions if t.type == TransactionType.WITHDRAWAL)
                 transfers = sum(t.amount for t in recent_transactions if t.type == TransactionType.TRANSFER)
-                
+
                 statement = {
                     'account_number': account_number,
                     'current_balance': account.balance,
@@ -1783,21 +2099,31 @@ class Bank:
                         'transfers': transfers
                     }
                 }
-                
+
                 self.event_console.add_event(
                     pid,
                     "STATEMENT_GENERATED",
-                    f"Estado de cuenta generado. Resumen: Depósitos=${deposits:.2f}, Retiros=${withdrawals:.2f}, Transferencias=${transfers:.2f}",
+                    f"Estado de cuenta generado para {account_number}",
                     "success"
                 )
-                
+
                 return statement
-                
+
+        except Exception as e:
+            self.event_console.add_event(
+                pid,
+                "STATEMENT_ERROR",
+                f"Error generando estado de cuenta: {str(e)}",
+                "error"
+            )
+            return {}
+
         finally:
+            self.process_tracker.update_lock("accounts_lock", state="free", owner_pid=-1)
             self.process_tracker.update_process(
                 pid,
                 state="ready",
-                current_operation="Reporte completado",
+                current_operation="Operación completada",
                 lock_acquired=None,
                 lock_waiting=None
             )

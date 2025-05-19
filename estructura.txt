@@ -25,7 +25,7 @@ C:.
 |       
 +---server                 # Módulo del servidor y componentes de atención
 |   |   advisor.py         # Lógica para asesores bancarios
-|   |   locks.py           # Implementación de locks para concurrencia (BankLocks)
+|   |   locks.py           # Implementación de locks y semaphors para concurrencia (BankLocks)
 |   |   process_dispatcher.py  # Gestión de procesos del servidor
 |   |   run_process.py     # Script para ejecutar procesos
 |   |   teller.py          # Lógica para cajeros bancarios

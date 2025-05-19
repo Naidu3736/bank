@@ -1,6 +1,8 @@
 from hashlib import sha256
 import random
+from typing import List
 from core.debit_card import DebitCard, CardType
+from core.transaction import Transaction,TransactionType
 
 class Account:
     def __init__(self, customer_id, initial_balance=0, nip=None):
@@ -31,8 +33,14 @@ class Account:
         self.debit_cards.append(card)
         return card
 
-    def add_transaction(self, transaction):
+    def add_transaction(self, transaction: Transaction):
+        """Añade una transacción y actualiza el balance"""
         self.transaction_history.append(transaction)
+        
+        if transaction.type == TransactionType.DEPOSIT:
+            self.balance += transaction.amount
+        elif transaction.type == TransactionType.WITHDRAWAL:
+            self.balance -= transaction.amount
 
     def unlock_account(self):
         self.is_locked = False
@@ -44,6 +52,12 @@ class Account:
     def get_transaction_history(self) -> list:
         return [f"{t.timestamp}: {t.type} - ${t.amount}" for t in self.transaction_history]
     
+    def get_transactions(self, limit: int = 10) -> List[Transaction]:
+        """Devuelve las últimas transacciones de la cuenta"""
+        return sorted(self.transaction_history, 
+                    key=lambda t: t.timestamp, 
+                    reverse=True)[:limit]
+    
     def get_cards_summary(self) -> list:
         return [str(card) for card in self.debit_cards]
     
@@ -52,14 +66,10 @@ class Account:
                         if dc.card_number != card_number]
         return True
 
-    def validate_nip(self, nip):
-        """Valida el NIP proporcionado"""
+    def validate_nip(self, nip: str) -> bool:
+        """Valida el NIP usando el hash almacenado"""
         if self.is_locked:
             return False
-        if sha256(nip.encode()).hexdigest() == self.nip_hash:
-            self.nip_attempts = 0
-            return True
-        self.nip_attempts += 1
-        if self.nip_attempts >= 3:
-            self.is_locked = True
-        return False
+        if not self.nip_hash:  # Si no tiene NIP configurado
+            return False
+        return sha256(nip.encode()).hexdigest() == self.nip_hash

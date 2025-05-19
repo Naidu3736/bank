@@ -1,5 +1,5 @@
 from enum import Enum
-from datetime import datetime
+from datetime import datetime, timedelta
 import uuid
 
 class TransactionType(Enum):
@@ -9,20 +9,23 @@ class TransactionType(Enum):
     PAYMENT = "payment"
 
 class Transaction:
-    def __init__(self, account_id, amount, transaction_type, 
-                 target_account_id=None, card_number=None, is_cash=False):
-        self.transaction_id = self._generator_transaction_id()    # Identificador de la transacción
-        self.account_id = account_id    # Identificador de la cuenta de origen de la transacción
-        self.amount = amount    # Cantidad a operar del saldo
-        self.type = TransactionType(transaction_type)    # Tipo de transacción que se utilizara
-        self.timestamp = datetime.now() # Hora en que realizo la transacción
-
-        # Se asigna el id del receptor si y solo si es una transferencia
-        self.target_account_id = target_account_id  if transaction_type == TransactionType.TRANSFER else None
-
+    def __init__(self, account_id: str, amount: float, transaction_type: TransactionType,
+                 card_number: str = None, description: str = None,
+                 source_reference: str = None, is_cash: bool = False):
+        self.transaction_id = str(uuid.uuid4())
+        self.account_id = account_id
+        self.amount = amount
+        self.type = transaction_type
+        self.timestamp = datetime.now()
         self.card_number = card_number
-
+        self.description = description
+        self.source_reference = source_reference
         self.is_cash = is_cash
 
-    def _generator_transaction_id(self):
-        return str(uuid.uuid4)
+    def is_recent(self, days: int) -> bool:
+        """Determina si la transacción es reciente (dentro de X días)"""
+        return datetime.now() - self.timestamp < timedelta(days=days)
+
+    def __str__(self):
+        return (f"{self.timestamp.strftime('%Y-%m-%d %H:%M:%S')} - "
+                f"{self.type.name}: ${self.amount:.2f}")

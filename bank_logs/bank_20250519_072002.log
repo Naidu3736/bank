@@ -1,0 +1,67 @@
+{"timestamp": "07:20:03,022", "pid": 1989546, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Juan P\u00e9rez (juan@example.com)", "status": "info"}
+{"timestamp": "07:20:03,089", "pid": 1989546, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Juan P\u00e9rez (ID: f8a562ff-e473-4738-88ca-c07f684f680f)", "status": "success"}
+{"timestamp": "07:20:03,123", "pid": 1989546, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente f8a562ff-e473-4738-88ca-c07f684f680f", "status": "info"}
+{"timestamp": "07:20:03,295", "pid": 1989546, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 9372822468 con saldo inicial $3422.88", "status": "success"}
+{"timestamp": "07:20:03,396", "pid": 1989546, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente f8a562ff-e473-4738-88ca-c07f684f680f", "status": "info"}
+{"timestamp": "07:20:03,566", "pid": 1989546, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 7926447829 con saldo inicial $2445.21", "status": "success"}
+{"timestamp": "07:20:03,615", "pid": 1989546, "operation": "ISSUE_DEBIT_CARD_START", "details": "Emisi\u00f3n de tarjeta d\u00e9bito para cuenta 9372822468", "status": "info"}
+{"timestamp": "07:20:03,729", "pid": 1989546, "operation": "ISSUE_DEBIT_CARD_SUCCESS", "details": "Tarjeta d\u00e9bito emitida: 5225512886669414 (Tipo: PLATINUM)", "status": "success"}
+{"timestamp": "07:20:03,768", "pid": 1989546, "operation": "ISSUE_CREDIT_CARD_START", "details": "Emisi\u00f3n de tarjeta cr\u00e9dito para cliente f8a562ff-e473-4738-88ca-c07f684f680f", "status": "info"}
+{"timestamp": "07:20:03,883", "pid": 1989546, "operation": "ISSUE_CREDIT_CARD_SUCCESS", "details": "Tarjeta cr\u00e9dito emitida: 5198426026367022 (L\u00edmite: $20000.00)", "status": "success"}
+{"timestamp": "07:20:03,921", "pid": 1989546, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Mar\u00eda Garc\u00eda (maria@example.com)", "status": "info"}
+{"timestamp": "07:20:03,981", "pid": 1989546, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Mar\u00eda Garc\u00eda (ID: 14b70329-045f-41b5-8686-e4929dc3e20a)", "status": "success"}
+{"timestamp": "07:20:04,012", "pid": 1989546, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 14b70329-045f-41b5-8686-e4929dc3e20a", "status": "info"}
+{"timestamp": "07:20:04,179", "pid": 1989546, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 2259765622 con saldo inicial $3535.43", "status": "success"}
+{"timestamp": "07:20:04,228", "pid": 1989546, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 14b70329-045f-41b5-8686-e4929dc3e20a", "status": "info"}
+{"timestamp": "07:20:04,394", "pid": 1989546, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 9232641455 con saldo inicial $2006.13", "status": "success"}
+{"timestamp": "07:20:04,446", "pid": 1989546, "operation": "ISSUE_DEBIT_CARD_START", "details": "Emisi\u00f3n de tarjeta d\u00e9bito para cuenta 2259765622", "status": "info"}
+{"timestamp": "07:20:04,565", "pid": 1989546, "operation": "ISSUE_DEBIT_CARD_SUCCESS", "details": "Tarjeta d\u00e9bito emitida: 4592599850472008 (Tipo: NORMAL)", "status": "success"}
+{"timestamp": "07:20:04,603", "pid": 1989546, "operation": "ISSUE_CREDIT_CARD_START", "details": "Emisi\u00f3n de tarjeta cr\u00e9dito para cliente 14b70329-045f-41b5-8686-e4929dc3e20a", "status": "info"}
+{"timestamp": "07:20:04,717", "pid": 1989546, "operation": "ISSUE_CREDIT_CARD_SUCCESS", "details": "Tarjeta cr\u00e9dito emitida: 5147920734437331 (L\u00edmite: $20000.00)", "status": "success"}
+{"timestamp": "07:20:04,756", "pid": 1989546, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Carlos L\u00f3pez (carlos@example.com)", "status": "info"}
+{"timestamp": "07:20:04,812", "pid": 1989546, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Carlos L\u00f3pez (ID: 7264690e-72b9-411c-8503-6776ae763bd5)", "status": "success"}
+{"timestamp": "07:20:04,843", "pid": 1989546, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 7264690e-72b9-411c-8503-6776ae763bd5", "status": "info"}
+{"timestamp": "07:20:05,004", "pid": 1989546, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 7354721854 con saldo inicial $1696.20", "status": "success"}
+{"timestamp": "07:20:05,050", "pid": 1989546, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 7264690e-72b9-411c-8503-6776ae763bd5", "status": "info"}
+{"timestamp": "07:20:05,216", "pid": 1989546, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 7159265449 con saldo inicial $3306.37", "status": "success"}
+{"timestamp": "07:20:05,263", "pid": 1989546, "operation": "ISSUE_DEBIT_CARD_START", "details": "Emisi\u00f3n de tarjeta d\u00e9bito para cuenta 7354721854", "status": "info"}
+{"timestamp": "07:20:05,370", "pid": 1989546, "operation": "ISSUE_DEBIT_CARD_SUCCESS", "details": "Tarjeta d\u00e9bito emitida: 4492879188001457 (Tipo: NORMAL)", "status": "success"}
+{"timestamp": "07:20:05,410", "pid": 1989546, "operation": "ISSUE_CREDIT_CARD_START", "details": "Emisi\u00f3n de tarjeta cr\u00e9dito para cliente 7264690e-72b9-411c-8503-6776ae763bd5", "status": "info"}
+{"timestamp": "07:20:05,533", "pid": 1989546, "operation": "ISSUE_CREDIT_CARD_SUCCESS", "details": "Tarjeta cr\u00e9dito emitida: 4652758534553108 (L\u00edmite: $10000.00)", "status": "success"}
+{"timestamp": "07:20:05,575", "pid": 1989546, "operation": "SYSTEM_START", "details": "Sistema bancario iniciado", "status": "success"}
+{"timestamp": "07:20:05,584", "pid": 1989546, "operation": "TURN_ADDED", "details": "Turn TURN-1 added to queue", "status": "info"}
+{"timestamp": "07:20:05,588", "pid": 1989546, "operation": "TURN_ASSIGNED", "details": "Turno 1 asignado a Mar\u00eda Garc\u00eda con 2 operaciones", "status": "info"}
+{"timestamp": "07:20:08,345", "pid": 1989546, "operation": "TURN_ADDED", "details": "Turn TURN-2 added to queue", "status": "info"}
+{"timestamp": "07:20:08,349", "pid": 1989546, "operation": "TURN_ASSIGNED", "details": "Turno 2 asignado a Carlos L\u00f3pez con 0 operaciones", "status": "info"}
+{"timestamp": "07:20:09,585", "pid": 1989546, "operation": "TURN_ADDED", "details": "Turn TURN-3 added to queue", "status": "info"}
+{"timestamp": "07:20:09,590", "pid": 1989546, "operation": "TURN_ASSIGNED", "details": "Turno 3 asignado a Carlos L\u00f3pez con 0 operaciones", "status": "info"}
+{"timestamp": "07:20:11,559", "pid": 1989546, "operation": "TURN_ADDED", "details": "Turn TURN-4 added to queue", "status": "info"}
+{"timestamp": "07:20:11,564", "pid": 1989546, "operation": "TURN_ASSIGNED", "details": "Turno 4 asignado a Juan P\u00e9rez con 1 operaciones", "status": "info"}
+{"timestamp": "07:20:13,084", "pid": 1989546, "operation": "TURN_ADDED", "details": "Turn TURN-5 added to queue", "status": "info"}
+{"timestamp": "07:20:13,088", "pid": 1989546, "operation": "TURN_ASSIGNED", "details": "Turno 5 asignado a Juan P\u00e9rez con 1 operaciones", "status": "info"}
+{"timestamp": "07:20:14,288", "pid": 1989546, "operation": "TURN_ADDED", "details": "Turn TURN-6 added to queue", "status": "info"}
+{"timestamp": "07:20:14,293", "pid": 1989546, "operation": "TURN_ASSIGNED", "details": "Turno 6 asignado a Carlos L\u00f3pez con 0 operaciones", "status": "info"}
+{"timestamp": "07:20:17,261", "pid": 1989546, "operation": "TURN_ADDED", "details": "Turn TURN-7 added to queue", "status": "info"}
+{"timestamp": "07:20:17,265", "pid": 1989546, "operation": "TURN_ASSIGNED", "details": "Turno 7 asignado a Mar\u00eda Garc\u00eda con 2 operaciones", "status": "info"}
+{"timestamp": "07:20:18,913", "pid": 1989546, "operation": "TURN_ADDED", "details": "Turn TURN-8 added to queue", "status": "info"}
+{"timestamp": "07:20:18,917", "pid": 1989546, "operation": "TURN_ASSIGNED", "details": "Turno 8 asignado a Juan P\u00e9rez con 2 operaciones", "status": "info"}
+{"timestamp": "07:20:21,163", "pid": 1989546, "operation": "TURN_ADDED", "details": "Turn TURN-9 added to queue", "status": "info"}
+{"timestamp": "07:20:21,167", "pid": 1989546, "operation": "TURN_ASSIGNED", "details": "Turno 9 asignado a Carlos L\u00f3pez con 3 operaciones", "status": "info"}
+{"timestamp": "07:20:22,625", "pid": 1989546, "operation": "TURN_ADDED", "details": "Turn TURN-10 added to queue", "status": "info"}
+{"timestamp": "07:20:22,629", "pid": 1989546, "operation": "TURN_ASSIGNED", "details": "Turno 10 asignado a Mar\u00eda Garc\u00eda con 0 operaciones", "status": "info"}
+{"timestamp": "07:20:24,609", "pid": 1989546, "operation": "TURN_ADDED", "details": "Turn TURN-11 added to queue", "status": "info"}
+{"timestamp": "07:20:24,613", "pid": 1989546, "operation": "TURN_ASSIGNED", "details": "Turno 11 asignado a Juan P\u00e9rez con 2 operaciones", "status": "info"}
+{"timestamp": "07:20:26,200", "pid": 1989546, "operation": "TURN_ADDED", "details": "Turn TURN-12 added to queue", "status": "info"}
+{"timestamp": "07:20:26,212", "pid": 1989546, "operation": "TURN_ASSIGNED", "details": "Turno 12 asignado a Carlos L\u00f3pez con 2 operaciones", "status": "info"}
+{"timestamp": "07:20:28,403", "pid": 1989546, "operation": "TURN_ADDED", "details": "Turn TURN-13 added to queue", "status": "info"}
+{"timestamp": "07:20:28,413", "pid": 1989546, "operation": "TURN_ASSIGNED", "details": "Turno 13 asignado a Juan P\u00e9rez con 2 operaciones", "status": "info"}
+{"timestamp": "07:20:31,108", "pid": 1989546, "operation": "TURN_ADDED", "details": "Turn TURN-14 added to queue", "status": "info"}
+{"timestamp": "07:20:31,112", "pid": 1989546, "operation": "TURN_ASSIGNED", "details": "Turno 14 asignado a Mar\u00eda Garc\u00eda con 1 operaciones", "status": "info"}
+{"timestamp": "07:20:33,410", "pid": 1989546, "operation": "TURN_ADDED", "details": "Turn TURN-15 added to queue", "status": "info"}
+{"timestamp": "07:20:33,415", "pid": 1989546, "operation": "TURN_ASSIGNED", "details": "Turno 15 asignado a Juan P\u00e9rez con 2 operaciones", "status": "info"}
+{"timestamp": "07:20:34,960", "pid": 1989546, "operation": "TURN_ADDED", "details": "Turn TURN-16 added to queue", "status": "info"}
+{"timestamp": "07:20:34,964", "pid": 1989546, "operation": "TURN_ASSIGNED", "details": "Turno 16 asignado a Juan P\u00e9rez con 3 operaciones", "status": "info"}
+{"timestamp": "07:20:37,934", "pid": 1989546, "operation": "TURN_ADDED", "details": "Turn TURN-17 added to queue", "status": "info"}
+{"timestamp": "07:20:37,946", "pid": 1989546, "operation": "TURN_ASSIGNED", "details": "Turno 17 asignado a Mar\u00eda Garc\u00eda con 1 operaciones", "status": "info"}
+{"timestamp": "07:20:39,578", "pid": 1989546, "operation": "TURN_ADDED", "details": "Turn TURN-18 added to queue", "status": "info"}
+{"timestamp": "07:20:39,584", "pid": 1989546, "operation": "TURN_ASSIGNED", "details": "Turno 18 asignado a Carlos L\u00f3pez con 1 operaciones", "status": "info"}
