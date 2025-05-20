@@ -218,9 +218,9 @@ class BankMonitor:
         layout = Layout()
         layout.split_column(
             Layout(name="processes", size=10),
-            Layout(name="spacer1",   size=1),
+            Layout(name="",   size=1),
             Layout(name="locks",     size=10),
-            Layout(name="spacer1",   size=1),
+            Layout(name="",   size=1),
             Layout(name="events",    size=14),
         )
 

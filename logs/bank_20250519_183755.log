@@ -1,0 +1,48 @@
+{"timestamp": "18:37:55,674", "pid": 3780, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Juan P\u00e9rez (juan@example.com)", "status": "info"}
+{"timestamp": "18:37:55,692", "pid": 3780, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Juan P\u00e9rez (ID: 3ce50d5a-2d17-4e70-b266-cce53aea13c2)", "status": "success"}
+{"timestamp": "18:37:55,699", "pid": 3780, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Mar\u00eda Garc\u00eda (maria@example.com)", "status": "info"}
+{"timestamp": "18:37:55,715", "pid": 3780, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Mar\u00eda Garc\u00eda (ID: 18fd89f7-7b5a-4567-9dd9-ab7a1ac992f4)", "status": "success"}
+{"timestamp": "18:37:55,723", "pid": 3780, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 3ce50d5a-2d17-4e70-b266-cce53aea13c2", "status": "info"}
+{"timestamp": "18:37:55,767", "pid": 3780, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 9640801580 con saldo inicial $1000.00", "status": "success"}
+{"timestamp": "18:37:55,778", "pid": 3780, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 3ce50d5a-2d17-4e70-b266-cce53aea13c2", "status": "info"}
+{"timestamp": "18:37:55,821", "pid": 3780, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 4367959763 con saldo inicial $500.00", "status": "success"}
+{"timestamp": "18:37:55,831", "pid": 3780, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 18fd89f7-7b5a-4567-9dd9-ab7a1ac992f4", "status": "info"}
+{"timestamp": "18:37:55,872", "pid": 3780, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 6345593482 con saldo inicial $2000.00", "status": "success"}
+{"timestamp": "18:37:55,884", "pid": 3780, "operation": "ISSUE_DEBIT_CARD_START", "details": "Emisi\u00f3n de tarjeta d\u00e9bito para cuenta 9640801580", "status": "info"}
+{"timestamp": "18:37:55,912", "pid": 3780, "operation": "ISSUE_DEBIT_CARD_SUCCESS", "details": "Tarjeta d\u00e9bito emitida: 4315780571849799 (Tipo: NORMAL)", "status": "success"}
+{"timestamp": "18:37:55,921", "pid": 3780, "operation": "ISSUE_DEBIT_CARD_START", "details": "Emisi\u00f3n de tarjeta d\u00e9bito para cuenta 4367959763", "status": "info"}
+{"timestamp": "18:37:55,953", "pid": 3780, "operation": "ISSUE_DEBIT_CARD_SUCCESS", "details": "Tarjeta d\u00e9bito emitida: 5135146161749912 (Tipo: GOLD)", "status": "success"}
+{"timestamp": "18:37:55,962", "pid": 3780, "operation": "ISSUE_CREDIT_CARD_START", "details": "Emisi\u00f3n de tarjeta cr\u00e9dito para cliente 3ce50d5a-2d17-4e70-b266-cce53aea13c2", "status": "info"}
+{"timestamp": "18:37:55,987", "pid": 3780, "operation": "ISSUE_CREDIT_CARD_SUCCESS", "details": "Tarjeta cr\u00e9dito emitida: 5286190355721358 (L\u00edmite: $50000.00)", "status": "success"}
+{"timestamp": "18:37:56,255", "pid": 3780, "operation": "TRANSACTION_HISTORY_REQUEST", "details": "Requesting transaction history for 6345593482 (last 10 transactions)", "status": "info"}
+{"timestamp": "18:37:56,276", "pid": 3780, "operation": "TRANSACTION_HISTORY_RETURNED", "details": "Found 0 transactions", "status": "success"}
+{"timestamp": "18:37:56,338", "pid": 3780, "operation": "TRANSACTION_HISTORY_REQUEST", "details": "Requesting transaction history for 9640801580 (last 10 transactions)", "status": "info"}
+{"timestamp": "18:37:56,356", "pid": 3780, "operation": "TRANSACTION_HISTORY_RETURNED", "details": "Found 0 transactions", "status": "success"}
+{"timestamp": "18:37:56,561", "pid": 3780, "operation": "CREDIT_PAYMENT_START", "details": "Procesando pago de $60.26 a tarjeta 5286190355721358", "status": "info"}
+{"timestamp": "18:37:56,606", "pid": 3780, "operation": "CREDIT_PAYMENT_SUCCESS", "details": "Pago aplicado a tarjeta 5286190355721358. Nuevo saldo: $0.00", "status": "success"}
+{"timestamp": "18:37:56,716", "pid": 3780, "operation": "DEPOSIT_INITIATED", "details": "Attempting to deposit $85.94 to 9640801580", "status": "info"}
+{"timestamp": "18:37:56,730", "pid": 3780, "operation": "DEPOSIT_COMPLETED", "details": "Deposit successful. New balance: $1111.62", "status": "success"}
+{"timestamp": "18:37:56,768", "pid": 3780, "operation": "DEPOSIT_INITIATED", "details": "Attempting to deposit $68.61 to 6345593482", "status": "info"}
+{"timestamp": "18:37:56,784", "pid": 3780, "operation": "DEPOSIT_COMPLETED", "details": "Deposit successful. New balance: $2137.21", "status": "success"}
+{"timestamp": "18:37:57,042", "pid": 3780, "operation": "BALANCE_REQUEST", "details": "Requesting balance for 9640801580", "status": "info"}
+{"timestamp": "18:37:57,058", "pid": 3780, "operation": "BALANCE_RETURNED", "details": "Balance retrieved: $1111.62", "status": "success"}
+{"timestamp": "18:37:57,067", "pid": 3780, "operation": "CREDIT_PAYMENT_START", "details": "Procesando pago de $97.40 a tarjeta 5286190355721358", "status": "info"}
+{"timestamp": "18:37:57,108", "pid": 3780, "operation": "CREDIT_PAYMENT_SUCCESS", "details": "Pago aplicado a tarjeta 5286190355721358. Nuevo saldo: $0.00", "status": "success"}
+{"timestamp": "18:37:57,143", "pid": 3780, "operation": "BALANCE_REQUEST", "details": "Requesting balance for 6345593482", "status": "info"}
+{"timestamp": "18:37:57,159", "pid": 3780, "operation": "BALANCE_RETURNED", "details": "Balance retrieved: $2137.21", "status": "success"}
+{"timestamp": "18:37:57,267", "pid": 3780, "operation": "TRANSACTION_HISTORY_REQUEST", "details": "Requesting transaction history for 6345593482 (last 10 transactions)", "status": "info"}
+{"timestamp": "18:37:57,283", "pid": 3780, "operation": "TRANSACTION_HISTORY_RETURNED", "details": "Found 1 transactions", "status": "success"}
+{"timestamp": "18:37:57,411", "pid": 3780, "operation": "WITHDRAWAL_INITIATED", "details": "Attempting to withdraw $40.13 from 9640801580", "status": "info"}
+{"timestamp": "18:37:57,428", "pid": 3780, "operation": "WITHDRAWAL_COMPLETED", "details": "Withdrawal successful. New balance: $933.96", "status": "success"}
+{"timestamp": "18:37:57,512", "pid": 3780, "operation": "CREDIT_PAYMENT_START", "details": "Procesando pago de $40.76 a tarjeta 5286190355721358", "status": "info"}
+{"timestamp": "18:37:57,558", "pid": 3780, "operation": "CREDIT_PAYMENT_SUCCESS", "details": "Pago aplicado a tarjeta 5286190355721358. Nuevo saldo: $0.00", "status": "success"}
+{"timestamp": "18:37:57,713", "pid": 3780, "operation": "WITHDRAWAL_INITIATED", "details": "Attempting to withdraw $30.91 from 6345593482", "status": "info"}
+{"timestamp": "18:37:57,729", "pid": 3780, "operation": "WITHDRAWAL_FAILED", "details": "Incorrect PIN. Remaining attempts: 3", "status": "warning"}
+{"timestamp": "18:37:57,917", "pid": 3780, "operation": "BALANCE_REQUEST", "details": "Requesting balance for 9640801580", "status": "info"}
+{"timestamp": "18:37:57,933", "pid": 3780, "operation": "BALANCE_RETURNED", "details": "Balance retrieved: $893.20", "status": "success"}
+{"timestamp": "18:37:57,941", "pid": 3780, "operation": "BLOCK_CARD_START", "details": "Intentando bloquear tarjeta 4315780571849799", "status": "warning"}
+{"timestamp": "18:37:57,954", "pid": 3780, "operation": "BLOCK_CARD_SUCCESS", "details": "Tarjeta 4315780571849799 bloqueada exitosamente", "status": "warning"}
+{"timestamp": "18:37:57,962", "pid": 3780, "operation": "ACCOUNT_STATEMENT_START", "details": "Generando estado de cuenta para 9640801580 (\u00faltimos 30 d\u00edas)", "status": "info"}
+{"timestamp": "18:37:57,978", "pid": 3780, "operation": "STATEMENT_GENERATED", "details": "Estado de cuenta generado para 9640801580", "status": "success"}
+{"timestamp": "18:37:57,985", "pid": 3780, "operation": "MONTHLY_INTEREST_START", "details": "Aplicando intereses mensuales a tarjetas de cr\u00e9dito", "status": "info"}
+{"timestamp": "18:37:57,997", "pid": 3780, "operation": "MONTHLY_INTEREST_COMPLETE", "details": "Intereses aplicados a 0 tarjetas. Total: $0.00", "status": "success"}
