@@ -1,6 +1,6 @@
 from multiprocessing import Lock
 import os
-import threading
+
 
 class TrackedLock:
     def __init__(self, name: str,process_tracker):
@@ -9,11 +9,14 @@ class TrackedLock:
         self.acquired = False
         self._pt = process_tracker
 
-    def acquire(self, blocking=True, timeout=None):
+    def acquire(self, blocking=True, timeout=-1):
+        if timeout is None:
+            timeout = -1
         acquired = self._lock.acquire(blocking, timeout)
         if acquired:
             self.acquired = True
             # no habiamos llamado a update lock , y nunca se informaba al ProccessTracker
+            self.acquired = True
             self._pt.update_lock(
                 lock_name=self.name,
                 owner_pid=os.getpid(),
