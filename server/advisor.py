@@ -9,6 +9,16 @@ class Advisor:
         self.advisor_id = advisor_id
         self.bank = bank
         self.history: List[Dict] = []
+        self.available = True
+        self.current_turn = None 
+
+    def assign_turn(self, turn):
+        self.current_turn = turn
+        self.available = False
+
+    def complete_turn(self):
+        self.current_turn = None
+        self.available = True
 
     # ---- Gestión de Clientes ----
     def create_customer(self, name: str, email: str) -> str:

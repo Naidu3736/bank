@@ -1,156 +1,221 @@
+import os
 from core.bank import Bank
-from core.card import CardType
 from server.locks import BankLocks
 from event_logger import EventConsole, ProcessTracker, BankMonitor
+from core.card import CardType
+import multiprocessing
 import time
 import random
-import os
-import threading
+import signal
+import sys
 from typing import List
-from rich.console import Console
+import queue
 
-def customer_operations(bank: Bank, customer_id: str, account_numbers: List[str]):
-    """Simula operaciones de un cliente"""
-    pid = os.getpid()
-    
-    for i in range(5):
-        time.sleep(random.uniform(0.1, 0.5))
-        operation = random.choice([
-            lambda: bank.deposit(account_numbers[0], random.uniform(10, 100)),
-            lambda: bank.withdraw(account_numbers[0], random.uniform(10, 50), "1234"),
-            lambda: bank.transfer(account_numbers[0], account_numbers[1], random.uniform(5, 30)),
-            lambda: bank.get_account_balance(account_numbers[0]),
-            lambda: bank.get_account_transactions(account_numbers[0])
-        ])
+# Configuración ajustada
+NUM_CLIENTES = 20  # Reducido para pruebas
+MAX_OPERACIONES_POR_CLIENTE = 5
+MAX_PROCESS_AT_ONCE = 10  
+SIMULATION_DURATION = 30
+QUEUE_TIMEOUT = 2
+
+def customer_operations(bank: Bank, customer_id: str):
+    """Versión con manejo robusto de errores"""
+    try:
+        # 1. Crear cuenta (obligatorio)
+        account = bank.add_account(
+            customer_id,
+            initial_balance=random.randint(100, 5000),
+            nip=str(random.randint(1000, 9999))
+        )
+        bank.event_console.add_event(
+            os.getpid(),
+            "ACCOUNT_CREATED",
+            f"Cuenta {account.account_number[:4]}... creada",
+            "success"
+        )
+
+        # 2. Operaciones básicas
+        deposit_amt = random.randint(10, 300)
+        bank.deposit(account.account_number, deposit_amt)
         
-        try:
-            operation()
-        except Exception as e:
-            bank.event_console.add_event(
-                pid,
-                "CUSTOMER_OPERATION_ERROR",
-                f"Error en operación: {str(e)}",
-                "error"
-            )
+        withdraw_amt = random.randint(5, 150)
+        bank.withdraw(account.account_number, withdraw_amt, account.nip)
 
-def credit_card_operations(bank: Bank, card_number: str, account_number: str):
-    """Simula operaciones con tarjeta de crédito"""
-    pid = os.getpid()
-    
-    for i in range(3):
-        time.sleep(random.uniform(0.3, 1.0))
+        # 3. Operaciones condicionales
+        if len(bank.accounts) > 1:
+            target = random.choice([
+                acc for acc in bank.accounts.keys() 
+                if acc != account.account_number
+            ])
+            bank.transfer(account.account_number, target, random.randint(5, 100), account.nip)
+
+        if random.random() < 0.5:  # 50% probabilidad
+            bank.issue_debit_card(account.account_number, random.choice(list(CardType)))
+
+    except Exception as e:
+        bank.event_console.add_event(
+            os.getpid(),
+            "OPERATION_ERROR",
+            f"Error: {str(e)}",
+            "error"
+        )
+
+def customer_creator(bank: Bank, customer_queue: multiprocessing.Queue, stop_event):
+    """Creador con verificación explícita"""
+    created = 0
+    while not stop_event.is_set() and created < NUM_CLIENTES:
         try:
-            if random.random() > 0.3:
-                bank.pay_credit_card(
-                    card_number, 
-                    random.uniform(20, 100), 
-                    account_number
+            customer = bank.add_customer(
+                f"Cliente-{created+1}",
+                f"cliente.{created+1}@banco.com"
+            )
+            customer_queue.put(customer.customer_id)
+            created += 1
+            
+            # Verificación crítica
+            if customer_queue.qsize() == 0:
+                bank.event_console.add_event(
+                    os.getpid(),
+                    "QUEUE_ERROR",
+                    "¡La cola no está aceptando elementos!",
+                    "critical"
                 )
-            else:
-                bank.pay_credit_card(
-                    card_number, 
-                    random.uniform(10, 50), 
-                    is_cash=True
-                )
+            
+            time.sleep(random.uniform(0.01, 0.1))
+            
         except Exception as e:
             bank.event_console.add_event(
-                pid,
-                "CREDIT_CARD_OPERATION_ERROR",
-                f"Error en pago: {str(e)}",
+                os.getpid(),
+                "CREATION_ERROR",
+                f"Error creando cliente: {str(e)}",
                 "error"
             )
+            time.sleep(0.5)
+
+def operation_dispatcher(bank: Bank, customer_queue: multiprocessing.Queue, stop_event):
+    """Dispatcher con manejo mejorado"""
+    active_processes = []
+    
+    while not stop_event.is_set():
+        try:
+            # Limpieza de procesos
+            active_processes = [p for p in active_processes if p.is_alive()]
+            
+            if len(active_processes) >= MAX_PROCESS_AT_ONCE:
+                time.sleep(0.1)
+                continue
+                
+            customer_id = customer_queue.get(timeout=QUEUE_TIMEOUT)
+            p = multiprocessing.Process(
+                target=customer_operations,
+                args=(bank, customer_id),
+                daemon=True
+            )
+            p.start()
+            active_processes.append(p)
+            
+        except queue.Empty:
+            bank.event_console.add_event(
+                os.getpid(),
+                "QUEUE_EMPTY",
+                "Esperando clientes...",
+                "warning"
+            )
+            time.sleep(1)
+        except Exception as e:
+            bank.event_console.add_event(
+                os.getpid(),
+                "DISPATCHER_FAILURE",
+                f"Error crítico: {str(e)}",
+                "critical"
+            )
+            time.sleep(2)
 
 def main():
-    console = Console()
+    # Configuración esencial
+    signal.signal(signal.SIGINT, signal_handler)
     
-    # Inicializar componentes
+    # Inicialización explícita del Manager
+    manager = multiprocessing.Manager()
+    print(f"Manager state: {manager._state}")  # Debug
+    
+    # Estructuras compartidas
+    shared_data = {
+        'accounts': manager.dict(),
+        'customers': manager.dict(),
+        'cards': manager.dict(),
+        'transactions': manager.list()
+    }
+    
+    # Sistema central
     locks = BankLocks()
-    event_console = EventConsole()
-    process_tracker = ProcessTracker()
+    event_console = EventConsole(manager=manager)
+    process_tracker = ProcessTracker(manager=manager)
+    customer_queue = manager.Queue(maxsize=100)
+    stop_event = manager.Event()
     
-    # Crear banco
-    bank = Bank(locks, event_console, process_tracker)
+    # Banco
+    bank = Bank(locks, event_console, process_tracker, shared_data, manager)
     
-    # Iniciar el monitor en un hilo separado
+    # Monitor (con verificación)
     monitor = BankMonitor(event_console, process_tracker)
-    monitor_thread = threading.Thread(target=monitor.run, daemon=True)
-    monitor_thread.start()
+    monitor_process = multiprocessing.Process(
+        target=monitor.run,
+        daemon=True
+    )
+    monitor_process.start()
+    time.sleep(1)  # Esperar inicialización
     
     try:
-        console.print("\n--- Creando clientes ---", style="bold blue")
-        customer1 = bank.add_customer("Juan Pérez", "juan@example.com")
-        customer2 = bank.add_customer("María García", "maria@example.com")
-        
-        console.print("\n--- Creando cuentas ---", style="bold blue")
-        account1 = bank.add_account(customer1.customer_id, 1000.0, "1234")
-        account2 = bank.add_account(customer1.customer_id, 500.0, "5678")
-        account3 = bank.add_account(customer2.customer_id, 2000.0, "4321")
-        
-        console.print("\n--- Emitiendo tarjetas ---", style="bold blue")
-        debit_card1 = bank.issue_debit_card(account1.account_number, CardType.NORMAL)
-        debit_card2 = bank.issue_debit_card(account2.account_number, CardType.GOLD)
-        credit_card1 = bank.issue_credit_card(customer1.customer_id, CardType.PLATINUM)
-        
-        # Iniciar operaciones concurrentes
-        console.print("\n--- Iniciando operaciones concurrentes ---", style="bold blue")
-        threads = []
-        
-        # Operaciones del cliente 1
-        t = threading.Thread(
-            target=customer_operations,
-            args=(bank, customer1.customer_id, [account1.account_number, account2.account_number])
+        # Procesos principales
+        creator = multiprocessing.Process(
+            target=customer_creator,
+            args=(bank, customer_queue, stop_event),
+            daemon=True
         )
-        threads.append(t)
-        t.start()
+        creator.start()
         
-        # Operaciones del cliente 2
-        t = threading.Thread(
-            target=customer_operations,
-            args=(bank, customer2.customer_id, [account3.account_number])
-        )
-        threads.append(t)
-        t.start()
+        dispatchers = [
+            multiprocessing.Process(
+                target=operation_dispatcher,
+                args=(bank, customer_queue, stop_event),
+                daemon=True
+            ) for _ in range(2)
+        ]
+        for d in dispatchers:
+            d.start()
         
-        # Operaciones con tarjeta de crédito
-        t = threading.Thread(
-            target=credit_card_operations,
-            args=(bank, credit_card1.card_number, account1.account_number)
-        )
-        threads.append(t)
-        t.start()
+        # Espera controlada
+        print(f"\nSimulación en curso por {SIMULATION_DURATION} segundos...")
+        time.sleep(SIMULATION_DURATION)
         
-        # Esperar a que terminen las operaciones
-        for t in threads:
-            t.join(timeout=10)
-        
-        # Operaciones administrativas finales
-        console.print("\n--- Realizando operaciones administrativas ---", style="bold blue")
-        bank.block_card(debit_card1.card_number)
-        bank.generate_account_statement(account1.account_number)
-        bank.apply_monthly_interest()
-        
-        console.print("\n--- Todas las operaciones completadas ---", style="bold green")
-        console.print("El monitor seguirá activo durante 10 segundos más...")
-        
-        time.sleep(10)  # Tiempo para ver el monitor
-        
-    except Exception as e:
-        console.print(f"\nError en main: {str(e)}", style="bold red")
     finally:
-        # Detener el monitor
-        monitor.running = False
-        monitor_thread.join(timeout=1)
+        # Finalización controlada
+        stop_event.set()
+        creator.join(timeout=5)
+        for d in dispatchers:
+            d.join(timeout=5)
         
-        # Resumen final
-        console.print("\n--- Resumen final ---", style="bold green")
-        console.print(f"Clientes creados: {len(bank.customers)}")
-        console.print(f"Cuentas creadas: {len(bank.accounts)}")
-        console.print(f"Tarjetas emitidas: {len(bank.card_registry)}")
-        console.print(f"Transacciones realizadas: {len(bank.transaction_history)}")
+        # Estadísticas verificadas
+        print("\n=== Estadísticas Verificadas ===")
+        print(f"Clientes en sistema: {len(bank.customers)}")
+        print(f"Cuentas creadas: {len(bank.accounts)}")
+        print(f"Transacciones registradas: {len(bank.transaction_history)}")
+        print(f"Elementos en cola no procesados: {customer_queue.qsize()}")
+        
+        # Debug adicional
+        if not bank.customers:
+            print("\n[DEBUG] Estado interno:")
+            print(f"- Manager activo: {manager._state.value == 'STARTED'}")
+            print(f"- Cola compartida: {type(customer_queue)}")
+            print(f"- Eventos registrados: {len(event_console.get_events(100))}")
+
+def signal_handler(sig, frame):
+    print("\nInterrupción recibida")
+    sys.exit(0)
 
 if __name__ == "__main__":
-    # Configuración para Windows
-    import multiprocessing
-    multiprocessing.freeze_support()
-    
+    # Verificación de entorno multiproceso
+    multiprocessing.set_start_method('spawn')  # Crucial para Linux/Mac
+    print("Iniciando con método:", multiprocessing.get_start_method())
     main()

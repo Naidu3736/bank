@@ -1,0 +1,82 @@
+{"timestamp": "18:16:40,590", "pid": 1247097, "operation": "ADD_CUSTOMER_START", "details": "Iniciando ADD CUSTOMER", "status": "info"}
+{"timestamp": "18:16:40,592", "pid": 1247101, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:16:40,592", "pid": 1247099, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:16:40,676", "pid": 1247097, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Operaci\u00f3n completada en 0.09s", "status": "success"}
+{"timestamp": "18:16:40,715", "pid": 1247101, "operation": "DISPATCHING_OPERATIONS", "details": "Iniciando operaciones para cliente 25378c6f-6e57-436c-a8b1-25759d7603ce", "status": "info"}
+{"timestamp": "18:16:40,715", "pid": 1247097, "operation": "CUSTOMER_ADDED_TO_QUEUE", "details": "Cliente 25378c6f-6e57-436c-a8b1-25759d7603ce a\u00f1adido a cola (Tama\u00f1o: 0)", "status": "debug"}
+{"timestamp": "18:16:40,720", "pid": 1247101, "operation": "DISPATCHER_ERROR", "details": "daemonic processes are not allowed to have children", "status": "error"}
+{"timestamp": "18:16:40,728", "pid": 1247101, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:16:40,744", "pid": 1247097, "operation": "ADD_CUSTOMER_START", "details": "Iniciando ADD CUSTOMER", "status": "info"}
+{"timestamp": "18:16:40,807", "pid": 1247097, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Operaci\u00f3n completada en 0.06s", "status": "success"}
+{"timestamp": "18:16:40,843", "pid": 1247097, "operation": "CUSTOMER_ADDED_TO_QUEUE", "details": "Cliente 9972196e-a4a5-4e6e-a5b3-a2284aa24ae6 a\u00f1adido a cola (Tama\u00f1o: 0)", "status": "debug"}
+{"timestamp": "18:16:40,843", "pid": 1247099, "operation": "DISPATCHING_OPERATIONS", "details": "Iniciando operaciones para cliente 9972196e-a4a5-4e6e-a5b3-a2284aa24ae6", "status": "info"}
+{"timestamp": "18:16:40,851", "pid": 1247099, "operation": "DISPATCHER_ERROR", "details": "daemonic processes are not allowed to have children", "status": "error"}
+{"timestamp": "18:16:40,856", "pid": 1247099, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:16:40,891", "pid": 1247097, "operation": "ADD_CUSTOMER_START", "details": "Iniciando ADD CUSTOMER", "status": "info"}
+{"timestamp": "18:16:40,962", "pid": 1247097, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Operaci\u00f3n completada en 0.07s", "status": "success"}
+{"timestamp": "18:16:41,000", "pid": 1247097, "operation": "CUSTOMER_ADDED_TO_QUEUE", "details": "Cliente 5a9897ab-c329-4277-87c3-64a0d65db3af a\u00f1adido a cola (Tama\u00f1o: 0)", "status": "debug"}
+{"timestamp": "18:16:41,000", "pid": 1247101, "operation": "DISPATCHING_OPERATIONS", "details": "Iniciando operaciones para cliente 5a9897ab-c329-4277-87c3-64a0d65db3af", "status": "info"}
+{"timestamp": "18:16:41,009", "pid": 1247101, "operation": "DISPATCHER_ERROR", "details": "daemonic processes are not allowed to have children", "status": "error"}
+{"timestamp": "18:16:41,015", "pid": 1247101, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:16:41,042", "pid": 1247097, "operation": "ADD_CUSTOMER_START", "details": "Iniciando ADD CUSTOMER", "status": "info"}
+{"timestamp": "18:16:41,108", "pid": 1247097, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Operaci\u00f3n completada en 0.07s", "status": "success"}
+{"timestamp": "18:16:41,153", "pid": 1247099, "operation": "DISPATCHING_OPERATIONS", "details": "Iniciando operaciones para cliente 1f397a9b-c1ad-44c2-8a2a-f7280be6cfca", "status": "info"}
+{"timestamp": "18:16:41,153", "pid": 1247097, "operation": "CUSTOMER_ADDED_TO_QUEUE", "details": "Cliente 1f397a9b-c1ad-44c2-8a2a-f7280be6cfca a\u00f1adido a cola (Tama\u00f1o: 0)", "status": "debug"}
+{"timestamp": "18:16:41,159", "pid": 1247099, "operation": "DISPATCHER_ERROR", "details": "daemonic processes are not allowed to have children", "status": "error"}
+{"timestamp": "18:16:41,170", "pid": 1247099, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:16:41,183", "pid": 1247097, "operation": "ADD_CUSTOMER_START", "details": "Iniciando ADD CUSTOMER", "status": "info"}
+{"timestamp": "18:16:41,258", "pid": 1247097, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Operaci\u00f3n completada en 0.08s", "status": "success"}
+{"timestamp": "18:16:41,298", "pid": 1247101, "operation": "DISPATCHING_OPERATIONS", "details": "Iniciando operaciones para cliente 35d39ea2-c626-41ec-8256-1ee0b8c55436", "status": "info"}
+{"timestamp": "18:16:41,298", "pid": 1247097, "operation": "CUSTOMER_ADDED_TO_QUEUE", "details": "Cliente 35d39ea2-c626-41ec-8256-1ee0b8c55436 a\u00f1adido a cola (Tama\u00f1o: 0)", "status": "debug"}
+{"timestamp": "18:16:41,303", "pid": 1247101, "operation": "DISPATCHER_ERROR", "details": "daemonic processes are not allowed to have children", "status": "error"}
+{"timestamp": "18:16:41,314", "pid": 1247101, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:16:41,354", "pid": 1247097, "operation": "ADD_CUSTOMER_START", "details": "Iniciando ADD CUSTOMER", "status": "info"}
+{"timestamp": "18:16:41,432", "pid": 1247097, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Operaci\u00f3n completada en 0.08s", "status": "success"}
+{"timestamp": "18:16:41,471", "pid": 1247099, "operation": "DISPATCHING_OPERATIONS", "details": "Iniciando operaciones para cliente 90be5ff8-5b1b-4d9f-ada1-4097911944a3", "status": "info"}
+{"timestamp": "18:16:41,471", "pid": 1247097, "operation": "CUSTOMER_ADDED_TO_QUEUE", "details": "Cliente 90be5ff8-5b1b-4d9f-ada1-4097911944a3 a\u00f1adido a cola (Tama\u00f1o: 0)", "status": "debug"}
+{"timestamp": "18:16:41,476", "pid": 1247099, "operation": "DISPATCHER_ERROR", "details": "daemonic processes are not allowed to have children", "status": "error"}
+{"timestamp": "18:16:41,483", "pid": 1247097, "operation": "ADD_CUSTOMER_START", "details": "Iniciando ADD CUSTOMER", "status": "info"}
+{"timestamp": "18:16:41,486", "pid": 1247099, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:16:41,554", "pid": 1247097, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Operaci\u00f3n completada en 0.07s", "status": "success"}
+{"timestamp": "18:16:41,588", "pid": 1247101, "operation": "DISPATCHING_OPERATIONS", "details": "Iniciando operaciones para cliente dc95bc1d-e5c2-4e84-8407-b99e0d0672b3", "status": "info"}
+{"timestamp": "18:16:41,588", "pid": 1247097, "operation": "CUSTOMER_ADDED_TO_QUEUE", "details": "Cliente dc95bc1d-e5c2-4e84-8407-b99e0d0672b3 a\u00f1adido a cola (Tama\u00f1o: 0)", "status": "debug"}
+{"timestamp": "18:16:41,592", "pid": 1247101, "operation": "DISPATCHER_ERROR", "details": "daemonic processes are not allowed to have children", "status": "error"}
+{"timestamp": "18:16:41,602", "pid": 1247101, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:16:41,611", "pid": 1247097, "operation": "ADD_CUSTOMER_START", "details": "Iniciando ADD CUSTOMER", "status": "info"}
+{"timestamp": "18:16:41,679", "pid": 1247097, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Operaci\u00f3n completada en 0.07s", "status": "success"}
+{"timestamp": "18:16:41,725", "pid": 1247099, "operation": "DISPATCHING_OPERATIONS", "details": "Iniciando operaciones para cliente c43623c3-e1fc-44eb-bba9-40d237f9c196", "status": "info"}
+{"timestamp": "18:16:41,725", "pid": 1247097, "operation": "CUSTOMER_ADDED_TO_QUEUE", "details": "Cliente c43623c3-e1fc-44eb-bba9-40d237f9c196 a\u00f1adido a cola (Tama\u00f1o: 0)", "status": "debug"}
+{"timestamp": "18:16:41,729", "pid": 1247099, "operation": "DISPATCHER_ERROR", "details": "daemonic processes are not allowed to have children", "status": "error"}
+{"timestamp": "18:16:41,739", "pid": 1247099, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:16:41,753", "pid": 1247097, "operation": "ADD_CUSTOMER_START", "details": "Iniciando ADD CUSTOMER", "status": "info"}
+{"timestamp": "18:16:41,822", "pid": 1247097, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Operaci\u00f3n completada en 0.07s", "status": "success"}
+{"timestamp": "18:16:41,860", "pid": 1247101, "operation": "DISPATCHING_OPERATIONS", "details": "Iniciando operaciones para cliente 3e7c1ec7-87a1-4fa7-ac2b-c8158deb80fd", "status": "info"}
+{"timestamp": "18:16:41,860", "pid": 1247097, "operation": "CUSTOMER_ADDED_TO_QUEUE", "details": "Cliente 3e7c1ec7-87a1-4fa7-ac2b-c8158deb80fd a\u00f1adido a cola (Tama\u00f1o: 0)", "status": "debug"}
+{"timestamp": "18:16:41,866", "pid": 1247101, "operation": "DISPATCHER_ERROR", "details": "daemonic processes are not allowed to have children", "status": "error"}
+{"timestamp": "18:16:41,876", "pid": 1247101, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:16:41,896", "pid": 1247097, "operation": "ADD_CUSTOMER_START", "details": "Iniciando ADD CUSTOMER", "status": "info"}
+{"timestamp": "18:16:41,961", "pid": 1247097, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Operaci\u00f3n completada en 0.07s", "status": "success"}
+{"timestamp": "18:16:42,008", "pid": 1247099, "operation": "DISPATCHING_OPERATIONS", "details": "Iniciando operaciones para cliente 2819d35c-8b2f-4805-8a29-c6e22958e736", "status": "info"}
+{"timestamp": "18:16:42,008", "pid": 1247097, "operation": "CUSTOMER_ADDED_TO_QUEUE", "details": "Cliente 2819d35c-8b2f-4805-8a29-c6e22958e736 a\u00f1adido a cola (Tama\u00f1o: 0)", "status": "debug"}
+{"timestamp": "18:16:42,013", "pid": 1247099, "operation": "DISPATCHER_ERROR", "details": "daemonic processes are not allowed to have children", "status": "error"}
+{"timestamp": "18:16:42,023", "pid": 1247099, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:16:42,882", "pid": 1247101, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:16:42,887", "pid": 1247101, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:16:43,029", "pid": 1247099, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:16:43,035", "pid": 1247099, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:16:43,893", "pid": 1247101, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:16:43,900", "pid": 1247101, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:16:44,041", "pid": 1247099, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:16:44,046", "pid": 1247099, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:16:44,905", "pid": 1247101, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:16:44,912", "pid": 1247101, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:16:45,052", "pid": 1247099, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:16:45,058", "pid": 1247099, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:16:45,918", "pid": 1247101, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:16:45,923", "pid": 1247101, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:16:46,063", "pid": 1247099, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:16:46,069", "pid": 1247099, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:16:46,930", "pid": 1247101, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:16:46,936", "pid": 1247101, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:16:47,075", "pid": 1247099, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:16:47,080", "pid": 1247099, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}

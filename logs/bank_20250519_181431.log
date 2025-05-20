@@ -1,0 +1,196 @@
+{"timestamp": "18:14:31,207", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:31,209", "pid": 1214051, "operation": "ADD_CUSTOMER_START", "details": "Iniciando ADD CUSTOMER", "status": "info"}
+{"timestamp": "18:14:31,209", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:31,294", "pid": 1214051, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Operaci\u00f3n completada en 0.09s", "status": "success"}
+{"timestamp": "18:14:31,333", "pid": 1214054, "operation": "DISPATCHING_OPERATIONS", "details": "Iniciando operaciones para cliente 136d2953-7480-47e1-a610-a003363d5ac8", "status": "info"}
+{"timestamp": "18:14:31,337", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "daemonic processes are not allowed to have children", "status": "error"}
+{"timestamp": "18:14:31,342", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:31,380", "pid": 1214051, "operation": "ADD_CUSTOMER_START", "details": "Iniciando ADD CUSTOMER", "status": "info"}
+{"timestamp": "18:14:31,449", "pid": 1214051, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Operaci\u00f3n completada en 0.07s", "status": "success"}
+{"timestamp": "18:14:31,488", "pid": 1214058, "operation": "DISPATCHING_OPERATIONS", "details": "Iniciando operaciones para cliente 195b99b0-804d-4bdf-95d5-f52bd12b27d5", "status": "info"}
+{"timestamp": "18:14:31,493", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "daemonic processes are not allowed to have children", "status": "error"}
+{"timestamp": "18:14:31,500", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:31,528", "pid": 1214051, "operation": "ADD_CUSTOMER_START", "details": "Iniciando ADD CUSTOMER", "status": "info"}
+{"timestamp": "18:14:31,593", "pid": 1214051, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Operaci\u00f3n completada en 0.07s", "status": "success"}
+{"timestamp": "18:14:31,631", "pid": 1214054, "operation": "DISPATCHING_OPERATIONS", "details": "Iniciando operaciones para cliente 0e1747d3-2413-4881-a293-09e30fb2db9f", "status": "info"}
+{"timestamp": "18:14:31,636", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "daemonic processes are not allowed to have children", "status": "error"}
+{"timestamp": "18:14:31,642", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:31,657", "pid": 1214051, "operation": "ADD_CUSTOMER_START", "details": "Iniciando ADD CUSTOMER", "status": "info"}
+{"timestamp": "18:14:31,733", "pid": 1214051, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Operaci\u00f3n completada en 0.08s", "status": "success"}
+{"timestamp": "18:14:31,774", "pid": 1214058, "operation": "DISPATCHING_OPERATIONS", "details": "Iniciando operaciones para cliente 6cad7f97-f606-4bca-b593-01c422440dbb", "status": "info"}
+{"timestamp": "18:14:31,780", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "daemonic processes are not allowed to have children", "status": "error"}
+{"timestamp": "18:14:31,787", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:31,807", "pid": 1214051, "operation": "ADD_CUSTOMER_START", "details": "Iniciando ADD CUSTOMER", "status": "info"}
+{"timestamp": "18:14:31,878", "pid": 1214051, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Operaci\u00f3n completada en 0.07s", "status": "success"}
+{"timestamp": "18:14:31,917", "pid": 1214054, "operation": "DISPATCHING_OPERATIONS", "details": "Iniciando operaciones para cliente da8c2ca6-b4d8-46ed-9876-7cae3fb2f236", "status": "info"}
+{"timestamp": "18:14:31,922", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "daemonic processes are not allowed to have children", "status": "error"}
+{"timestamp": "18:14:31,922", "pid": 1214051, "operation": "ADD_CUSTOMER_START", "details": "Iniciando ADD CUSTOMER", "status": "info"}
+{"timestamp": "18:14:31,927", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:31,998", "pid": 1214051, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Operaci\u00f3n completada en 0.08s", "status": "success"}
+{"timestamp": "18:14:32,036", "pid": 1214058, "operation": "DISPATCHING_OPERATIONS", "details": "Iniciando operaciones para cliente 8a222def-494f-4021-9e09-c4588886035a", "status": "info"}
+{"timestamp": "18:14:32,041", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "daemonic processes are not allowed to have children", "status": "error"}
+{"timestamp": "18:14:32,046", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:32,062", "pid": 1214051, "operation": "ADD_CUSTOMER_START", "details": "Iniciando ADD CUSTOMER", "status": "info"}
+{"timestamp": "18:14:32,129", "pid": 1214051, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Operaci\u00f3n completada en 0.07s", "status": "success"}
+{"timestamp": "18:14:32,164", "pid": 1214054, "operation": "DISPATCHING_OPERATIONS", "details": "Iniciando operaciones para cliente c3c7b037-c200-4b93-9e89-e5fbb4b89f1f", "status": "info"}
+{"timestamp": "18:14:32,169", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "daemonic processes are not allowed to have children", "status": "error"}
+{"timestamp": "18:14:32,174", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:32,179", "pid": 1214051, "operation": "ADD_CUSTOMER_START", "details": "Iniciando ADD CUSTOMER", "status": "info"}
+{"timestamp": "18:14:32,242", "pid": 1214051, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Operaci\u00f3n completada en 0.06s", "status": "success"}
+{"timestamp": "18:14:32,284", "pid": 1214058, "operation": "DISPATCHING_OPERATIONS", "details": "Iniciando operaciones para cliente 8dacf8f3-7e07-4c13-a658-3cd052b6aa6b", "status": "info"}
+{"timestamp": "18:14:32,290", "pid": 1214051, "operation": "ADD_CUSTOMER_START", "details": "Iniciando ADD CUSTOMER", "status": "info"}
+{"timestamp": "18:14:32,293", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "daemonic processes are not allowed to have children", "status": "error"}
+{"timestamp": "18:14:32,322", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:32,386", "pid": 1214051, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Operaci\u00f3n completada en 0.10s", "status": "success"}
+{"timestamp": "18:14:32,421", "pid": 1214054, "operation": "DISPATCHING_OPERATIONS", "details": "Iniciando operaciones para cliente a9bc1b85-501f-442f-a4e8-ac9d4c9310ce", "status": "info"}
+{"timestamp": "18:14:32,426", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "daemonic processes are not allowed to have children", "status": "error"}
+{"timestamp": "18:14:32,431", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:32,457", "pid": 1214051, "operation": "ADD_CUSTOMER_START", "details": "Iniciando ADD CUSTOMER", "status": "info"}
+{"timestamp": "18:14:32,522", "pid": 1214051, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Operaci\u00f3n completada en 0.06s", "status": "success"}
+{"timestamp": "18:14:32,557", "pid": 1214058, "operation": "DISPATCHING_OPERATIONS", "details": "Iniciando operaciones para cliente a0449304-fe94-4b3a-ae43-741a2276e8cb", "status": "info"}
+{"timestamp": "18:14:32,561", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "daemonic processes are not allowed to have children", "status": "error"}
+{"timestamp": "18:14:32,566", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:33,436", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:33,441", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:33,571", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:33,577", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:34,446", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:34,452", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:34,584", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:34,591", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:35,457", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:35,463", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:35,598", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:35,604", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:36,469", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:36,475", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:36,610", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:36,616", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:37,481", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:37,487", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:37,621", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:37,627", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:38,492", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:38,498", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:38,632", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:38,638", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:39,503", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:39,508", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:39,643", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:39,649", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:40,514", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:40,519", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:40,655", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:40,661", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:41,524", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:41,529", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:41,666", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:41,672", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:42,534", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:42,539", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:42,677", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:42,683", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:44,097", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:44,103", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:44,241", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:44,247", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:45,109", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:45,114", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:45,252", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:45,258", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:46,120", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:46,126", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:46,263", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:46,269", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:47,131", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:47,137", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:47,275", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:47,280", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:48,143", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:48,148", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:48,285", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:48,291", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:49,153", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:49,159", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:49,297", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:49,302", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:50,164", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:50,170", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:50,307", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:50,313", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:51,175", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:51,181", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:51,318", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:51,325", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:52,192", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:52,223", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:52,330", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:52,337", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:53,229", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:53,242", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:53,342", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:53,348", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:54,289", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:54,295", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:54,354", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:54,360", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:55,300", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:55,306", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:55,366", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:55,372", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:56,311", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:56,317", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:56,377", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:56,382", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:57,322", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:57,328", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:57,387", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:57,392", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:58,334", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:58,347", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:58,398", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:58,403", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:59,354", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:59,360", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:14:59,408", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:14:59,416", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:15:00,365", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:15:00,371", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:15:00,423", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:15:00,429", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:15:01,376", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:15:01,382", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:15:01,435", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:15:01,439", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:15:02,388", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:15:02,393", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:15:02,445", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:15:02,451", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:15:03,399", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:15:03,407", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:15:03,457", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:15:03,463", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:15:04,415", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:15:04,422", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:15:04,468", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:15:04,478", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:15:05,447", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:15:05,452", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:15:05,488", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:15:05,494", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:15:06,458", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:15:06,463", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:15:06,499", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:15:06,505", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:15:07,468", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:15:07,473", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:15:07,511", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:15:07,516", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:15:08,479", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:15:08,485", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:15:08,521", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:15:08,527", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:15:09,489", "pid": 1214054, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:15:09,495", "pid": 1214054, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}
+{"timestamp": "18:15:09,532", "pid": 1214058, "operation": "DISPATCHER_ERROR", "details": "", "status": "error"}
+{"timestamp": "18:15:09,539", "pid": 1214058, "operation": "DISPATCHER_STATUS", "details": "Clientes en cola: 0, Procesos activos: 0", "status": "debug"}

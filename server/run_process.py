@@ -1,65 +1,42 @@
-from multiprocessing import Pool
-from core.turn import Turn
-from event_logger import EventConsole, ProcessTracker
+import multiprocessing
+from event_logger import ProcessTracker
 import os
-import time
 
-def run_process(turn: Turn, operations):
-    """Ejecuta operaciones en paralelo con multiprocessing."""
-    pid = os.getpid()
-    ProcessTracker.update_process(
-        pid,
-        state="running",
-        current_operation=f"Processing turn {turn.turn_id}"
-    )
-    
-    start_time = time.time()
-    results = []
+def run_process(parent_pid, turn, operations, manager=None):
+    """Versión mejorada con mejor tracking"""
+    tracker = ProcessTracker(manager)
     
     try:
-        with Pool(processes=min(len(operations), 3)) as pool:
-            for i, op in enumerate(operations):
-                ProcessTracker.update_process(
-                    pid,
-                    state="running",
-                    current_operation=f"Executing op {i+1}/{len(operations)}"
-                )
-                results.append(pool.apply_async(_execute_operation, (op,)))
-            
-            results = [r.get() for r in results]
-            
+        current_pid = os.getpid()
+        # Registrar inicio con más detalle
+        tracker.update_process(
+            pid=current_pid,
+            state="running",
+            current_operation=f"Processing turn {turn.turn_id} with {len(operations)} ops",
+            ppid=parent_pid
+        )
+        
+        # Ejecutar operaciones con tracking
+        results = []
+        for i, op in enumerate(operations):
+            tracker.update_process(
+                pid=current_pid,
+                current_operation=f"Executing op {i+1}/{len(operations)}: {op.__name__}"
+            )
+            results.append(op())
+        
         if all(results):
             turn.mark_as_attended()
-            EventConsole.add_event(
-                pid,
-                "PROCESS_COMPLETE",
-                f"Turn {turn.turn_id} completed successfully",
-                "success"
-            )
         else:
             turn.mark_as_failed()
-            EventConsole.add_event(
-                pid,
-                "PROCESS_FAILED",
-                f"Turn {turn.turn_id} failed",
-                "error"
-            )
             
     except Exception as e:
-        EventConsole.add_event(
-            pid,
-            "PROCESS_ERROR",
-            f"Error in turn {turn.turn_id}: {str(e)}",
-            "error"
+        tracker.update_process(
+            pid=current_pid,
+            state="error",
+            current_operation=f"Failed: {str(e)}"
         )
         turn.mark_as_failed()
-        
-    finally:
-        ProcessTracker.update_process(
-            pid,
-            state="completed",
-            current_operation=f"Turn {turn.turn_id} processed in {time.time()-start_time:.2f}s"
-        )
 
 def _execute_operation(op):
     """Función auxiliar para ejecutar una operación."""

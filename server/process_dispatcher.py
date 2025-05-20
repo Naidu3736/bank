@@ -18,7 +18,7 @@ class ProcessDispatcher:
         self.advisors = [Advisor(f"A{j+1}", bank) for j in range(num_advisors)]
         self.operation_queue = multiprocessing.Queue()
         self.event_console = event_console or EventConsole()
-        self.process_tracker = process_tracker or ProcessTracker()
+        self.process_tracker = process_tracker
         
     def assign_turn(self, turn: Turn):
         """Asigna un turno al sistema"""
@@ -73,33 +73,50 @@ class ProcessDispatcher:
             except Empty:
                 continue
                 
-    # Modificar el método _assign_handler
     def _assign_handler(self, turn):
-        """Asigna turno a handler (teller o advisor) disponible."""
-        # Determinar el tipo de servicio basado en las operaciones
         service_type = self._determine_service_type(turn.operations)
-        turn.assign_service_type(service_type)  # Asignar el tipo de servicio
         
-        handler_pool = self.tellers if service_type == "teller" else self.advisors
-        with self.locks.teller_pool_lock:
-            for handler in handler_pool:
-                if handler.available:
-                    handler.assign_turn(turn)
-                    operations = self._prepare_operations(turn, handler)
-                    if operations:
-                        process = multiprocessing.Process(
-                            target=run_process,
-                            args=(turn, operations))
-                        process.start()
-                        
-                        self.event_console.add_event(
-                            os.getpid(),
-                            "PROCESS_STARTED",
-                            f"Started process for turn {turn.turn_id} ({service_type})",
-                            "info"
-                        )
-                        return True
-        return False
+        # Actualizar estado antes de asignar
+        self.process_tracker.update_process(
+            os.getpid(),
+            current_operation=f"Assigning {service_type} for turn {turn.turn_id}"
+        )
+        
+        if service_type == "teller":
+            if not self.locks.tellers_sem.acquire(blocking=False):
+                return False
+            handler_pool = self.tellers
+        else:
+            if not self.locks.advisors_sem.acquire(blocking=False):
+                return False
+            handler_pool = self.advisors
+
+        try:
+            handler = next((h for h in handler_pool if not h.current_turn), None)
+            if handler:
+                handler.assign_turn(turn)
+                operations = self._prepare_operations(turn, handler)
+                
+                # Registrar asignación
+                self.event_console.add_event(
+                    os.getpid(),
+                    "HANDLER_ASSIGNED",
+                    f"Assigned {handler.teller_id if service_type=='teller' else handler.advisor_id} to turn {turn.turn_id}",
+                    "info"
+                )
+                
+                process = multiprocessing.Process(
+                    target=run_process,
+                    args=(os.getpid(), turn, operations, self.bank._manager)
+                )
+                process.start()
+                return True
+            return False
+        finally:
+            if service_type == "teller":
+                self.locks.tellers_sem.release()
+            else:
+                self.locks.advisors_sem.release()
 
     # Añadir nuevo método para determinar el tipo de servicio
     def _determine_service_type(self, operations):

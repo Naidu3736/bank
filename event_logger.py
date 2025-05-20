@@ -1,3 +1,4 @@
+import multiprocessing.managers
 import os
 from datetime import datetime
 from typing import List, Dict
@@ -12,14 +13,14 @@ import multiprocessing
 import time
 
 class EventConsole:
-    def __init__(self, log_dir="logs"):
+    def __init__(self, log_dir="logs", manager=None):
         self.console = Console()
         self.log_dir = Path(log_dir)
         self.log_dir.mkdir(exist_ok=True)
         self.log_file = self.log_dir / f"bank_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
-        self._manager = multiprocessing.Manager()
+        self._manager = manager or multiprocessing.Manager()
         self._events = self._manager.list()
-        self._lock = multiprocessing.Lock()
+        self._lock = self._manager.Lock()
         
     def add_event(self, pid: int, operation: str, details: str, status: str = "info"):
         timestamp = datetime.now().strftime("%H:%M:%S,%f")[:-3]
@@ -52,11 +53,11 @@ class EventConsole:
             return list(self._events[:limit])
 
 class ProcessTracker:
-    def __init__(self):
-        self._manager = multiprocessing.Manager()
+    def __init__(self, manager=None):
+        self._manager = manager or multiprocessing.Manager()
         self._processes = self._manager.dict()
         self._locks = self._manager.dict()
-        self._lock = multiprocessing.Lock()
+        self._lock = self._manager.Lock()
         
     def update_process(self, pid: int, **kwargs):
         """Actualiza la información de un proceso.
@@ -104,6 +105,16 @@ class ProcessTracker:
                     self._locks[lock_name]['acquired_time'] = time.time()
                 if state is not None:
                     self._locks[lock_name]['state'] = state
+
+    def update_semaphore(self, name: str, owner_pid: int, state: str, available: int):
+        with self._lock:
+            if name not in self._locks:
+                self._locks[name] = self._manager.dict({
+                    'type': 'semaphore',  # <- Nueva clave
+                    'owner_pid': owner_pid,
+                    'state': state,
+                    'available': available  # <- Slots libres
+                })
     
     def get_processes(self):
         with self._lock:
@@ -141,18 +152,20 @@ class BankMonitor:
         self.running = True
     
     def generate_process_table(self) -> Table:
-        """Genera la tabla de procesos"""
-        table = Table(title="Bank Processes", show_header=True, header_style="bold blue")
+        """Genera la tabla de procesos con más detalles"""
+        table = Table(title="Bank Processes - Detailed View", show_header=True, header_style="bold blue")
         table.add_column("PID", style="dim", width=8)
-        table.add_column("PPID", style="dim", width=8)
+        table.add_column("Type", width=10)
         table.add_column("State", width=12)
-        table.add_column("Current Operation", width=30)
-        table.add_column("Lock Held", width=15)
-        table.add_column("Lock Waiting", width=15)
+        table.add_column("Current Operation", width=40) 
+        table.add_column("Resource", width=15)  
         table.add_column("Uptime", width=10)
         
         processes = self.process_tracker.get_processes()
         for proc in processes:
+            # Determinar tipo de proceso
+            process_type = "Teller" if "T" in str(proc.get('current_operation', '')) else "Advisor"
+            
             state_style = {
                 'working': 'green',
                 'waiting': 'yellow',
@@ -161,11 +174,10 @@ class BankMonitor:
             
             table.add_row(
                 str(proc['pid']),
-                str(proc['ppid']),
+                process_type,
                 f"[{state_style}]{proc['state']}[/]",
                 proc['current_operation'],
-                proc['lock_held'] or '-',
-                proc['lock_waiting'] or '-',
+                proc.get('lock_held', '-'),
                 proc['uptime']
             )
         return table
@@ -220,13 +232,19 @@ class BankMonitor:
             Layout(name="events", size=14)
         )
         
-        with Live(layout, refresh_per_second=4, screen=True) as live:
-            while self.running:
-                try:
-                    layout["processes"].update(Panel(self.generate_process_table()))
-                    layout["locks"].update(Panel(self.generate_locks_table()))
-                    layout["events"].update(Panel(self.generate_events_table()))
-                    time.sleep(0.25)
-                except KeyboardInterrupt:
-                    self.running = False
-                    break
+        try:
+            with Live(layout, refresh_per_second=4, screen=True) as live:
+                while self.running:
+                    try:
+                        layout["processes"].update(Panel(self.generate_process_table()))
+                        layout["locks"].update(Panel(self.generate_locks_table()))
+                        layout["events"].update(Panel(self.generate_events_table()))
+                        time.sleep(0.25)
+                    except KeyboardInterrupt:
+                        self.running = False
+                        break
+                    except Exception as e:
+                        self.console.print(f"[red]Error en monitor: {str(e)}[/]")
+                        time.sleep(1)
+        except Exception as e:
+            self.console.print(f"[red]Error al iniciar Live: {str(e)}[/]")

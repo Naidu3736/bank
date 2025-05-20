@@ -30,10 +30,14 @@ class Customer:
         return [str(card) for card in self.credit_cards]
 
     def link_account(self, account: Account) -> bool:
-        """Vincula una cuenta al cliente con validación de propiedad"""
-        if account.customer_id != self.customer_id:
-            raise ValueError("La cuenta no pertenece a este cliente")
-        
-        if account not in self.accounts:
-            self.accounts.append(account)
-        return True
+        try:
+            if account.customer_id != self.customer_id:
+                raise ValueError(f"La cuenta pertenece a otro cliente (esperado: {self.customer_id}, actual: {account.customer_id})")
+            
+            # Evitar duplicados
+            if not any(a.account_number == account.account_number for a in self.accounts):
+                self.accounts.append(account)
+            return True
+        except Exception as e:
+            print(f"Error vinculando cuenta: {str(e)}")
+            return False
