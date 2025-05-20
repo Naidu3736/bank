@@ -1,0 +1,49 @@
+{"timestamp": "16:13:49,703", "pid": 7504, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Juan P\u00e9rez (juan@example.com)", "status": "info"}
+{"timestamp": "16:13:49,722", "pid": 7504, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Juan P\u00e9rez (ID: e70863b2-d241-45a2-b75b-aa05bbb1df4f)", "status": "success"}
+{"timestamp": "16:13:49,729", "pid": 7504, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Mar\u00eda Garc\u00eda (maria@example.com)", "status": "info"}
+{"timestamp": "16:13:49,743", "pid": 7504, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Mar\u00eda Garc\u00eda (ID: 18fc575b-b064-42cf-913f-6d1def832818)", "status": "success"}
+{"timestamp": "16:13:49,752", "pid": 7504, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente e70863b2-d241-45a2-b75b-aa05bbb1df4f", "status": "info"}
+{"timestamp": "16:13:49,808", "pid": 7504, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 9854985742 con saldo inicial $1000.00", "status": "success"}
+{"timestamp": "16:13:49,817", "pid": 7504, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente e70863b2-d241-45a2-b75b-aa05bbb1df4f", "status": "info"}
+{"timestamp": "16:13:49,847", "pid": 7504, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 2673972077 con saldo inicial $500.00", "status": "success"}
+{"timestamp": "16:13:49,856", "pid": 7504, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 18fc575b-b064-42cf-913f-6d1def832818", "status": "info"}
+{"timestamp": "16:13:49,886", "pid": 7504, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 6509996816 con saldo inicial $2000.00", "status": "success"}
+{"timestamp": "16:13:49,896", "pid": 7504, "operation": "ISSUE_DEBIT_CARD_START", "details": "Emisi\u00f3n de tarjeta d\u00e9bito para cuenta 9854985742", "status": "info"}
+{"timestamp": "16:13:49,918", "pid": 7504, "operation": "ISSUE_DEBIT_CARD_SUCCESS", "details": "Tarjeta d\u00e9bito emitida: 4788923702260004 (Tipo: NORMAL)", "status": "success"}
+{"timestamp": "16:13:49,930", "pid": 7504, "operation": "ISSUE_DEBIT_CARD_START", "details": "Emisi\u00f3n de tarjeta d\u00e9bito para cuenta 2673972077", "status": "info"}
+{"timestamp": "16:13:49,953", "pid": 7504, "operation": "ISSUE_DEBIT_CARD_SUCCESS", "details": "Tarjeta d\u00e9bito emitida: 5168409476039342 (Tipo: GOLD)", "status": "success"}
+{"timestamp": "16:13:49,961", "pid": 7504, "operation": "ISSUE_CREDIT_CARD_START", "details": "Emisi\u00f3n de tarjeta cr\u00e9dito para cliente e70863b2-d241-45a2-b75b-aa05bbb1df4f", "status": "info"}
+{"timestamp": "16:13:49,990", "pid": 7504, "operation": "ISSUE_CREDIT_CARD_SUCCESS", "details": "Tarjeta cr\u00e9dito emitida: 5217517530939984 (L\u00edmite: $50000.00)", "status": "success"}
+{"timestamp": "16:13:50,350", "pid": 7504, "operation": "BALANCE_REQUEST", "details": "Requesting balance for 6509996816", "status": "info"}
+{"timestamp": "16:13:50,364", "pid": 7504, "operation": "BALANCE_RETURNED", "details": "Balance retrieved: $2000.00", "status": "success"}
+{"timestamp": "16:13:50,391", "pid": 7504, "operation": "WITHDRAWAL_INITIATED", "details": "Attempting to withdraw $29.54 from 9854985742", "status": "info"}
+{"timestamp": "16:13:50,406", "pid": 7504, "operation": "WITHDRAWAL_COMPLETED", "details": "Withdrawal successful. New balance: $940.93", "status": "success"}
+{"timestamp": "16:13:50,662", "pid": 7504, "operation": "WITHDRAWAL_INITIATED", "details": "Attempting to withdraw $45.27 from 9854985742", "status": "info"}
+{"timestamp": "16:13:50,677", "pid": 7504, "operation": "WITHDRAWAL_COMPLETED", "details": "Withdrawal successful. New balance: $850.38", "status": "success"}
+{"timestamp": "16:13:50,690", "pid": 7504, "operation": "CREDIT_PAYMENT_START", "details": "Procesando pago de $81.19 a tarjeta 5217517530939984", "status": "info"}
+{"timestamp": "16:13:50,729", "pid": 7504, "operation": "CREDIT_PAYMENT_SUCCESS", "details": "Pago aplicado a tarjeta 5217517530939984. Nuevo saldo: $0.00", "status": "success"}
+{"timestamp": "16:13:50,742", "pid": 7504, "operation": "BALANCE_REQUEST", "details": "Requesting balance for 6509996816", "status": "info"}
+{"timestamp": "16:13:50,759", "pid": 7504, "operation": "BALANCE_RETURNED", "details": "Balance retrieved: $2000.00", "status": "success"}
+{"timestamp": "16:13:50,810", "pid": 7504, "operation": "DEPOSIT_INITIATED", "details": "Attempting to deposit $52.58 to 9854985742", "status": "info"}
+{"timestamp": "16:13:50,825", "pid": 7504, "operation": "DEPOSIT_COMPLETED", "details": "Deposit successful. New balance: $874.35", "status": "success"}
+{"timestamp": "16:13:51,202", "pid": 7504, "operation": "TRANSACTION_HISTORY_REQUEST", "details": "Requesting transaction history for 6509996816 (last 10 transactions)", "status": "info"}
+{"timestamp": "16:13:51,216", "pid": 7504, "operation": "TRANSACTION_HISTORY_RETURNED", "details": "Found 0 transactions", "status": "success"}
+{"timestamp": "16:13:51,315", "pid": 7504, "operation": "TRANSFER_INITIATED", "details": "Transfer initiated: $12.69 from 9854... to 2673...", "status": "info"}
+{"timestamp": "16:13:51,332", "pid": 7504, "operation": "TRANSFER_COMPLETED", "details": "Transfer successful. New balances: 9854...=$861.65, 2673...=$525.39", "status": "success"}
+{"timestamp": "16:13:51,360", "pid": 7504, "operation": "CREDIT_PAYMENT_START", "details": "Procesando pago de $76.47 a tarjeta 5217517530939984", "status": "info"}
+{"timestamp": "16:13:51,395", "pid": 7504, "operation": "CREDIT_PAYMENT_SUCCESS", "details": "Pago aplicado a tarjeta 5217517530939984. Nuevo saldo: $0.00", "status": "success"}
+{"timestamp": "16:13:51,526", "pid": 7504, "operation": "WITHDRAWAL_INITIATED", "details": "Attempting to withdraw $35.07 from 6509996816", "status": "info"}
+{"timestamp": "16:13:51,540", "pid": 7504, "operation": "WITHDRAWAL_FAILED", "details": "Incorrect PIN. Remaining attempts: 3", "status": "warning"}
+{"timestamp": "16:13:51,697", "pid": 7504, "operation": "TRANSFER_INITIATED", "details": "Transfer initiated: $20.76 from 9854... to 2673...", "status": "info"}
+{"timestamp": "16:13:51,711", "pid": 7504, "operation": "TRANSFER_COMPLETED", "details": "Transfer successful. New balances: 9854...=$764.42, 2673...=$566.91", "status": "success"}
+{"timestamp": "16:13:51,797", "pid": 7504, "operation": "BALANCE_REQUEST", "details": "Requesting balance for 6509996816", "status": "info"}
+{"timestamp": "16:13:51,810", "pid": 7504, "operation": "BALANCE_RETURNED", "details": "Balance retrieved: $2000.00", "status": "success"}
+{"timestamp": "16:13:52,360", "pid": 7504, "operation": "CREDIT_PAYMENT_START", "details": "Procesando pago de $15.31 a tarjeta 5217517530939984", "status": "info"}
+{"timestamp": "16:13:52,373", "pid": 7504, "operation": "CREDIT_CASH_PAYMENT", "details": "Pago en efectivo registrado: $15.31", "status": "info"}
+{"timestamp": "16:13:52,385", "pid": 7504, "operation": "CREDIT_PAYMENT_SUCCESS", "details": "Pago aplicado a tarjeta 5217517530939984. Nuevo saldo: $0.00", "status": "success"}
+{"timestamp": "16:13:52,395", "pid": 7504, "operation": "BLOCK_CARD_START", "details": "Intentando bloquear tarjeta 4788923702260004", "status": "warning"}
+{"timestamp": "16:13:52,406", "pid": 7504, "operation": "BLOCK_CARD_SUCCESS", "details": "Tarjeta 4788923702260004 bloqueada exitosamente", "status": "warning"}
+{"timestamp": "16:13:52,412", "pid": 7504, "operation": "ACCOUNT_STATEMENT_START", "details": "Generando estado de cuenta para 9854985742 (\u00faltimos 30 d\u00edas)", "status": "info"}
+{"timestamp": "16:13:52,426", "pid": 7504, "operation": "STATEMENT_GENERATED", "details": "Estado de cuenta generado para 9854985742", "status": "success"}
+{"timestamp": "16:13:52,433", "pid": 7504, "operation": "MONTHLY_INTEREST_START", "details": "Aplicando intereses mensuales a tarjetas de cr\u00e9dito", "status": "info"}
+{"timestamp": "16:13:52,446", "pid": 7504, "operation": "MONTHLY_INTEREST_COMPLETE", "details": "Intereses aplicados a 0 tarjetas. Total: $0.00", "status": "success"}

@@ -1,0 +1,49 @@
+{"timestamp": "17:54:12,553", "pid": 6980, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Juan P\u00e9rez (juan@example.com)", "status": "info"}
+{"timestamp": "17:54:12,572", "pid": 6980, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Juan P\u00e9rez (ID: 4cd9f5c4-8e77-4960-9a27-fda812cfd597)", "status": "success"}
+{"timestamp": "17:54:12,579", "pid": 6980, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Mar\u00eda Garc\u00eda (maria@example.com)", "status": "info"}
+{"timestamp": "17:54:12,595", "pid": 6980, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Mar\u00eda Garc\u00eda (ID: 3b376034-0bd8-4b20-b043-b6b339c1c9ef)", "status": "success"}
+{"timestamp": "17:54:12,605", "pid": 6980, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 4cd9f5c4-8e77-4960-9a27-fda812cfd597", "status": "info"}
+{"timestamp": "17:54:12,653", "pid": 6980, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 4193911161 con saldo inicial $1000.00", "status": "success"}
+{"timestamp": "17:54:12,665", "pid": 6980, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 4cd9f5c4-8e77-4960-9a27-fda812cfd597", "status": "info"}
+{"timestamp": "17:54:12,712", "pid": 6980, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 1972613186 con saldo inicial $500.00", "status": "success"}
+{"timestamp": "17:54:12,723", "pid": 6980, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 3b376034-0bd8-4b20-b043-b6b339c1c9ef", "status": "info"}
+{"timestamp": "17:54:12,763", "pid": 6980, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 6134887707 con saldo inicial $2000.00", "status": "success"}
+{"timestamp": "17:54:12,775", "pid": 6980, "operation": "ISSUE_DEBIT_CARD_START", "details": "Emisi\u00f3n de tarjeta d\u00e9bito para cuenta 4193911161", "status": "info"}
+{"timestamp": "17:54:12,802", "pid": 6980, "operation": "ISSUE_DEBIT_CARD_SUCCESS", "details": "Tarjeta d\u00e9bito emitida: 4688579867665446 (Tipo: NORMAL)", "status": "success"}
+{"timestamp": "17:54:12,817", "pid": 6980, "operation": "ISSUE_DEBIT_CARD_START", "details": "Emisi\u00f3n de tarjeta d\u00e9bito para cuenta 1972613186", "status": "info"}
+{"timestamp": "17:54:12,844", "pid": 6980, "operation": "ISSUE_DEBIT_CARD_SUCCESS", "details": "Tarjeta d\u00e9bito emitida: 5177579310233829 (Tipo: GOLD)", "status": "success"}
+{"timestamp": "17:54:12,853", "pid": 6980, "operation": "ISSUE_CREDIT_CARD_START", "details": "Emisi\u00f3n de tarjeta cr\u00e9dito para cliente 4cd9f5c4-8e77-4960-9a27-fda812cfd597", "status": "info"}
+{"timestamp": "17:54:12,879", "pid": 6980, "operation": "ISSUE_CREDIT_CARD_SUCCESS", "details": "Tarjeta cr\u00e9dito emitida: 5208151427714088 (L\u00edmite: $50000.00)", "status": "success"}
+{"timestamp": "17:54:13,082", "pid": 6980, "operation": "BALANCE_REQUEST", "details": "Requesting balance for 6134887707", "status": "info"}
+{"timestamp": "17:54:13,101", "pid": 6980, "operation": "BALANCE_RETURNED", "details": "Balance retrieved: $2000.00", "status": "success"}
+{"timestamp": "17:54:13,265", "pid": 6980, "operation": "TRANSACTION_HISTORY_REQUEST", "details": "Requesting transaction history for 4193911161 (last 10 transactions)", "status": "info"}
+{"timestamp": "17:54:13,282", "pid": 6980, "operation": "TRANSACTION_HISTORY_RETURNED", "details": "Found 0 transactions", "status": "success"}
+{"timestamp": "17:54:13,318", "pid": 6980, "operation": "WITHDRAWAL_INITIATED", "details": "Attempting to withdraw $25.36 from 6134887707", "status": "info"}
+{"timestamp": "17:54:13,339", "pid": 6980, "operation": "WITHDRAWAL_FAILED", "details": "Incorrect PIN. Remaining attempts: 3", "status": "warning"}
+{"timestamp": "17:54:13,348", "pid": 6980, "operation": "CREDIT_PAYMENT_START", "details": "Procesando pago de $72.16 a tarjeta 5208151427714088", "status": "info"}
+{"timestamp": "17:54:13,386", "pid": 6980, "operation": "CREDIT_PAYMENT_SUCCESS", "details": "Pago aplicado a tarjeta 5208151427714088. Nuevo saldo: $0.00", "status": "success"}
+{"timestamp": "17:54:13,579", "pid": 6980, "operation": "TRANSFER_INITIATED", "details": "Transfer initiated: $22.37 from 4193... to 1972...", "status": "info"}
+{"timestamp": "17:54:13,607", "pid": 6980, "operation": "TRANSFER_COMPLETED", "details": "Transfer successful. New balances: 4193...=$905.46, 1972...=$544.75", "status": "success"}
+{"timestamp": "17:54:13,773", "pid": 6980, "operation": "CREDIT_PAYMENT_START", "details": "Procesando pago de $64.13 a tarjeta 5208151427714088", "status": "info"}
+{"timestamp": "17:54:13,811", "pid": 6980, "operation": "TRANSACTION_HISTORY_REQUEST", "details": "Requesting transaction history for 6134887707 (last 10 transactions)", "status": "info"}
+{"timestamp": "17:54:13,817", "pid": 6980, "operation": "CREDIT_PAYMENT_SUCCESS", "details": "Pago aplicado a tarjeta 5208151427714088. Nuevo saldo: $0.00", "status": "success"}
+{"timestamp": "17:54:13,829", "pid": 6980, "operation": "TRANSACTION_HISTORY_REQUEST", "details": "Requesting transaction history for 4193911161 (last 10 transactions)", "status": "info"}
+{"timestamp": "17:54:13,834", "pid": 6980, "operation": "TRANSACTION_HISTORY_RETURNED", "details": "Found 0 transactions", "status": "success"}
+{"timestamp": "17:54:13,856", "pid": 6980, "operation": "TRANSACTION_HISTORY_RETURNED", "details": "Found 3 transactions", "status": "success"}
+{"timestamp": "17:54:14,155", "pid": 6980, "operation": "TRANSACTION_HISTORY_REQUEST", "details": "Requesting transaction history for 6134887707 (last 10 transactions)", "status": "info"}
+{"timestamp": "17:54:14,171", "pid": 6980, "operation": "TRANSACTION_HISTORY_RETURNED", "details": "Found 0 transactions", "status": "success"}
+{"timestamp": "17:54:14,311", "pid": 6980, "operation": "WITHDRAWAL_INITIATED", "details": "Attempting to withdraw $39.55 from 4193911161", "status": "info"}
+{"timestamp": "17:54:14,327", "pid": 6980, "operation": "WITHDRAWAL_COMPLETED", "details": "Withdrawal successful. New balance: $762.23", "status": "success"}
+{"timestamp": "17:54:14,622", "pid": 6980, "operation": "TRANSACTION_HISTORY_REQUEST", "details": "Requesting transaction history for 6134887707 (last 10 transactions)", "status": "info"}
+{"timestamp": "17:54:14,623", "pid": 6980, "operation": "BALANCE_REQUEST", "details": "Requesting balance for 4193911161", "status": "info"}
+{"timestamp": "17:54:14,649", "pid": 6980, "operation": "TRANSACTION_HISTORY_RETURNED", "details": "Found 0 transactions", "status": "success"}
+{"timestamp": "17:54:14,664", "pid": 6980, "operation": "BALANCE_RETURNED", "details": "Balance retrieved: $762.23", "status": "success"}
+{"timestamp": "17:54:14,714", "pid": 6980, "operation": "CREDIT_PAYMENT_START", "details": "Procesando pago de $30.92 a tarjeta 5208151427714088", "status": "info"}
+{"timestamp": "17:54:14,732", "pid": 6980, "operation": "CREDIT_CASH_PAYMENT", "details": "Pago en efectivo registrado: $30.92", "status": "info"}
+{"timestamp": "17:54:14,746", "pid": 6980, "operation": "CREDIT_PAYMENT_SUCCESS", "details": "Pago aplicado a tarjeta 5208151427714088. Nuevo saldo: $0.00", "status": "success"}
+{"timestamp": "17:54:14,757", "pid": 6980, "operation": "BLOCK_CARD_START", "details": "Intentando bloquear tarjeta 4688579867665446", "status": "warning"}
+{"timestamp": "17:54:14,770", "pid": 6980, "operation": "BLOCK_CARD_SUCCESS", "details": "Tarjeta 4688579867665446 bloqueada exitosamente", "status": "warning"}
+{"timestamp": "17:54:14,780", "pid": 6980, "operation": "ACCOUNT_STATEMENT_START", "details": "Generando estado de cuenta para 4193911161 (\u00faltimos 30 d\u00edas)", "status": "info"}
+{"timestamp": "17:54:14,800", "pid": 6980, "operation": "STATEMENT_GENERATED", "details": "Estado de cuenta generado para 4193911161", "status": "success"}
+{"timestamp": "17:54:14,808", "pid": 6980, "operation": "MONTHLY_INTEREST_START", "details": "Aplicando intereses mensuales a tarjetas de cr\u00e9dito", "status": "info"}
+{"timestamp": "17:54:14,822", "pid": 6980, "operation": "MONTHLY_INTEREST_COMPLETE", "details": "Intereses aplicados a 0 tarjetas. Total: $0.00", "status": "success"}

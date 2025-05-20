@@ -63,17 +63,18 @@ def credit_card_operations(bank: Bank, card_number: str, account_number: str):
 def main():
     console = Console()
     
-    # Inicializar componentes
-    locks = BankLocks()
-    event_console = EventConsole()
+    # Cada vez que un bloqueo se adquiera o suelte, update_lock llena ProcessTracker._locks y ya no queda vacio
     process_tracker = ProcessTracker()
+    locks = BankLocks(process_tracker)
+    event_console = EventConsole()
+    
     
     # Crear banco
     bank = Bank(locks, event_console, process_tracker)
     
     # Iniciar el monitor en un hilo separado
     monitor = BankMonitor(event_console, process_tracker)
-    monitor_thread = threading.Thread(target=monitor.run, daemon=True)
+    monitor_thread = threading.Thread(target=monitor.run , daemon=True)
     monitor_thread.start()
     
     try:

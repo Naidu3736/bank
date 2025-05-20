@@ -1,0 +1,47 @@
+{"timestamp": "16:14:45,831", "pid": 5160, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Juan P\u00e9rez (juan@example.com)", "status": "info"}
+{"timestamp": "16:14:45,849", "pid": 5160, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Juan P\u00e9rez (ID: 1c4f913c-494c-4178-bdbf-38fbfea37026)", "status": "success"}
+{"timestamp": "16:14:45,855", "pid": 5160, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Mar\u00eda Garc\u00eda (maria@example.com)", "status": "info"}
+{"timestamp": "16:14:45,869", "pid": 5160, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Mar\u00eda Garc\u00eda (ID: 17797f8c-0b0f-49e1-8125-87a7a7359aa1)", "status": "success"}
+{"timestamp": "16:14:45,877", "pid": 5160, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 1c4f913c-494c-4178-bdbf-38fbfea37026", "status": "info"}
+{"timestamp": "16:14:45,912", "pid": 5160, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 6101556426 con saldo inicial $1000.00", "status": "success"}
+{"timestamp": "16:14:45,923", "pid": 5160, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 1c4f913c-494c-4178-bdbf-38fbfea37026", "status": "info"}
+{"timestamp": "16:14:45,958", "pid": 5160, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 6300118992 con saldo inicial $500.00", "status": "success"}
+{"timestamp": "16:14:45,968", "pid": 5160, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 17797f8c-0b0f-49e1-8125-87a7a7359aa1", "status": "info"}
+{"timestamp": "16:14:46,000", "pid": 5160, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 2593709509 con saldo inicial $2000.00", "status": "success"}
+{"timestamp": "16:14:46,009", "pid": 5160, "operation": "ISSUE_DEBIT_CARD_START", "details": "Emisi\u00f3n de tarjeta d\u00e9bito para cuenta 6101556426", "status": "info"}
+{"timestamp": "16:14:46,031", "pid": 5160, "operation": "ISSUE_DEBIT_CARD_SUCCESS", "details": "Tarjeta d\u00e9bito emitida: 4222000619995793 (Tipo: NORMAL)", "status": "success"}
+{"timestamp": "16:14:46,042", "pid": 5160, "operation": "ISSUE_DEBIT_CARD_START", "details": "Emisi\u00f3n de tarjeta d\u00e9bito para cuenta 6300118992", "status": "info"}
+{"timestamp": "16:14:46,064", "pid": 5160, "operation": "ISSUE_DEBIT_CARD_SUCCESS", "details": "Tarjeta d\u00e9bito emitida: 5144113724353010 (Tipo: GOLD)", "status": "success"}
+{"timestamp": "16:14:46,072", "pid": 5160, "operation": "ISSUE_CREDIT_CARD_START", "details": "Emisi\u00f3n de tarjeta cr\u00e9dito para cliente 1c4f913c-494c-4178-bdbf-38fbfea37026", "status": "info"}
+{"timestamp": "16:14:46,095", "pid": 5160, "operation": "ISSUE_CREDIT_CARD_SUCCESS", "details": "Tarjeta cr\u00e9dito emitida: 5235569029562326 (L\u00edmite: $50000.00)", "status": "success"}
+{"timestamp": "16:14:46,454", "pid": 5160, "operation": "BALANCE_REQUEST", "details": "Requesting balance for 6101556426", "status": "info"}
+{"timestamp": "16:14:46,469", "pid": 5160, "operation": "BALANCE_RETURNED", "details": "Balance retrieved: $1000.00", "status": "success"}
+{"timestamp": "16:14:46,471", "pid": 5160, "operation": "TRANSACTION_HISTORY_REQUEST", "details": "Requesting transaction history for 2593709509 (last 10 transactions)", "status": "info"}
+{"timestamp": "16:14:46,486", "pid": 5160, "operation": "TRANSACTION_HISTORY_RETURNED", "details": "Found 0 transactions", "status": "success"}
+{"timestamp": "16:14:46,735", "pid": 5160, "operation": "BALANCE_REQUEST", "details": "Requesting balance for 6101556426", "status": "info"}
+{"timestamp": "16:14:46,748", "pid": 5160, "operation": "BALANCE_RETURNED", "details": "Balance retrieved: $1000.00", "status": "success"}
+{"timestamp": "16:14:46,875", "pid": 5160, "operation": "CUSTOMER_OPERATION_ERROR", "details": "Error en operaci\u00f3n: list index out of range", "status": "error"}
+{"timestamp": "16:14:46,991", "pid": 5160, "operation": "WITHDRAWAL_INITIATED", "details": "Attempting to withdraw $49.77 from 6101556426", "status": "info"}
+{"timestamp": "16:14:47,004", "pid": 5160, "operation": "WITHDRAWAL_COMPLETED", "details": "Withdrawal successful. New balance: $900.46", "status": "success"}
+{"timestamp": "16:14:47,022", "pid": 5160, "operation": "CREDIT_PAYMENT_START", "details": "Procesando pago de $32.14 a tarjeta 5235569029562326", "status": "info"}
+{"timestamp": "16:14:47,036", "pid": 5160, "operation": "CREDIT_CASH_PAYMENT", "details": "Pago en efectivo registrado: $32.14", "status": "info"}
+{"timestamp": "16:14:47,048", "pid": 5160, "operation": "CREDIT_PAYMENT_SUCCESS", "details": "Pago aplicado a tarjeta 5235569029562326. Nuevo saldo: $0.00", "status": "success"}
+{"timestamp": "16:14:47,347", "pid": 5160, "operation": "CUSTOMER_OPERATION_ERROR", "details": "Error en operaci\u00f3n: list index out of range", "status": "error"}
+{"timestamp": "16:14:47,389", "pid": 5160, "operation": "BALANCE_REQUEST", "details": "Requesting balance for 6101556426", "status": "info"}
+{"timestamp": "16:14:47,398", "pid": 5160, "operation": "CREDIT_PAYMENT_START", "details": "Procesando pago de $91.21 a tarjeta 5235569029562326", "status": "info"}
+{"timestamp": "16:14:47,405", "pid": 5160, "operation": "BALANCE_RETURNED", "details": "Balance retrieved: $900.46", "status": "success"}
+{"timestamp": "16:14:47,444", "pid": 5160, "operation": "CREDIT_PAYMENT_SUCCESS", "details": "Pago aplicado a tarjeta 5235569029562326. Nuevo saldo: $0.00", "status": "success"}
+{"timestamp": "16:14:47,561", "pid": 5160, "operation": "DEPOSIT_INITIATED", "details": "Attempting to deposit $85.13 to 6101556426", "status": "info"}
+{"timestamp": "16:14:47,574", "pid": 5160, "operation": "DEPOSIT_COMPLETED", "details": "Deposit successful. New balance: $979.51", "status": "success"}
+{"timestamp": "16:14:47,813", "pid": 5160, "operation": "WITHDRAWAL_INITIATED", "details": "Attempting to withdraw $10.73 from 2593709509", "status": "info"}
+{"timestamp": "16:14:47,826", "pid": 5160, "operation": "WITHDRAWAL_FAILED", "details": "Incorrect PIN. Remaining attempts: 3", "status": "warning"}
+{"timestamp": "16:14:48,048", "pid": 5160, "operation": "CREDIT_PAYMENT_START", "details": "Procesando pago de $46.14 a tarjeta 5235569029562326", "status": "info"}
+{"timestamp": "16:14:48,090", "pid": 5160, "operation": "CREDIT_PAYMENT_SUCCESS", "details": "Pago aplicado a tarjeta 5235569029562326. Nuevo saldo: $0.00", "status": "success"}
+{"timestamp": "16:14:48,260", "pid": 5160, "operation": "TRANSACTION_HISTORY_REQUEST", "details": "Requesting transaction history for 2593709509 (last 10 transactions)", "status": "info"}
+{"timestamp": "16:14:48,278", "pid": 5160, "operation": "TRANSACTION_HISTORY_RETURNED", "details": "Found 0 transactions", "status": "success"}
+{"timestamp": "16:14:48,287", "pid": 5160, "operation": "BLOCK_CARD_START", "details": "Intentando bloquear tarjeta 4222000619995793", "status": "warning"}
+{"timestamp": "16:14:48,306", "pid": 5160, "operation": "BLOCK_CARD_SUCCESS", "details": "Tarjeta 4222000619995793 bloqueada exitosamente", "status": "warning"}
+{"timestamp": "16:14:48,314", "pid": 5160, "operation": "ACCOUNT_STATEMENT_START", "details": "Generando estado de cuenta para 6101556426 (\u00faltimos 30 d\u00edas)", "status": "info"}
+{"timestamp": "16:14:48,334", "pid": 5160, "operation": "STATEMENT_GENERATED", "details": "Estado de cuenta generado para 6101556426", "status": "success"}
+{"timestamp": "16:14:48,342", "pid": 5160, "operation": "MONTHLY_INTEREST_START", "details": "Aplicando intereses mensuales a tarjetas de cr\u00e9dito", "status": "info"}
+{"timestamp": "16:14:48,357", "pid": 5160, "operation": "MONTHLY_INTEREST_COMPLETE", "details": "Intereses aplicados a 0 tarjetas. Total: $0.00", "status": "success"}

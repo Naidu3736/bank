@@ -8,6 +8,7 @@ from rich.table import Table
 from rich.live import Live
 from rich.panel import Panel
 from rich.layout import Layout
+from rich.padding import Padding
 import multiprocessing
 import time
 
@@ -211,21 +212,27 @@ class BankMonitor:
             )
         return table
     
+
     def run(self):
         """Ejecuta la interfaz de monitoreo en la consola"""
         layout = Layout()
-        layout.split(
+        layout.split_column(
             Layout(name="processes", size=10),
-            Layout(name="locks", size=10),
-            Layout(name="events", size=14)
+            Layout(name="spacer1",   size=1),
+            Layout(name="locks",     size=10),
+            Layout(name="spacer1",   size=1),
+            Layout(name="events",    size=14),
         )
-        
-        with Live(layout, refresh_per_second=4, screen=True) as live:
+
+        with Live(layout, refresh_per_second=2, screen=True) as live:
             while self.running:
                 try:
+                    
+
                     layout["processes"].update(Panel(self.generate_process_table()))
-                    layout["locks"].update(Panel(self.generate_locks_table()))
-                    layout["events"].update(Panel(self.generate_events_table()))
+                    layout["locks"].update(    Panel(self.generate_locks_table())   )
+                    layout["events"].update(   Panel(self.generate_events_table())  )
+
                     time.sleep(0.25)
                 except KeyboardInterrupt:
                     self.running = False

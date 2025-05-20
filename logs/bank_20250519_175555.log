@@ -1,0 +1,48 @@
+{"timestamp": "17:55:55,384", "pid": 11608, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Juan P\u00e9rez (juan@example.com)", "status": "info"}
+{"timestamp": "17:55:55,402", "pid": 11608, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Juan P\u00e9rez (ID: 47518daa-646d-4d39-8dde-2c2d9a358232)", "status": "success"}
+{"timestamp": "17:55:55,411", "pid": 11608, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Mar\u00eda Garc\u00eda (maria@example.com)", "status": "info"}
+{"timestamp": "17:55:55,427", "pid": 11608, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Mar\u00eda Garc\u00eda (ID: ad37f8d2-5546-4757-b4ae-2dbb98e8593f)", "status": "success"}
+{"timestamp": "17:55:55,436", "pid": 11608, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 47518daa-646d-4d39-8dde-2c2d9a358232", "status": "info"}
+{"timestamp": "17:55:55,481", "pid": 11608, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 1287802987 con saldo inicial $1000.00", "status": "success"}
+{"timestamp": "17:55:55,493", "pid": 11608, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 47518daa-646d-4d39-8dde-2c2d9a358232", "status": "info"}
+{"timestamp": "17:55:55,538", "pid": 11608, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 7813634085 con saldo inicial $500.00", "status": "success"}
+{"timestamp": "17:55:55,550", "pid": 11608, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente ad37f8d2-5546-4757-b4ae-2dbb98e8593f", "status": "info"}
+{"timestamp": "17:55:55,592", "pid": 11608, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 6103444148 con saldo inicial $2000.00", "status": "success"}
+{"timestamp": "17:55:55,603", "pid": 11608, "operation": "ISSUE_DEBIT_CARD_START", "details": "Emisi\u00f3n de tarjeta d\u00e9bito para cuenta 1287802987", "status": "info"}
+{"timestamp": "17:55:55,633", "pid": 11608, "operation": "ISSUE_DEBIT_CARD_SUCCESS", "details": "Tarjeta d\u00e9bito emitida: 4530878691471415 (Tipo: NORMAL)", "status": "success"}
+{"timestamp": "17:55:55,644", "pid": 11608, "operation": "ISSUE_DEBIT_CARD_START", "details": "Emisi\u00f3n de tarjeta d\u00e9bito para cuenta 7813634085", "status": "info"}
+{"timestamp": "17:55:55,673", "pid": 11608, "operation": "ISSUE_DEBIT_CARD_SUCCESS", "details": "Tarjeta d\u00e9bito emitida: 5122370215043008 (Tipo: GOLD)", "status": "success"}
+{"timestamp": "17:55:55,682", "pid": 11608, "operation": "ISSUE_CREDIT_CARD_START", "details": "Emisi\u00f3n de tarjeta cr\u00e9dito para cliente 47518daa-646d-4d39-8dde-2c2d9a358232", "status": "info"}
+{"timestamp": "17:55:55,708", "pid": 11608, "operation": "ISSUE_CREDIT_CARD_SUCCESS", "details": "Tarjeta cr\u00e9dito emitida: 5276375976749090 (L\u00edmite: $50000.00)", "status": "success"}
+{"timestamp": "17:55:55,898", "pid": 11608, "operation": "BALANCE_REQUEST", "details": "Requesting balance for 1287802987", "status": "info"}
+{"timestamp": "17:55:55,919", "pid": 11608, "operation": "BALANCE_RETURNED", "details": "Balance retrieved: $1000.00", "status": "success"}
+{"timestamp": "17:55:56,050", "pid": 11608, "operation": "CREDIT_PAYMENT_START", "details": "Procesando pago de $39.38 a tarjeta 5276375976749090", "status": "info"}
+{"timestamp": "17:55:56,069", "pid": 11608, "operation": "CREDIT_CASH_PAYMENT", "details": "Pago en efectivo registrado: $39.38", "status": "info"}
+{"timestamp": "17:55:56,083", "pid": 11608, "operation": "CREDIT_PAYMENT_SUCCESS", "details": "Pago aplicado a tarjeta 5276375976749090. Nuevo saldo: $0.00", "status": "success"}
+{"timestamp": "17:55:56,097", "pid": 11608, "operation": "CUSTOMER_OPERATION_ERROR", "details": "Error en operaci\u00f3n: list index out of range", "status": "error"}
+{"timestamp": "17:55:56,265", "pid": 11608, "operation": "DEPOSIT_INITIATED", "details": "Attempting to deposit $39.49 to 1287802987", "status": "info"}
+{"timestamp": "17:55:56,283", "pid": 11608, "operation": "DEPOSIT_COMPLETED", "details": "Deposit successful. New balance: $1078.98", "status": "success"}
+{"timestamp": "17:55:56,457", "pid": 11608, "operation": "WITHDRAWAL_INITIATED", "details": "Attempting to withdraw $37.10 from 6103444148", "status": "info"}
+{"timestamp": "17:55:56,474", "pid": 11608, "operation": "WITHDRAWAL_FAILED", "details": "Incorrect PIN. Remaining attempts: 3", "status": "warning"}
+{"timestamp": "17:55:56,553", "pid": 11608, "operation": "TRANSACTION_HISTORY_REQUEST", "details": "Requesting transaction history for 1287802987 (last 10 transactions)", "status": "info"}
+{"timestamp": "17:55:56,570", "pid": 11608, "operation": "TRANSACTION_HISTORY_RETURNED", "details": "Found 1 transactions", "status": "success"}
+{"timestamp": "17:55:56,622", "pid": 11608, "operation": "TRANSACTION_HISTORY_REQUEST", "details": "Requesting transaction history for 6103444148 (last 10 transactions)", "status": "info"}
+{"timestamp": "17:55:56,639", "pid": 11608, "operation": "TRANSACTION_HISTORY_RETURNED", "details": "Found 0 transactions", "status": "success"}
+{"timestamp": "17:55:56,738", "pid": 11608, "operation": "DEPOSIT_INITIATED", "details": "Attempting to deposit $82.56 to 1287802987", "status": "info"}
+{"timestamp": "17:55:56,755", "pid": 11608, "operation": "DEPOSIT_COMPLETED", "details": "Deposit successful. New balance: $1244.09", "status": "success"}
+{"timestamp": "17:55:56,792", "pid": 11608, "operation": "BALANCE_REQUEST", "details": "Requesting balance for 6103444148", "status": "info"}
+{"timestamp": "17:55:56,810", "pid": 11608, "operation": "BALANCE_RETURNED", "details": "Balance retrieved: $2000.00", "status": "success"}
+{"timestamp": "17:55:56,880", "pid": 11608, "operation": "BALANCE_REQUEST", "details": "Requesting balance for 1287802987", "status": "info"}
+{"timestamp": "17:55:56,897", "pid": 11608, "operation": "BALANCE_RETURNED", "details": "Balance retrieved: $1244.09", "status": "success"}
+{"timestamp": "17:55:56,928", "pid": 11608, "operation": "DEPOSIT_INITIATED", "details": "Attempting to deposit $13.41 to 6103444148", "status": "info"}
+{"timestamp": "17:55:56,950", "pid": 11608, "operation": "DEPOSIT_COMPLETED", "details": "Deposit successful. New balance: $2026.83", "status": "success"}
+{"timestamp": "17:55:56,958", "pid": 11608, "operation": "CREDIT_PAYMENT_START", "details": "Procesando pago de $52.80 a tarjeta 5276375976749090", "status": "info"}
+{"timestamp": "17:55:57,002", "pid": 11608, "operation": "CREDIT_PAYMENT_SUCCESS", "details": "Pago aplicado a tarjeta 5276375976749090. Nuevo saldo: $0.00", "status": "success"}
+{"timestamp": "17:55:57,759", "pid": 11608, "operation": "CREDIT_PAYMENT_START", "details": "Procesando pago de $57.96 a tarjeta 5276375976749090", "status": "info"}
+{"timestamp": "17:55:57,803", "pid": 11608, "operation": "CREDIT_PAYMENT_SUCCESS", "details": "Pago aplicado a tarjeta 5276375976749090. Nuevo saldo: $0.00", "status": "success"}
+{"timestamp": "17:55:57,814", "pid": 11608, "operation": "BLOCK_CARD_START", "details": "Intentando bloquear tarjeta 4530878691471415", "status": "warning"}
+{"timestamp": "17:55:57,828", "pid": 11608, "operation": "BLOCK_CARD_SUCCESS", "details": "Tarjeta 4530878691471415 bloqueada exitosamente", "status": "warning"}
+{"timestamp": "17:55:57,838", "pid": 11608, "operation": "ACCOUNT_STATEMENT_START", "details": "Generando estado de cuenta para 1287802987 (\u00faltimos 30 d\u00edas)", "status": "info"}
+{"timestamp": "17:55:57,855", "pid": 11608, "operation": "STATEMENT_GENERATED", "details": "Estado de cuenta generado para 1287802987", "status": "success"}
+{"timestamp": "17:55:57,863", "pid": 11608, "operation": "MONTHLY_INTEREST_START", "details": "Aplicando intereses mensuales a tarjetas de cr\u00e9dito", "status": "info"}
+{"timestamp": "17:55:57,877", "pid": 11608, "operation": "MONTHLY_INTEREST_COMPLETE", "details": "Intereses aplicados a 0 tarjetas. Total: $0.00", "status": "success"}

@@ -1,0 +1,49 @@
+{"timestamp": "16:14:27,598", "pid": 5820, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Juan P\u00e9rez (juan@example.com)", "status": "info"}
+{"timestamp": "16:14:27,618", "pid": 5820, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Juan P\u00e9rez (ID: fcb80aaf-9ffb-4b7d-ba9f-d6fe8c4591f2)", "status": "success"}
+{"timestamp": "16:14:27,626", "pid": 5820, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Mar\u00eda Garc\u00eda (maria@example.com)", "status": "info"}
+{"timestamp": "16:14:27,639", "pid": 5820, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Mar\u00eda Garc\u00eda (ID: 4b7ead13-7a4f-4b02-acef-6f61524a8493)", "status": "success"}
+{"timestamp": "16:14:27,650", "pid": 5820, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente fcb80aaf-9ffb-4b7d-ba9f-d6fe8c4591f2", "status": "info"}
+{"timestamp": "16:14:27,691", "pid": 5820, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 8173257416 con saldo inicial $1000.00", "status": "success"}
+{"timestamp": "16:14:27,703", "pid": 5820, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente fcb80aaf-9ffb-4b7d-ba9f-d6fe8c4591f2", "status": "info"}
+{"timestamp": "16:14:27,741", "pid": 5820, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 8917521146 con saldo inicial $500.00", "status": "success"}
+{"timestamp": "16:14:27,750", "pid": 5820, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 4b7ead13-7a4f-4b02-acef-6f61524a8493", "status": "info"}
+{"timestamp": "16:14:27,782", "pid": 5820, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 1614560562 con saldo inicial $2000.00", "status": "success"}
+{"timestamp": "16:14:27,791", "pid": 5820, "operation": "ISSUE_DEBIT_CARD_START", "details": "Emisi\u00f3n de tarjeta d\u00e9bito para cuenta 8173257416", "status": "info"}
+{"timestamp": "16:14:27,812", "pid": 5820, "operation": "ISSUE_DEBIT_CARD_SUCCESS", "details": "Tarjeta d\u00e9bito emitida: 4891022926912449 (Tipo: NORMAL)", "status": "success"}
+{"timestamp": "16:14:27,822", "pid": 5820, "operation": "ISSUE_DEBIT_CARD_START", "details": "Emisi\u00f3n de tarjeta d\u00e9bito para cuenta 8917521146", "status": "info"}
+{"timestamp": "16:14:27,845", "pid": 5820, "operation": "ISSUE_DEBIT_CARD_SUCCESS", "details": "Tarjeta d\u00e9bito emitida: 5117616256534714 (Tipo: GOLD)", "status": "success"}
+{"timestamp": "16:14:27,853", "pid": 5820, "operation": "ISSUE_CREDIT_CARD_START", "details": "Emisi\u00f3n de tarjeta cr\u00e9dito para cliente fcb80aaf-9ffb-4b7d-ba9f-d6fe8c4591f2", "status": "info"}
+{"timestamp": "16:14:27,881", "pid": 5820, "operation": "ISSUE_CREDIT_CARD_SUCCESS", "details": "Tarjeta cr\u00e9dito emitida: 5285471495659528 (L\u00edmite: $50000.00)", "status": "success"}
+{"timestamp": "16:14:28,101", "pid": 5820, "operation": "BALANCE_REQUEST", "details": "Requesting balance for 1614560562", "status": "info"}
+{"timestamp": "16:14:28,115", "pid": 5820, "operation": "BALANCE_RETURNED", "details": "Balance retrieved: $2000.00", "status": "success"}
+{"timestamp": "16:14:28,192", "pid": 5820, "operation": "WITHDRAWAL_INITIATED", "details": "Attempting to withdraw $41.00 from 8173257416", "status": "info"}
+{"timestamp": "16:14:28,214", "pid": 5820, "operation": "WITHDRAWAL_COMPLETED", "details": "Withdrawal successful. New balance: $918.00", "status": "success"}
+{"timestamp": "16:14:28,403", "pid": 5820, "operation": "WITHDRAWAL_INITIATED", "details": "Attempting to withdraw $21.87 from 1614560562", "status": "info"}
+{"timestamp": "16:14:28,416", "pid": 5820, "operation": "WITHDRAWAL_FAILED", "details": "Incorrect PIN. Remaining attempts: 3", "status": "warning"}
+{"timestamp": "16:14:28,510", "pid": 5820, "operation": "WITHDRAWAL_INITIATED", "details": "Attempting to withdraw $19.55 from 8173257416", "status": "info"}
+{"timestamp": "16:14:28,523", "pid": 5820, "operation": "WITHDRAWAL_COMPLETED", "details": "Withdrawal successful. New balance: $878.90", "status": "success"}
+{"timestamp": "16:14:28,711", "pid": 5820, "operation": "CREDIT_PAYMENT_START", "details": "Procesando pago de $15.48 a tarjeta 5285471495659528", "status": "info"}
+{"timestamp": "16:14:28,724", "pid": 5820, "operation": "CREDIT_CASH_PAYMENT", "details": "Pago en efectivo registrado: $15.48", "status": "info"}
+{"timestamp": "16:14:28,734", "pid": 5820, "operation": "CREDIT_PAYMENT_SUCCESS", "details": "Pago aplicado a tarjeta 5285471495659528. Nuevo saldo: $0.00", "status": "success"}
+{"timestamp": "16:14:28,883", "pid": 5820, "operation": "CUSTOMER_OPERATION_ERROR", "details": "Error en operaci\u00f3n: list index out of range", "status": "error"}
+{"timestamp": "16:14:28,972", "pid": 5820, "operation": "TRANSFER_INITIATED", "details": "Transfer initiated: $9.41 from 8173... to 8917...", "status": "info"}
+{"timestamp": "16:14:28,985", "pid": 5820, "operation": "TRANSFER_COMPLETED", "details": "Transfer successful. New balances: 8173...=$869.49, 8917...=$518.81", "status": "success"}
+{"timestamp": "16:14:29,157", "pid": 5820, "operation": "WITHDRAWAL_INITIATED", "details": "Attempting to withdraw $36.04 from 8173257416", "status": "info"}
+{"timestamp": "16:14:29,174", "pid": 5820, "operation": "WITHDRAWAL_COMPLETED", "details": "Withdrawal successful. New balance: $797.42", "status": "success"}
+{"timestamp": "16:14:29,260", "pid": 5820, "operation": "WITHDRAWAL_INITIATED", "details": "Attempting to withdraw $26.62 from 1614560562", "status": "info"}
+{"timestamp": "16:14:29,274", "pid": 5820, "operation": "WITHDRAWAL_FAILED", "details": "Incorrect PIN. Remaining attempts: 3", "status": "warning"}
+{"timestamp": "16:14:29,325", "pid": 5820, "operation": "BALANCE_REQUEST", "details": "Requesting balance for 8173257416", "status": "info"}
+{"timestamp": "16:14:29,339", "pid": 5820, "operation": "BALANCE_RETURNED", "details": "Balance retrieved: $797.42", "status": "success"}
+{"timestamp": "16:14:29,439", "pid": 5820, "operation": "CREDIT_PAYMENT_START", "details": "Procesando pago de $61.38 a tarjeta 5285471495659528", "status": "info"}
+{"timestamp": "16:14:29,479", "pid": 5820, "operation": "CREDIT_PAYMENT_SUCCESS", "details": "Pago aplicado a tarjeta 5285471495659528. Nuevo saldo: $0.00", "status": "success"}
+{"timestamp": "16:14:29,718", "pid": 5820, "operation": "BALANCE_REQUEST", "details": "Requesting balance for 1614560562", "status": "info"}
+{"timestamp": "16:14:29,738", "pid": 5820, "operation": "BALANCE_RETURNED", "details": "Balance retrieved: $2000.00", "status": "success"}
+{"timestamp": "16:14:29,958", "pid": 5820, "operation": "CREDIT_PAYMENT_START", "details": "Procesando pago de $33.80 a tarjeta 5285471495659528", "status": "info"}
+{"timestamp": "16:14:29,971", "pid": 5820, "operation": "CREDIT_CASH_PAYMENT", "details": "Pago en efectivo registrado: $33.80", "status": "info"}
+{"timestamp": "16:14:29,982", "pid": 5820, "operation": "CREDIT_PAYMENT_SUCCESS", "details": "Pago aplicado a tarjeta 5285471495659528. Nuevo saldo: $0.00", "status": "success"}
+{"timestamp": "16:14:29,999", "pid": 5820, "operation": "BLOCK_CARD_START", "details": "Intentando bloquear tarjeta 4891022926912449", "status": "warning"}
+{"timestamp": "16:14:30,010", "pid": 5820, "operation": "BLOCK_CARD_SUCCESS", "details": "Tarjeta 4891022926912449 bloqueada exitosamente", "status": "warning"}
+{"timestamp": "16:14:30,016", "pid": 5820, "operation": "ACCOUNT_STATEMENT_START", "details": "Generando estado de cuenta para 8173257416 (\u00faltimos 30 d\u00edas)", "status": "info"}
+{"timestamp": "16:14:30,029", "pid": 5820, "operation": "STATEMENT_GENERATED", "details": "Estado de cuenta generado para 8173257416", "status": "success"}
+{"timestamp": "16:14:30,036", "pid": 5820, "operation": "MONTHLY_INTEREST_START", "details": "Aplicando intereses mensuales a tarjetas de cr\u00e9dito", "status": "info"}
+{"timestamp": "16:14:30,046", "pid": 5820, "operation": "MONTHLY_INTEREST_COMPLETE", "details": "Intereses aplicados a 0 tarjetas. Total: $0.00", "status": "success"}
