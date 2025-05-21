@@ -1,96 +1,46 @@
-from datetime import datetime
-from core.turn import Turn
-from typing import Optional, Dict, List
+import threading
 
 class Teller:
-    def __init__(self, teller_id: str, bank):
-        self.teller_id = teller_id
+    def __init__(self, id, bank):
+        self.id = id
         self.bank = bank
-        self.available = True
-        self.current_turn: Optional[Turn] = None
-        self.history: List[Dict] = []
+        self.current_turn = None
+        self.current_thread = None
 
-    # ---- Operaciones Monetarias ----
-    def deposit(self, account_number: str, amount: float) -> str:
-        if not self.current_turn:
-            return "Error: No hay turno asignado"
-        success = self.bank.deposit(account_number, amount)
-        if success:
-            self._log_operation("DEPOSIT", amount, account_number)
-            return f"Depósito exitoso: ${amount:.2f}"
-        return "Error: Cuenta no encontrada o monto inválido"
+    def _track(self, operation_desc):
+        self.bank.process_tracker.update_process(
+            threading.get_ident(),
+            state="working",
+            current_operation=operation_desc,
+            type="Teller"
+        )
 
-    def withdraw(self, account_number: str, amount: float, nip: str) -> str:
-        if not self.current_turn:
-            return "Error: No hay turno asignado"
-        success = self.bank.withdraw(account_number, amount, nip)
-        if success:
-            self._log_operation("WITHDRAW", amount, account_number)
-            return f"Retiro exitoso: ${amount:.2f}"
-        return "Error: Fondos insuficientes, NIP incorrecto o cuenta inválida"
-
-    def transfer(self, source_acc: str, target_acc: str, amount: float, nip: str = None) -> str:
-        if not self.current_turn:
-            return "Error: No hay turno asignado"
-        success = self.bank.transfer(source_acc, target_acc, amount, nip)
-        if success:
-            self._log_operation("TRANSFER", amount, f"{source_acc} → {target_acc}")
-            return f"Transferencia exitosa: ${amount:.2f}"
-        return "Error: Cuentas inválidas, fondos insuficientes o NIP incorrecto"
-
-    def transfer_between_own_accounts(self, customer_id: str, source_acc: str, target_acc: str, amount: float) -> str:
-        if not self.current_turn:
-            return "Error: No hay turno asignado"
-        success = self.bank.transfer_between_own_accounts(customer_id, source_acc, target_acc, amount)
-        if success:
-            self._log_operation("INTERNAL_TRANSFER", amount, f"{source_acc} → {target_acc}")
-            return f"Transferencia entre cuentas propias exitosa: ${amount:.2f}"
-        return "Error: Cuentas no pertenecen al cliente o datos inválidos"
-
-    def process_debit_payment(self, card_number: str, amount: float, merchant: str, nip: str) -> str:
-        if not self.current_turn:
-            return "Error: No hay turno asignado"
-        success = self.bank.process_debit_payment(card_number, amount, merchant, nip)
-        if success:
-            self._log_operation("DEBIT_PAYMENT", amount, f"Tarjeta {card_number} en {merchant}")
-            return f"Pago con débito exitoso: ${amount:.2f}"
-        return "Error: Tarjeta inválida, límite excedido o NIP incorrecto"
-
-    def pay_credit_card(self, card_number: str, from_account: str, amount: float) -> str:
-        if not self.current_turn:
-            return "Error: No hay turno asignado"
-        success = self.bank.pay_credit_card(card_number, from_account, amount)
-        if success:
-            self._log_operation("CREDIT_PAYMENT", amount, f"Tarjeta {card_number} desde {from_account}")
-            return f"Pago a tarjeta de crédito exitoso: ${amount:.2f}"
-        return "Error: Fondos insuficientes o datos inválidos"
-
-    def block_card_emergency(self, card_number: str) -> str:
-        success = self.bank.block_card(card_number)
-        if success:
-            self._log_operation("BLOCK_CARD", 0, f"Tarjeta {card_number}")
-            return "Tarjeta bloqueada exitosamente"
-        return "Error: Tarjeta no encontrada"
-
-    # ---- Consultas Rápidas ----
-    def check_balance(self, account_number: str) -> str:
-        balance = self.bank.get_account_balance(account_number)
-        return f"Saldo actual: ${balance:.2f}" if balance is not None else "Cuenta no encontrada"
-
-    # ---- Métodos Internos ----
-    def _log_operation(self, op_type: str, amount: float, details: str):
-        self.history.append({
-            "teller_id": self.teller_id,
-            "operation": op_type,
-            "amount": amount,
-            "details": details,
-            "timestamp": datetime.now().isoformat()
-        })
-
-    def assign_turn(self, turn: Turn):
+    def assign_turn(self, turn):
         self.current_turn = turn
-        self.available = False
 
     def complete_turn(self):
         self.current_turn = None
-        self.available = True
+
+    def deposit(self, account_number, amount):
+        self._track(f"Depósito de ${amount} en cuenta {account_number}")
+        self.bank.deposit(account_number, amount)
+
+    def withdraw(self, account_number, amount, nip):
+        self._track(f"Retiro de ${amount} en cuenta {account_number}")
+        self.bank.withdraw(account_number, amount, nip)
+
+    def transfer(self, source_id, target_id, amount, nip):
+        self._track(f"Transferencia de ${amount} de {source_id} a {target_id}")
+        self.bank.transfer(source_id, target_id, amount, nip)
+
+    def pay_credit_card(self, card_number, amount, payment_source):
+        self._track(f"Pago de ${amount} a tarjeta {card_number} desde {payment_source}")
+        self.bank.pay_credit_card(card_number, amount, payment_source)
+
+    def get_account_transactions(self, account_number):
+        self._track(f"Consultar movimientos de cuenta {account_number}")
+        return self.bank.get_account_transactions(account_number)
+
+    def check_balance(self, account_number):
+        self._track(f"Consultar saldo de cuenta {account_number}")
+        return self.bank.get_account_balance(account_number)

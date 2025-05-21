@@ -1,58 +1,14 @@
-import multiprocessing
-from event_logger import ProcessTracker
-import os
-
-def run_process(parent_pid, turn, operations, manager=None):
-    """Versión mejorada con mejor tracking"""
-    tracker = ProcessTracker(manager)
-    
+def run_process(pid, turn, operations, handler, process_tracker=None):
+    if process_tracker:
+        process_tracker.update_process(pid, state="processing", current_operation=f"Procesando turno {turn.turn_id}", type=handler.__class__.__name__)
     try:
-        current_pid = os.getpid()
-        # Registrar inicio con más detalle
-        tracker.update_process(
-            pid=current_pid,
-            state="running",
-            current_operation=f"Processing turn {turn.turn_id} with {len(operations)} ops",
-            ppid=parent_pid
-        )
-        
-        # Ejecutar operaciones con tracking
-        results = []
-        for i, op in enumerate(operations):
-            tracker.update_process(
-                pid=current_pid,
-                current_operation=f"Executing op {i+1}/{len(operations)}: {op.__name__}"
-            )
-            results.append(op())
-        
-        if all(results):
-            turn.mark_as_attended()
-        else:
-            turn.mark_as_failed()
-            
-    except Exception as e:
-        tracker.update_process(
-            pid=current_pid,
-            state="error",
-            current_operation=f"Failed: {str(e)}"
-        )
-        turn.mark_as_failed()
-
-def _execute_operation(op):
-    """Función auxiliar para ejecutar una operación."""
-    pid = os.getpid()
-    try:
-        ProcessTracker.update_process(
-            pid,
-            state="running",
-            current_operation="Executing bank operation"
-        )
-        return op()
-    except Exception as e:
-        EventConsole.add_event(
-            pid,
-            "OPERATION_ERROR",
-            f"Operation failed: {str(e)}",
-            "error"
-        )
-        return False
+        for op in operations:
+            try:
+                # Aquí la operación llamará al método del handler, que actualiza el process_tracker con _track()
+                print(f"[RUN] Ejecutando operación {op}")
+                op()
+            except Exception as e:
+                print(f"[ERROR] Fallo en operación: {e}")
+    finally:
+        if process_tracker:
+            process_tracker.update_process(pid, state="ready", current_operation="Operación completada", type=handler.__class__.__name__)

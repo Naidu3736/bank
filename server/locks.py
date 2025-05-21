@@ -1,55 +1,63 @@
-from multiprocessing import Lock, Semaphore
+import threading
 from typing import Optional
-import os
 
 class TrackedLock:
+    """Lock con tracking completo para threading"""
     def __init__(self, name: str, process_tracker=None):
-        self._lock = Lock()
+        self._lock = threading.Lock()  # Lock real de threading
         self.name = name
-        self.acquired = False
         self.process_tracker = process_tracker
         self._owner_pid = -1
-        self._waiting_processes = set()
+        self._is_acquired = False  # Track manual del estado
 
     def acquire(self, blocking=True, timeout=None):
-        pid = os.getpid()
+        """Adquiere el lock con tracking"""
+        thread_id = threading.get_ident()
         if self.process_tracker:
             self.process_tracker.update_lock(
-                self.name, 
-                owner_pid=pid, 
+                self.name,
+                owner_pid=thread_id,
                 state="waiting"
             )
-            self._waiting_processes.add(pid)
-            
-        acquired = self._lock.acquire(blocking, timeout)
+        
+        # Llamada real al acquire del Lock
+        if timeout is not None:
+            acquired = self._lock.acquire(blocking, timeout)
+        else:
+            acquired = self._lock.acquire(blocking)
         
         if acquired:
-            self.acquired = True
-            self._owner_pid = pid
-            if pid in self._waiting_processes:
-                self._waiting_processes.remove(pid)
+            self._owner_pid = thread_id
+            self._is_acquired = True
             if self.process_tracker:
                 self.process_tracker.update_lock(
                     self.name,
-                    owner_pid=pid,
+                    owner_pid=thread_id,
                     state="acquired"
                 )
         return acquired
 
     def release(self):
-        if self.acquired:
-            self._lock.release()
-            self.acquired = False
-            self._owner_pid = -1
-            if self.process_tracker:
-                self.process_tracker.update_lock(
-                    self.name,
-                    owner_pid=-1,
-                    state="free"
-                )
-
-    def __str__(self):
-        return f"Lock(name={self.name}, owner_pid={self._owner_pid}, state={'acquired' if self.acquired else 'free'})"
+        """Libera el lock con tracking"""
+        if self._is_acquired:
+            try:
+                self._lock.release()  # Llamada real al release
+                self._owner_pid = -1
+                self._is_acquired = False
+                if self.process_tracker:
+                    self.process_tracker.update_lock(
+                        self.name,
+                        owner_pid=-1,
+                        state="released"
+                    )
+            except Exception as e:
+                if self.process_tracker:
+                    self.process_tracker.update_lock(
+                        self.name,
+                        owner_pid=threading.get_ident(),
+                        state=f"release_error: {str(e)}"
+                    )
+                raise
 
     def __enter__(self):
         self.acquire()
@@ -59,48 +67,73 @@ class TrackedLock:
         self.release()
 
 class ResourceSemaphore:
-    """Semaforo para gestionar recursos limitados (Tellers/Advisors)"""
     def __init__(self, max_workers: int, name: str, tracker=None):
-        self.semaphore = Semaphore(max_workers)
+        self._semaphore = threading.Semaphore(max_workers)
         self.name = name
         self.tracker = tracker
-        self._waiting_pids = set()
+        self.max_workers = max_workers
+        self._available = max_workers
+        self._lock = threading.Lock()  # Para proteger el acceso a _available
 
-    def acquire(self, pid: Optional[int] = None):
-        pid = pid or os.getpid()
+    def acquire(self, blocking=True, timeout=None):
+        thread_id = threading.get_ident()
+        
+        # Actualizar estado antes de adquirir
         if self.tracker:
-            available = self.semaphore._value  # Acceder al contador interno
-            self.tracker.update_lock(
-                self.name,
-                owner_pid=pid,
-                state=f"waiting (slots: {available})"  # <- Más detalle
+            self.tracker.update_semaphore(
+                name=self.name,
+                owner_pid=thread_id,
+                state="waiting",
+                available=self._available
             )
+        
+        acquired = self._semaphore.acquire(blocking, timeout)
+        
+        if acquired:
+            with self._lock:
+                self._available -= 1
+            if self.tracker:
+                self.tracker.update_semaphore(
+                    name=self.name,
+                    owner_pid=thread_id,
+                    state="acquired",
+                    available=self._available
+                )
+        return acquired
 
-    def release(self, pid: Optional[int] = None):
-        pid = pid or os.getpid()
-        self.semaphore.release()
+    def release(self):
+        with self._lock:
+            self._available += 1
+            if self._available > self.max_workers:
+                self._available = self.max_workers
+                
         if self.tracker:
-            self.tracker.update_lock(self.name, owner_pid=-1, state="free")
-
-    def __str__(self):
-        return f"Lock(name={self.name}, owner_pid={self._owner_pid}, state={'acquired' if self.acquired else 'free'})"
+            self.tracker.update_semaphore(
+                name=self.name,
+                owner_pid=-1,
+                state="released",
+                available=self._available
+            )
+        self._semaphore.release()
 
 class BankLocks:
+    """Gestión centralizada de locks con tracking para threading"""
     def __init__(self, process_tracker=None):
-        # Semaforos para recursos
+        # Semáforos para recursos
         self.tellers_sem = ResourceSemaphore(
-            max_workers=4,  # Ejemplo: 4 tellers máximo
+            max_workers=4,
             name="tellers_pool",
             tracker=process_tracker
         )
         
         self.advisors_sem = ResourceSemaphore(
-            max_workers=2,  # Ejemplo: 2 advisors máximo
+            max_workers=2,
             name="advisors_pool",
             tracker=process_tracker
         )
         
-        # Locks tradicionales para datos
+        # Locks para estructuras de datos
         self.accounts_lock = TrackedLock("accounts_lock", process_tracker)
         self.customers_lock = TrackedLock("customers_lock", process_tracker)
         self.cards_lock = TrackedLock("cards_lock", process_tracker)
+        self.turn_queue_lock = TrackedLock("turn_queue_lock", process_tracker)

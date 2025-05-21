@@ -1,4 +1,3 @@
-import multiprocessing.managers
 import os
 from datetime import datetime
 from typing import List, Dict
@@ -9,18 +8,17 @@ from rich.table import Table
 from rich.live import Live
 from rich.panel import Panel
 from rich.layout import Layout
-import multiprocessing
+import threading
 import time
 
 class EventConsole:
-    def __init__(self, log_dir="logs", manager=None):
+    def __init__(self, log_dir="logs"):
         self.console = Console()
         self.log_dir = Path(log_dir)
         self.log_dir.mkdir(exist_ok=True)
         self.log_file = self.log_dir / f"bank_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
-        self._manager = manager or multiprocessing.Manager()
-        self._events = self._manager.list()
-        self._lock = self._manager.Lock()
+        self._events = []
+        self._lock = threading.Lock()
         
     def add_event(self, pid: int, operation: str, details: str, status: str = "info"):
         timestamp = datetime.now().strftime("%H:%M:%S,%f")[:-3]
@@ -53,52 +51,41 @@ class EventConsole:
             return list(self._events[:limit])
 
 class ProcessTracker:
-    def __init__(self, manager=None):
-        self._manager = manager or multiprocessing.Manager()
-        self._processes = self._manager.dict()
-        self._locks = self._manager.dict()
-        self._lock = self._manager.Lock()
+    def __init__(self):
+        self._processes = {}
+        self._locks = {}
+        self._lock = threading.Lock()
         
     def update_process(self, pid: int, **kwargs):
-        """Actualiza la información de un proceso.
-        
-        Args:
-            pid: ID del proceso
-            kwargs: Puede incluir:
-                - state: estado del proceso
-                - current_operation: operación actual
-                - lock_held: lock adquirido (opcional)
-                - lock_waiting: lock esperando (opcional)
-                - ppid: ID del proceso padre (opcional)
-        """
         with self._lock:
             if pid not in self._processes:
-                self._processes[pid] = self._manager.dict({
+                self._processes[pid] = {
                     'start_time': time.time(),
                     'state': 'new',
                     'current_operation': '',
                     'lock_held': None,
                     'lock_waiting': None,
-                    'ppid': os.getppid()
-                })
-            
-            # Actualizar solo los campos proporcionados
+                    'ppid': os.getpid(),
+                    'type': kwargs.get('type', 'unknown')
+                }
+
             for key, value in kwargs.items():
-                if key in ['state', 'current_operation', 'ppid']:
+                if key in ['state', 'current_operation', 'ppid', 'type']:
                     self._processes[pid][key] = value
                 elif key == 'lock_held':
                     self._processes[pid]['lock_held'] = value if value else None
                 elif key == 'lock_waiting':
                     self._processes[pid]['lock_waiting'] = value if value else None
+
     
     def update_lock(self, lock_name: str, owner_pid: int = None, state: str = None):
         with self._lock:
             if lock_name not in self._locks:
-                self._locks[lock_name] = self._manager.dict({
+                self._locks[lock_name] = {
                     'owner_pid': owner_pid or -1,
                     'state': state or 'free',
                     'acquired_time': time.time() if owner_pid else None
-                })
+                }
             else:
                 if owner_pid is not None:
                     self._locks[lock_name]['owner_pid'] = owner_pid
@@ -107,18 +94,30 @@ class ProcessTracker:
                     self._locks[lock_name]['state'] = state
 
     def update_semaphore(self, name: str, owner_pid: int, state: str, available: int):
+        """Actualiza el estado de un semáforo con más detalle"""
         with self._lock:
             if name not in self._locks:
-                self._locks[name] = self._manager.dict({
-                    'type': 'semaphore',  # <- Nueva clave
+                self._locks[name] = {
+                    'type': 'semaphore',
                     'owner_pid': owner_pid,
                     'state': state,
-                    'available': available  # <- Slots libres
+                    'available': available,
+                    'max_capacity': available if state == 'acquired' else available + 1,
+                    'last_updated': time.time()
+                }
+            else:
+                self._locks[name].update({
+                    'owner_pid': owner_pid,
+                    'state': state,
+                    'available': available,
+                    'last_updated': time.time()
                 })
+                if 'max_capacity' not in self._locks[name]:
+                    self._locks[name]['max_capacity'] = available if state == 'acquired' else available + 1
     
     def get_processes(self):
         with self._lock:
-            # Calcular uptime para cada proceso
+            # Calcular uptime para cada proceso/hilo
             processes = []
             for pid, proc in self._processes.items():
                 uptime = time.time() - proc['start_time']
@@ -129,7 +128,8 @@ class ProcessTracker:
                     'current_operation': proc['current_operation'],
                     'lock_held': proc['lock_held'],
                     'lock_waiting': proc['lock_waiting'],
-                    'uptime': f"{uptime:.2f}s"
+                    'uptime': f"{uptime:.2f}s",
+                    'type': proc['type']
                 })
             return processes
     
@@ -140,8 +140,11 @@ class ProcessTracker:
                 locks[name] = {
                     'owner_pid': lock['owner_pid'],
                     'state': lock['state'],
-                    'acquired_time': lock.get('acquired_time')
+                    'acquired_time': lock.get('acquired_time'),
+                    'type': lock.get('type', 'lock')
                 }
+                if 'available' in lock:
+                    locks[name]['available'] = lock['available']
             return locks
 
 class BankMonitor:
@@ -152,19 +155,18 @@ class BankMonitor:
         self.running = True
     
     def generate_process_table(self) -> Table:
-        """Genera la tabla de procesos con más detalles"""
-        table = Table(title="Bank Processes - Detailed View", show_header=True, header_style="bold blue")
-        table.add_column("PID", style="dim", width=8)
+        """Genera la tabla de procesos/hilos con más detalles"""
+        table = Table(title="Bank Process - Detailed View", show_header=True, header_style="bold blue")
+        table.add_column("Process ID", style="dim", width=12)
         table.add_column("Type", width=10)
         table.add_column("State", width=12)
-        table.add_column("Current Operation", width=40) 
-        table.add_column("Resource", width=15)  
+        table.add_column("Current Operation", width=40)
         table.add_column("Uptime", width=10)
         
         processes = self.process_tracker.get_processes()
         for proc in processes:
-            # Determinar tipo de proceso
-            process_type = "Teller" if "T" in str(proc.get('current_operation', '')) else "Advisor"
+            # Determinar tipo de proceso/hilo
+            process_type = proc.get('type', 'unknown')
             
             state_style = {
                 'working': 'green',
@@ -173,35 +175,48 @@ class BankMonitor:
             }.get(proc['state'].lower(), 'white')
             
             table.add_row(
-                str(proc['pid']),
+                f"0x{proc['pid']:X}",  # Formato hexadecimal para thread IDs
                 process_type,
                 f"[{state_style}]{proc['state']}[/]",
                 proc['current_operation'],
-                proc.get('lock_held', '-'),
                 proc['uptime']
             )
         return table
     
     def generate_locks_table(self) -> Table:
-        """Genera la tabla de locks"""
-        table = Table(title="Bank Locks Status", show_header=True, header_style="bold blue")
-        table.add_column("Lock Name", width=20)
-        table.add_column("Owner PID", width=10)
+        """Tabla mejorada para mostrar locks y semáforos"""
+        table = Table(title="Locks & Semaphores Status", show_header=True, header_style="bold blue")
+        table.add_column("Name", width=20)
+        table.add_column("Type", width=10)
+        table.add_column("Owner ID", width=12)
         table.add_column("State", width=12)
-        table.add_column("Held For", width=10)
+        table.add_column("Available", width=10)
         
         locks = self.process_tracker.get_locks()
         for name, lock in locks.items():
-            state_style = 'green' if lock['state'] == 'acquired' else 'yellow'
+            # Determinar estilo basado en estado
+            state_style = {
+                'acquired': 'green',
+                'waiting': 'yellow',
+                'released': 'white',
+                'free': 'white'
+            }.get(lock['state'].lower(), 'white')
+            
+            # Calcular tiempo retenido
             held_for = "-"
-            if lock['acquired_time']:
-                held_for = f"{time.time() - lock['acquired_time']:.2f}s"
+            if lock.get('last_updated'):
+                held_for = f"{time.time() - lock['last_updated']:.1f}s"
+            
+            # Mostrar información específica para semáforos
+            available = str(lock.get('available', '-'))
+            capacity = str(lock.get('max_capacity', '-'))
             
             table.add_row(
                 name,
-                str(lock['owner_pid']),
+                lock.get('type', 'lock'),
+                f"0x{lock['owner_pid']:X}" if lock['owner_pid'] != -1 else "-",
                 f"[{state_style}]{lock['state']}[/]",
-                held_for
+                available
             )
         return table
     
@@ -209,7 +224,7 @@ class BankMonitor:
         """Genera la tabla de eventos"""
         table = Table(title="Bank System Events", show_header=True, header_style="bold blue")
         table.add_column("Timestamp", width=12)
-        table.add_column("PID", width=8)
+        table.add_column("Process ID", width=12)
         table.add_column("Operation", width=20)
         table.add_column("Details", width=40)
         
@@ -217,7 +232,7 @@ class BankMonitor:
         for event in events:
             table.add_row(
                 event['timestamp'],
-                str(event['pid']),
+                f"0x{event['pid']:X}",
                 event['operation'],
                 event['details']
             )
@@ -228,7 +243,7 @@ class BankMonitor:
         layout = Layout()
         layout.split(
             Layout(name="processes", size=10),
-            Layout(name="locks", size=10),
+            Layout(name="locks", size=15),
             Layout(name="events", size=14)
         )
         
