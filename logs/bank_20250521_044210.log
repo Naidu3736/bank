@@ -1,0 +1,12 @@
+{"timestamp": "04:42:10,296", "pid": 518462, "operation": "TURN_ADDED", "details": "Turn C001 (Priority: 3) added to queue", "status": "info"}
+{"timestamp": "04:42:10,302", "pid": 518462, "operation": "TURN_ADDED", "details": "Turn C001 added to queue", "status": "info"}
+{"timestamp": "04:42:10,835", "pid": 140120929027776, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Pedro L\u00f3pez (pedro.l\u00f3pez4094@mail.com)", "status": "info"}
+{"timestamp": "04:42:10,839", "pid": 140120929027776, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Pedro L\u00f3pez (ID: e416fece-97dd-4133-b200-f4674dcb9dfb)", "status": "success"}
+{"timestamp": "04:42:10,855", "pid": 518462, "operation": "TURN_COMPLETED", "details": "Turn C001 completed and removed from active turns", "status": "info"}
+{"timestamp": "04:42:11,019", "pid": 518462, "operation": "TURN_ADDED", "details": "Turn C002 (Priority: 3) added to queue", "status": "info"}
+{"timestamp": "04:42:11,022", "pid": 518462, "operation": "TURN_ADDED", "details": "Turn C002 added to queue", "status": "info"}
+{"timestamp": "04:42:11,419", "pid": 140120929027776, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Ana L\u00f3pez (ana.l\u00f3pez8983@mail.com)", "status": "info"}
+{"timestamp": "04:42:11,422", "pid": 140120929027776, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Ana L\u00f3pez (ID: c05d097f-61a2-4ba6-86be-0027830440c1)", "status": "success"}
+{"timestamp": "04:42:11,436", "pid": 140120929027776, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente e416fece-97dd-4133-b200-f4674dcb9dfb", "status": "info"}
+{"timestamp": "04:42:11,440", "pid": 140120929027776, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 2967904079 con saldo inicial $968.00", "status": "success"}
+{"timestamp": "04:42:11,444", "pid": 518462, "operation": "TURN_COMPLETED", "details": "Turn C002 completed and removed from active turns", "status": "info"}

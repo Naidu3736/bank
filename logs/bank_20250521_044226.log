@@ -1,0 +1,41 @@
+{"timestamp": "04:42:26,123", "pid": 518596, "operation": "TURN_ADDED", "details": "Turn C001 (Priority: 3) added to queue", "status": "info"}
+{"timestamp": "04:42:26,140", "pid": 518596, "operation": "TURN_ADDED", "details": "Turn C001 added to queue", "status": "info"}
+{"timestamp": "04:42:26,573", "pid": 518596, "operation": "TURN_ADDED", "details": "Turn C002 (Priority: 3) added to queue", "status": "info"}
+{"timestamp": "04:42:26,577", "pid": 518596, "operation": "TURN_ADDED", "details": "Turn C002 added to queue", "status": "info"}
+{"timestamp": "04:42:26,665", "pid": 140381945591488, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Juan Garc\u00eda (juan.garc\u00eda5117@mail.com)", "status": "info"}
+{"timestamp": "04:42:26,673", "pid": 518596, "operation": "TURN_ADDED", "details": "Turn C002 (Priority: 3) added to queue", "status": "info"}
+{"timestamp": "04:42:26,676", "pid": 140381945591488, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Juan Garc\u00eda (ID: 7af83dce-30a8-4ed2-880e-6af7d634425d)", "status": "success"}
+{"timestamp": "04:42:26,680", "pid": 518596, "operation": "TURN_ADDED", "details": "Turn C002 added to queue", "status": "info"}
+{"timestamp": "04:42:26,684", "pid": 518596, "operation": "TURN_COMPLETED", "details": "Turn C001 completed and removed from active turns", "status": "info"}
+{"timestamp": "04:42:26,741", "pid": 140381945591488, "operation": "ADD_CUSTOMER_START", "details": "Intentando agregar nuevo cliente: Pedro L\u00f3pez (pedro.l\u00f3pez4025@mail.com)", "status": "info"}
+{"timestamp": "04:42:26,744", "pid": 140381945591488, "operation": "ADD_CUSTOMER_SUCCESS", "details": "Nuevo cliente creado: Pedro L\u00f3pez (ID: be6f93a1-e752-4a84-842d-9e04cf90deff)", "status": "success"}
+{"timestamp": "04:42:26,747", "pid": 518596, "operation": "TURN_COMPLETED", "details": "Turn C002 completed and removed from active turns", "status": "info"}
+{"timestamp": "04:42:27,560", "pid": 518596, "operation": "TURN_ADDED", "details": "Turn C003 (Priority: 3) added to queue", "status": "info"}
+{"timestamp": "04:42:27,564", "pid": 518596, "operation": "TURN_ADDED", "details": "Turn C003 added to queue", "status": "info"}
+{"timestamp": "04:42:27,827", "pid": 140381945591488, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente be6f93a1-e752-4a84-842d-9e04cf90deff", "status": "info"}
+{"timestamp": "04:42:27,844", "pid": 140381945591488, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 3560304436 con saldo inicial $212.00", "status": "success"}
+{"timestamp": "04:42:27,848", "pid": 518596, "operation": "TURN_COMPLETED", "details": "Turn C003 completed and removed from active turns", "status": "info"}
+{"timestamp": "04:42:27,971", "pid": 518596, "operation": "TURN_ADDED", "details": "Turn C004 (Priority: 3) added to queue", "status": "info"}
+{"timestamp": "04:42:27,974", "pid": 518596, "operation": "TURN_ADDED", "details": "Turn C004 added to queue", "status": "info"}
+{"timestamp": "04:42:28,403", "pid": 140381945591488, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 7af83dce-30a8-4ed2-880e-6af7d634425d", "status": "info"}
+{"timestamp": "04:42:28,406", "pid": 140381945591488, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 3409560485 con saldo inicial $615.00", "status": "success"}
+{"timestamp": "04:42:28,410", "pid": 518596, "operation": "TURN_COMPLETED", "details": "Turn C004 completed and removed from active turns", "status": "info"}
+{"timestamp": "04:42:28,521", "pid": 518596, "operation": "TURN_ADDED", "details": "Turn C005 (Priority: 3) added to queue", "status": "info"}
+{"timestamp": "04:42:28,524", "pid": 518596, "operation": "TURN_ADDED", "details": "Turn C005 added to queue", "status": "info"}
+{"timestamp": "04:42:28,998", "pid": 518596, "operation": "OP_MAP_ERROR", "details": "No se encontr\u00f3 m\u00e9todo para transfer en Advisor", "status": "warning"}
+{"timestamp": "04:42:29,054", "pid": 518596, "operation": "OP_MAP_ERROR", "details": "No se encontr\u00f3 m\u00e9todo para deposit en Advisor", "status": "warning"}
+{"timestamp": "04:42:29,106", "pid": 518596, "operation": "OP_MAP_ERROR", "details": "No se encontr\u00f3 m\u00e9todo para transfer en Advisor", "status": "warning"}
+{"timestamp": "04:42:29,159", "pid": 140381945591488, "operation": "ADD_ACCOUNT_START", "details": "Creando nueva cuenta para cliente 7af83dce-30a8-4ed2-880e-6af7d634425d", "status": "info"}
+{"timestamp": "04:42:29,162", "pid": 140381945591488, "operation": "ADD_ACCOUNT_SUCCESS", "details": "Nueva cuenta creada: 6750285986 con saldo inicial $940.00", "status": "success"}
+{"timestamp": "04:42:29,166", "pid": 518596, "operation": "TURN_COMPLETED", "details": "Turn C005 completed and removed from active turns", "status": "info"}
+{"timestamp": "04:42:29,482", "pid": 518596, "operation": "TURN_ADDED", "details": "Turn C006 (Priority: 3) added to queue", "status": "info"}
+{"timestamp": "04:42:29,486", "pid": 518596, "operation": "TURN_ADDED", "details": "Turn C006 added to queue", "status": "info"}
+{"timestamp": "04:42:29,734", "pid": 140381945591488, "operation": "DEPOSIT_INITIATED", "details": "Attempting to deposit $253.00 to 6750285986", "status": "info"}
+{"timestamp": "04:42:29,756", "pid": 140381945591488, "operation": "DEPOSIT_COMPLETED", "details": "Deposit successful. New balance: $1446.00", "status": "success"}
+{"timestamp": "04:42:29,766", "pid": 518596, "operation": "TURN_ADDED", "details": "Turn C007 (Priority: 3) added to queue", "status": "info"}
+{"timestamp": "04:42:29,782", "pid": 518596, "operation": "TURN_COMPLETED", "details": "Turn C006 completed and removed from active turns", "status": "info"}
+{"timestamp": "04:42:29,786", "pid": 518596, "operation": "TURN_ADDED", "details": "Turn C007 added to queue", "status": "info"}
+{"timestamp": "04:42:30,310", "pid": 140381945591488, "operation": "WITHDRAWAL_INITIATED", "details": "Attempting to withdraw $261.00 from 3560304436", "status": "info"}
+{"timestamp": "04:42:30,325", "pid": 140381945591488, "operation": "WITHDRAWAL_FAILED", "details": "Incorrect PIN. Remaining attempts: 3", "status": "warning"}
+{"timestamp": "04:42:30,328", "pid": 518596, "operation": "TURN_COMPLETED", "details": "Turn C007 completed and removed from active turns", "status": "info"}
+{"timestamp": "04:42:30,576", "pid": 518596, "operation": "TURN_ADDED", "details": "Turn C008 (Priority: 3) added to queue", "status": "info"}

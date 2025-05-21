@@ -3,10 +3,6 @@ C:.
 |   event_logger.py         # Sistema de registro de eventos y monitorización (EventConsole, ProcessTracker, BankMonitor)
 |   main.py                 # Punto de entrada principal de la aplicación
 |   README.md               # Documentación general del proyecto
-|   view_logs.py            # Herramienta para visualizar los logs generados
-|   
-+---client
-|       descripción.txt     # Documentación sobre el módulo cliente
 |       
 +---core                   # Módulo principal con las clases básicas del sistema bancario
 |   |   account.py          # Clase Account (cuentas bancarias)
@@ -16,12 +12,9 @@ C:.
 |   |   customer.py         # Clase Customer (clientes del banco)
 |   |   debit_card.py       # Clase DebitCard (implementa tarjetas de débito)
 |   |   transaction.py      # Clase Transaction y TransactionType (enum)
-|   |   turn.py             # Gestión de turnos (si aplica)
-|   |   
-|   \---__pycache__        # Archivos compilados de Python (generados automáticamente)
+|   |   turn.py             # Clase Turn y Operation, TurnStatus (enum), ServiceType (enum) y OperationType (enum)
 |           
 +---logs                   # Directorio de logs generados por la aplicación
-|       bank_20250517_201009.log  # Ejemplo de archivo de log
 |       
 +---server                 # Módulo del servidor y componentes de atención
 |   |   advisor.py         # Lógica para asesores bancarios
@@ -29,4 +22,4 @@ C:.
 |   |   process_dispatcher.py  # Gestión de procesos del servidor
 |   |   run_process.py     # Script para ejecutar procesos
 |   |   teller.py          # Lógica para cajeros bancarios
-|   |   turn_manager.py    # Gestor de turnos (alternativa a turn.py)
+|   |   turn_manager.py    # Gestor de turnos
